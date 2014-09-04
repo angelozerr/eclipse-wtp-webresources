@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-Vendor: %pluginProvider
+Bundle-Localization: plugin
+Bundle-SymbolicName: org.eclipse.wst.htmlcss.core;singleton:=true
+Bundle-Version: 0.6.0.qualifier
+Bundle-Activator: org.eclipse.wst.htmlcss.internal.core.HTMLCSSCorePlugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: com.eclipsesource.json
+Require-Bundle: org.eclipse.wst.css.core,
+ org.eclipse.wst.html.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.xml.core,
+ org.eclipse.core.runtime
+Export-Package: org.eclipse.wst.htmlcss.ui.core
