@@ -31,18 +31,6 @@ import org.w3c.dom.stylesheets.StyleSheetList;
 public class ClassAttributeCompletionProposalComputer extends
 		DefaultXMLCompletionProposalComputer {
 
-	public ClassAttributeCompletionProposalComputer() {
-		System.err.println("eee");
-	}
-
-	@Override
-	public List computeCompletionProposals(
-			CompletionProposalInvocationContext context,
-			IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		return super.computeCompletionProposals(context, monitor);
-	}
-
 	@Override
 	protected void addAttributeValueProposals(
 			ContentAssistRequest contentAssistRequest,
@@ -66,13 +54,10 @@ public class ClassAttributeCompletionProposalComputer extends
 					// next region should be attr value region
 					if (regions.hasNext()) {
 						styleValueRegion = (ITextRegion) regions.next();
-						int offset = sdRegion.getStartOffset(styleValueRegion);
-
-						String attrVale = sdRegion.getText(styleValueRegion);
-						int pos = 200 - offset;
+						String attrValue = sdRegion.getText(styleValueRegion);
 						addCSSClassProposals(contentAssistRequest,
-								context.getInvocationOffset(), element, offset,
-								(char) 0);
+								context.getInvocationOffset(), element,
+								attrValue);
 					}
 				}
 			}
@@ -81,9 +66,9 @@ public class ClassAttributeCompletionProposalComputer extends
 
 	protected void addCSSClassProposals(
 			ContentAssistRequest contentAssistRequest, int pos,
-			IDOMNode element, int offset, char quote) {
+			IDOMNode element, String attrValue) {
 		ContentAssistCSSClassTraverser traverser = new ContentAssistCSSClassTraverser(
-				element, contentAssistRequest, pos);
+				element, contentAssistRequest, pos, attrValue);
 		traverser.process();
 	}
 }
