@@ -1,7 +1,18 @@
+/**
+ *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ */
 package org.eclipse.wst.htmlcss.internal.ui.contentassist;
 
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.eclipse.wst.htmlcss.internal.ui.DOMHelper;
 import org.eclipse.wst.htmlcss.internal.ui.ImageResource;
 import org.eclipse.wst.htmlcss.ui.core.AbstractCSSClassTraverser;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -10,61 +21,59 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 
+/**
+ * 
+ */
 public class ContentAssistCSSClassTraverser extends AbstractCSSClassTraverser {
 
 	private final ContentAssistRequest contentAssistRequest;
 	private String matchingClassName;
 	private int replacementOffset;
-	private final String attrValue;
 	private int replacementLength;
 
-	public ContentAssistCSSClassTraverser(IDOMNode node,
-			ContentAssistRequest contentAssistRequest, int pos, String attrValue) {
-		super(node);
+	public ContentAssistCSSClassTraverser(
+			ContentAssistRequest contentAssistRequest, int documentPosition,
+			String attrValue) {
+		super((IDOMNode) contentAssistRequest.getNode());
 		this.contentAssistRequest = contentAssistRequest;
 
-		matchingClassName = contentAssistRequest.getMatchString();
-		if (matchingClassName.startsWith("\"")) {
-			matchingClassName = matchingClassName.substring(1,
-					matchingClassName.length());
-		}
+		// ex : <input class="todo-done myClass" />
+		// completion done after my (todo-done my // Here Ctrl+Space)
+
+		// matching string = "todo-done my"
+		String matchingString = DOMHelper.getAttrValue(contentAssistRequest
+				.getMatchString());
+
+		// matching class name = "my"
+		matchingClassName = matchingString;
 		int index = matchingClassName.lastIndexOf(" ");
 		if (index != -1) {
 			matchingClassName = matchingClassName.substring(index + 1,
 					matchingClassName.length());
 		}
 
-		this.replacementOffset = pos - matchingClassName.length();
-		this.attrValue = attrValue;
-		this.replacementLength = attrValue.length() - 2;
+		// after matching class name = "Class"
+		String afterMatchingClassName = attrValue.substring(
+				matchingString.length(), attrValue.length());
+		index = afterMatchingClassName.indexOf(" ");
 		if (index != -1) {
-			// replacementLength += index;
-			// replacementOffset -= index;
+			afterMatchingClassName = afterMatchingClassName.substring(0, index);
 		}
 
-	}
+		this.replacementOffset = documentPosition - matchingClassName.length();
+		this.replacementLength = matchingClassName.length()
+				+ afterMatchingClassName.length();
 
-	private String getMatchingClassName(
-			ContentAssistRequest contentAssistRequest) {
-		String matchingClassName = contentAssistRequest.getMatchString();
-		if (matchingClassName.startsWith("\"")) {
-			matchingClassName = matchingClassName.substring(1,
-					matchingClassName.length());
-		}
-		int index = matchingClassName.lastIndexOf(" ");
-		if (index != -1) {
-			matchingClassName = matchingClassName.substring(index + 1,
-					matchingClassName.length());
-		}
-		return matchingClassName;
 	}
 
 	@Override
 	protected void addClassName(String className, ICSSStyleRule rule) {
+		// check if visited class name starts with matching class name?
 		if (!className.startsWith(matchingClassName)) {
 			return;
 		}
 
+		// Retrieve the file name of the CSS style rule.
 		String fileName = rule.getOwnerDocument().getModel().getBaseLocation();
 		if (IModelManager.UNMANAGED_MODEL.equals(fileName)) {
 			fileName = null;
@@ -81,21 +90,12 @@ public class ContentAssistCSSClassTraverser extends AbstractCSSClassTraverser {
 		}
 		String displayString = fileName != null ? new StringBuilder(className)
 				.append(" - ").append(fileName).toString() : className;
-		contentAssistRequest.addProposal(new CompletionProposal(className,
-				replacementOffset, 0, className.length(), ImageResource
-						.getImage(ImageResource.IMG_CLASSNAME), displayString,
-				null, info.toString()));
 
-		// /*contentAssistRequest.addProposal(new CustomCompletionProposal(
-		// className, pos,
-		// /* start pos */
-		// 0, /* replace length */
-		// className.length(), /*
-		// * /* cursor position after (relavtive to
-		// * start)
-		// */
-		// ImageResource.getImage(ImageResource.IMG_CLASSNAME), className,
-		// null, info.toString(), XMLRelevanceConstants.R_TAG_NAME));
+		int cursorPosition = className.length();
+		contentAssistRequest.addProposal(new CompletionProposal(className,
+				replacementOffset, replacementLength, cursorPosition,
+				ImageResource.getImage(ImageResource.IMG_CLASSNAME),
+				displayString, null, info.toString()));
 	}
 
 }
