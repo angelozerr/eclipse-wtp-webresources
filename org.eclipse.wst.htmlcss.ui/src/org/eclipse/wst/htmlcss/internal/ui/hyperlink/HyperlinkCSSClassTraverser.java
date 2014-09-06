@@ -28,7 +28,7 @@ public class HyperlinkCSSClassTraverser extends AbstractCSSClassTraverser {
 			if (hyperlinks == null) {
 				hyperlinks = new ArrayList<IHyperlink>();
 			}
-			hyperlinks.add(new ClassAttributeHyperlink(classNameRegion, rule));
+			hyperlinks.add(new CSSClassNameHyperlink(classNameRegion, rule));
 		}
 
 	}

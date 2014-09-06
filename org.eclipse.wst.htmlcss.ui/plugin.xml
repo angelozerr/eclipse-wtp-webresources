@@ -16,7 +16,7 @@
 	 
 	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
   		<documentationTextHover
-        	class="org.eclipse.wst.htmlcss.ui.hover.ClassAttributeHoverProcessor"
+        	class="org.eclipse.wst.htmlcss.internal.ui.hover.CSSClassNameHoverProcessor"
         	target="org.eclipse.wst.html.HTML_DEFAULT">
   		</documentationTextHover>				            
 	</extension>
@@ -26,17 +26,54 @@
 	    <proposalComputer
 	          activate="true"
 	          categoryId="org.eclipse.wst.html.ui.proposalCategory.htmlTags"
-	          class="org.eclipse.wst.htmlcss.ui.contentassist.ClassAttributeCompletionProposalComputer"
-	          id="org.eclipse.wst.htmlcss.ui.contentassist.ClassAttributeCompletionProposalComputer">
+	          class="org.eclipse.wst.htmlcss.internal.ui.contentassist.CSSClassNameCompletionProposalComputer"
+	          id="org.eclipse.wst.htmlcss.ui.contentassist.CSSClassNameCompletionProposalComputer">
 	       <contentType
 	             id="org.eclipse.wst.html.core.htmlsource">
 	          <partitionType
 	                id="org.eclipse.wst.html.HTML_DEFAULT">
 	          </partitionType>
-	       </contentType>	       	          	       
+	       </contentType>
+	       <contentType
+	             id="org.eclipse.jst.jsp.core.jspsource">
+	          <partitionType
+	                id="org.eclipse.wst.html.HTML_DEFAULT">
+	          </partitionType>
+	       </contentType>
+	       <contentType
+	             id="org.eclipse.php.core.phpsource">
+	          <partitionType
+	                id="org.eclipse.wst.html.HTML_DEFAULT">
+	          </partitionType>
+	       </contentType>	       	       	          	       
 	    </proposalComputer>
 	</extension>
 
+	<!-- Activate CSS class name completion for JSP : this declaration should be moved to JSP plugins -->
+	<extension point="org.eclipse.wst.sse.ui.completionProposal">
+	  <proposalComputerExtendedActivation
+	      id="org.eclipse.wst.htmlcss.ui.contentassist.CSSClassNameCompletionProposalComputer">
+	    <contentType
+	        id="org.eclipse.jst.jsp.core.jspsource">
+	      <partitionType
+	          id="org.eclipse.wst.html.HTML_DEFAULT">
+	      </partitionType>
+	    </contentType>
+	  </proposalComputerExtendedActivation>
+	</extension>
+
+	<!-- Activate CSS class name completion for PHP : this declaration should be moved to JSP plugins -->
+	<extension point="org.eclipse.wst.sse.ui.completionProposal">
+	  <proposalComputerExtendedActivation
+	      id="org.eclipse.wst.htmlcss.ui.contentassist.CSSClassNameCompletionProposalComputer">
+	    <contentType
+	        id="org.eclipse.php.core.phpsource">
+	      <partitionType
+	          id="org.eclipse.wst.html.HTML_DEFAULT">
+	      </partitionType>
+	    </contentType>
+	  </proposalComputerExtendedActivation>
+	</extension>
 
 	<!--======================================================================================-->
 	<!-- Hyperlink                                      						              -->
@@ -45,9 +82,9 @@
 	<extension
 		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
 		<hyperlinkDetector
-			class="org.eclipse.wst.htmlcss.ui.hyperlink.ClassAttributeHyperlinkDetector"
-			id="org.eclipse.wst.htmlcss.ui.hyperlink.ClassAttributeHyperlinkDetector"
-			name="%ClassAttributeHyperlinkDetector.name"
+			class="org.eclipse.wst.htmlcss.internal.ui.hyperlink.CSSClassNameHyperlinkDetector"
+			id="org.eclipse.wst.htmlcss.ui.hyperlink.CSSClassNameHyperlinkDetector"
+			name="%CSSClassNameHyperlinkDetector.name"
 			targetId="org.eclipse.wst.html.core.htmlsource">
 		</hyperlinkDetector>		
    	</extension>	

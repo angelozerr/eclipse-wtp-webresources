@@ -1,4 +1,4 @@
-package org.eclipse.wst.htmlcss.ui.hover;
+package org.eclipse.wst.htmlcss.internal.ui.hover;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
@@ -13,7 +13,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.Logger;
 
-public class ClassAttributeHoverProcessor extends HTMLTagInfoHoverProcessor {
+public class CSSClassNameHoverProcessor extends HTMLTagInfoHoverProcessor {
 
 	@Override
 	protected String computeTagAttNameHelp(IDOMNode xmlnode,

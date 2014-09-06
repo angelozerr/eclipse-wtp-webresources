@@ -8,12 +8,12 @@ import org.eclipse.wst.htmlcss.internal.ui.DOMHelper;
 import org.eclipse.wst.htmlcss.internal.ui.EditorUtils;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 
-public class ClassAttributeHyperlink implements IHyperlink {
+public class CSSClassNameHyperlink implements IHyperlink {
 
 	private final IRegion classNameRegion;
 	private final ICSSStyleRule rule;
 
-	public ClassAttributeHyperlink(IRegion classNameRegion, ICSSStyleRule rule) {
+	public CSSClassNameHyperlink(IRegion classNameRegion, ICSSStyleRule rule) {
 		this.classNameRegion = classNameRegion;
 		this.rule = rule;
 	}
