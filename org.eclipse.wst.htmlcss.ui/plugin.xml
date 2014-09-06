@@ -14,12 +14,12 @@
  -->
 <plugin>
 	 
-	<!--<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
   		<documentationTextHover
-        	class="org.eclipse.angularjs.internal.ui.taginfo.HTMLAngularTagInfoHoverProcessor"
+        	class="org.eclipse.wst.htmlcss.ui.hover.ClassAttributeHoverProcessor"
         	target="org.eclipse.wst.html.HTML_DEFAULT">
   		</documentationTextHover>				            
-	</extension>-->
+	</extension>
 	
    <extension
        point="org.eclipse.wst.sse.ui.completionProposal">
@@ -42,14 +42,14 @@
 	<!-- Hyperlink                                      						              -->
 	<!--======================================================================================-->
 		
-	<!--<extension
+	<extension
 		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
 		<hyperlinkDetector
-			class="org.eclipse.angularjs.internal.ui.hyperlink.HTMLAngularHyperLinkDetector"
-			id="org.eclipse.angularjs.internal.ui.hyperlink.HTMLAngularHyperLinkDetector"
-			name="%HTMLAngularHyperLinkDetector.name"
+			class="org.eclipse.wst.htmlcss.ui.hyperlink.ClassAttributeHyperlinkDetector"
+			id="org.eclipse.wst.htmlcss.ui.hyperlink.ClassAttributeHyperlinkDetector"
+			name="%ClassAttributeHyperlinkDetector.name"
 			targetId="org.eclipse.wst.html.core.htmlsource">
 		</hyperlinkDetector>		
    	</extension>	
-      -->
+    
 </plugin>        
