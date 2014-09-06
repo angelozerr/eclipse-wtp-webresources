@@ -34,47 +34,29 @@ public class ClassAttributeHyperlinkDetector extends AbstractHyperlinkDetector {
 			IRegion region, boolean canShowMultipleHyperlinks) {
 		if ((region != null) && (textViewer != null)) {
 
-			IStructuredDocumentRegion sdRegion = ContentAssistUtils
+			IStructuredDocumentRegion documentRegion = ContentAssistUtils
 					.getStructuredDocumentRegion(textViewer, region.getOffset());
-			Iterator regions = sdRegion.getRegions().iterator();
-			ITextRegion styleNameRegion = null;
-			ITextRegion styleValueRegion = null;
-			while (regions.hasNext()) {
-				styleNameRegion = (ITextRegion) regions.next();
-				if (styleNameRegion.getType().equals(
-						DOMRegionContext.XML_TAG_ATTRIBUTE_NAME)
-						&& sdRegion.getText(styleNameRegion).equalsIgnoreCase(
-								HTML40Namespace.ATTR_NAME_CLASS)) { //$NON-NLS-1$
-					// the next region should be "="
-					if (regions.hasNext()) {
-						regions.next(); // skip the "="
-						// next region should be attr value region
-						if (regions.hasNext()) {
-							styleValueRegion = (ITextRegion) regions.next();
-							String attrValue = DOMHelper.getAttrValue(sdRegion
-									.getText(styleValueRegion));
-							int startOffset = sdRegion
-									.getStartOffset(styleValueRegion);
-							int endOffset = sdRegion
-									.getEndOffset(styleValueRegion);
-							int index = region.getOffset()
-									- sdRegion.getStartOffset(styleValueRegion);
-							// DOMHelper.getClassName(attrValue, index);
-							ClassNameRegion classNameRegion = ClassNameFinder
-									.findName(textViewer.getDocument(),
-											region.getOffset(), startOffset,
-											endOffset);
-							if (classNameRegion != null) {
-								IDOMNode node = (IDOMNode) ContentAssistUtils
-										.getNodeAt(textViewer,
-												region.getOffset());
-								HyperlinkCSSClassTraverser traverser = new HyperlinkCSSClassTraverser(
-										node, classNameRegion);
-								traverser.process();
-								return traverser.getHyperlinks();
-							}
-						}
-					}
+			ITextRegion classAttrValueRegion = DOMHelper
+					.getClassAttrValueRegion(documentRegion);
+			if (classAttrValueRegion != null) {
+				String attrValue = DOMHelper.getAttrValue(documentRegion
+						.getText(classAttrValueRegion));
+				int startOffset = documentRegion
+						.getStartOffset(classAttrValueRegion);
+				int endOffset = documentRegion
+						.getEndOffset(classAttrValueRegion);
+				int index = region.getOffset()
+						- documentRegion.getStartOffset(classAttrValueRegion);
+				ClassNameRegion classNameRegion = ClassNameFinder.findName(
+						textViewer.getDocument(), region.getOffset(),
+						startOffset, endOffset);
+				if (classNameRegion != null) {
+					IDOMNode node = (IDOMNode) ContentAssistUtils.getNodeAt(
+							textViewer, region.getOffset());
+					HyperlinkCSSClassTraverser traverser = new HyperlinkCSSClassTraverser(
+							node, classNameRegion);
+					traverser.process();
+					return traverser.getHyperlinks();
 				}
 			}
 		}
