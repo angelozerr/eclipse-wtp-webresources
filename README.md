@@ -8,7 +8,21 @@ after try to contribute to WTP :
 
  * Class completion . See [bug 302125](https://bugs.eclipse.org/bugs/show_bug.cgi?id=302125) and [bug 211190](https://bugs.eclipse.org/bugs/show_bug.cgi?id=211190) 
 
+# Completion for CSS Class name
+
 Provides completion for WTP HTML editor for CSS className : 
 
 ![Class completion](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassCompletion.png)
+
+# Hyperlink for CSS Class name
+
+Provides hyperlink for WTP HTML editor for CSS className : 
+
+![Class hyperlink](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassHyperlink.png)
+
+# Hover for CSS Class name
+
+Provides text hover for WTP HTML editor for CSS className : 
+
+![Class hover](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassHover.png)
 
