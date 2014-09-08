@@ -19,8 +19,8 @@ public class CSSClassNameCompletionProposalComputer extends
 
 		IStructuredDocumentRegion documentRegion = contentAssistRequest
 				.getDocumentRegion();
-		ITextRegion classAttrValueRegion = DOMHelper
-				.getClassAttrValueRegion(documentRegion);
+		ITextRegion classAttrValueRegion = DOMHelper.getClassAttrValueRegion(
+				documentRegion, context.getInvocationOffset());
 		if (classAttrValueRegion != null) {
 			String attrValue = DOMHelper.getAttrValue(documentRegion
 					.getText(classAttrValueRegion));

@@ -36,7 +36,7 @@ public class CSSClassNameHyperlink implements IHyperlink {
 	@Override
 	public void open() {
 		IFile file = DOMHelper.getFile(rule);
-		if (file.exists()) {
+		if (file != null && file.exists()) {
 			int start = ((IndexedRegion) rule).getStartOffset();
 			int length = ((IndexedRegion) rule).getEndOffset() - start;
 			EditorUtils.openInEditor(file, start, length, true);

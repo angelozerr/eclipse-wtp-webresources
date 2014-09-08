@@ -22,7 +22,7 @@ public class CSSClassNameHyperlinkDetector extends AbstractHyperlinkDetector {
 			IStructuredDocumentRegion documentRegion = ContentAssistUtils
 					.getStructuredDocumentRegion(textViewer, region.getOffset());
 			ITextRegion classAttrValueRegion = DOMHelper
-					.getClassAttrValueRegion(documentRegion);
+					.getClassAttrValueRegion(documentRegion, region.getOffset());
 			if (classAttrValueRegion != null) {
 				String attrValue = DOMHelper.getAttrValue(documentRegion
 						.getText(classAttrValueRegion));

@@ -74,20 +74,8 @@ public class ContentAssistCSSClassTraverser extends AbstractCSSClassTraverser {
 		}
 
 		// Retrieve the file name of the CSS style rule.
-		String fileName = rule.getOwnerDocument().getModel().getBaseLocation();
-		if (IModelManager.UNMANAGED_MODEL.equals(fileName)) {
-			fileName = null;
-		}
-
-		StringBuilder info = new StringBuilder();
-		info.append("<pre>");
-		info.append(rule.getCssText());
-		info.append("</pre>");
-		if (fileName != null) {
-			info.append("<p>");
-			info.append(fileName);
-			info.append("</p>");
-		}
+		String info = DOMHelper.getInformation(rule);
+		String fileName = DOMHelper.getFileName(rule);
 		String displayString = fileName != null ? new StringBuilder(className)
 				.append(" - ").append(fileName).toString() : className;
 
@@ -95,7 +83,7 @@ public class ContentAssistCSSClassTraverser extends AbstractCSSClassTraverser {
 		contentAssistRequest.addProposal(new CompletionProposal(className,
 				replacementOffset, replacementLength, cursorPosition,
 				ImageResource.getImage(ImageResource.IMG_CLASSNAME),
-				displayString, null, info.toString()));
+				displayString, null, info));
 	}
 
 }

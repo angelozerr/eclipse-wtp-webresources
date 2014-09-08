@@ -31,7 +31,7 @@ public class ClassNameFinder {
 
 			while (pos > startOffset) {
 				c = document.getChar(pos);
-				if (isSpaceCharacter(c))
+				if (isSeparator(c))
 					break;
 				className.insert(0, c);
 				--pos;
@@ -42,7 +42,7 @@ public class ClassNameFinder {
 			int length = document.getLength();
 			while (pos < endOffset && pos < length) {
 				c = document.getChar(pos);
-				if (isSpaceCharacter(c))
+				if (isSeparator(c))
 					break;
 				className.append(c);
 				++pos;
@@ -66,7 +66,7 @@ public class ClassNameFinder {
 		return null;
 	}
 
-	private static boolean isSpaceCharacter(char c) {
+	private static boolean isSeparator(char c) {
 		return c == ' ' || c == '"' || c == '\'';
 	}
 }

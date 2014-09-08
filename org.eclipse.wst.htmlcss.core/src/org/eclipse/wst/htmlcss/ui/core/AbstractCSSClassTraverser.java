@@ -113,4 +113,8 @@ public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
 		}
 		return ret;
 	}
+
+	public IDOMNode getNode() {
+		return node;
+	}
 }

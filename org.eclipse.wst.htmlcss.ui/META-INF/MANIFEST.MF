@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %pluginProvider
 Bundle-Localization: plugin
-Bundle-SymbolicName: org.eclipse.wst.htmlcss.ui;singleton:=true
+Bundle-SymbolicName: org.eclipse.a.wst.htmlcss.ui;singleton:=true
 Bundle-Version: 0.6.0.qualifier
 Bundle-Activator: org.eclipse.wst.htmlcss.internal.ui.HTMLCSSUIPlugin
 Require-Bundle: org.eclipse.ui,
