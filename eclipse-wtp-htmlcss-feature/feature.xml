@@ -27,7 +27,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.wst.htmlcss.ui"
+         id="org.eclipse.a.wst.htmlcss.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
