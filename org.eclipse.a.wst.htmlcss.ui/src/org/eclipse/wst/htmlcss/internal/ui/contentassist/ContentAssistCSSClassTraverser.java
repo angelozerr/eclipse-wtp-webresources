@@ -12,14 +12,11 @@ package org.eclipse.wst.htmlcss.internal.ui.contentassist;
 
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
-import org.eclipse.wst.htmlcss.core.AbstractCSSClassTraverser;
+import org.eclipse.wst.htmlcss.internal.ui.AbstractCSSClassTraverser;
 import org.eclipse.wst.htmlcss.internal.ui.DOMHelper;
 import org.eclipse.wst.htmlcss.internal.ui.ImageResource;
-import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
-import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 
 /**
  * 

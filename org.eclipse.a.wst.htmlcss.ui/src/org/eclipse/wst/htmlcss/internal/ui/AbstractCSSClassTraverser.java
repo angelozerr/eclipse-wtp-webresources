@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wst.htmlcss.core;
+package org.eclipse.wst.htmlcss.internal.ui;
 
 import java.util.Iterator;
 
