@@ -6,8 +6,8 @@ import java.util.List;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.eclipse.wst.htmlcss.core.AbstractCSSClassTraverser;
 import org.eclipse.wst.htmlcss.internal.ui.ClassNameRegion;
-import org.eclipse.wst.htmlcss.ui.core.AbstractCSSClassTraverser;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public class HyperlinkCSSClassTraverser extends AbstractCSSClassTraverser {

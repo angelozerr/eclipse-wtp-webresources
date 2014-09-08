@@ -22,7 +22,7 @@
 	</licenses>
 	<modules>
 		<module>org.eclipse.wst.htmlcss.core</module>
-		<module>org.eclipse.wst.htmlcss.ui</module>
+		<module>org.eclipse.a.wst.htmlcss.ui</module>
 		<module>eclipse-wtp-htmlcss-feature</module>		
 		<module>org.eclipse.wst.htmlcss.repository</module>		
 	</modules>
