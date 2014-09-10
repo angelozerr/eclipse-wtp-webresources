@@ -75,19 +75,19 @@ public class Trace {
 
 		if (level == SEVERE) {
 			// if (!logged.contains(s)) {
-			HTMLCSSUIPlugin
+			WebResourcesPlugin
 					.getDefault()
 					.getLog()
-					.log(new Status(IStatus.ERROR, HTMLCSSUIPlugin.PLUGIN_ID,
+					.log(new Status(IStatus.ERROR, WebResourcesPlugin.PLUGIN_ID,
 							s, t));
 			// logged.add(s);
 			// }
 		}
 
-		if (!HTMLCSSUIPlugin.getDefault().isDebugging())
+		if (!WebResourcesPlugin.getDefault().isDebugging())
 			return;
 
-		StringBuilder sb = new StringBuilder(HTMLCSSUIPlugin.PLUGIN_ID);
+		StringBuilder sb = new StringBuilder(WebResourcesPlugin.PLUGIN_ID);
 		sb.append(" ");
 		sb.append(levelNames[level]);
 		sb.append(" ");

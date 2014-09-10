@@ -35,12 +35,13 @@ public class ImageResource {
 	private static final String URL_OBJ = "full/obj16/";
 
 	// General Object Images
-	public static final String IMG_CLASSNAME = "classname";
+	public static final String IMG_CSS_CLASSNAME = "css_classname";
+	public static final String IMG_CSS_ID = "css_id";
 
 	static {
 		try {
 			String pathSuffix = "icons/";
-			ICON_BASE_URL = HTMLCSSUIPlugin.getDefault().getBundle()
+			ICON_BASE_URL = WebResourcesPlugin.getDefault().getBundle()
 					.getEntry(pathSuffix);
 		} catch (Exception e) {
 			Trace.trace(Trace.SEVERE, "Images error", e);
@@ -118,7 +119,8 @@ public class ImageResource {
 		imageDescriptors = new HashMap<String, ImageDescriptor>();
 
 		// load general object images
-		registerImage(IMG_CLASSNAME, URL_OBJ + IMG_CLASSNAME + ".gif");
+		registerImage(IMG_CSS_CLASSNAME, URL_OBJ + IMG_CSS_CLASSNAME + ".gif");
+		registerImage(IMG_CSS_ID, URL_OBJ + IMG_CSS_ID + ".gif");
 	}
 
 	/**

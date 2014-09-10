@@ -1,13 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2004, 2005 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ */
 package org.eclipse.wst.htmlcss.internal.ui;
 
 import java.util.Iterator;
@@ -29,14 +29,18 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.stylesheets.StyleSheetList;
 
 /**
- * 
+ * CSS class name or ID traverser.
  */
-public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
+public abstract class AbstractCSSClassNameOrIdTraverser extends
+		AbstractCssTraverser {
 
 	private final IDOMNode node;
+	private final WebResourcesType webResourcesType;
 
-	public AbstractCSSClassTraverser(IDOMNode node) {
+	public AbstractCSSClassNameOrIdTraverser(IDOMNode node,
+			WebResourcesType webResourcesType) {
 		this.node = node;
+		this.webResourcesType = webResourcesType;
 		super.setTraverseImported(true);
 	}
 
@@ -54,7 +58,7 @@ public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
 		}
 	}
 
-	private void addClassNames(ICSSStyleRule rule) {
+	private void traverseRule(ICSSStyleRule rule) {
 		ICSSSelectorList selectorList = rule.getSelectors();
 		Iterator iSelector = selectorList.getIterator();
 		while (iSelector.hasNext()) {
@@ -64,17 +68,28 @@ public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
 				ICSSSelectorItem item = (ICSSSelectorItem) iItem.next();
 				if (item.getItemType() == ICSSSelectorItem.SIMPLE) {
 					ICSSSimpleSelector sel = (ICSSSimpleSelector) item;
-					int nClasses = sel.getNumOfClasses();
-					for (int iClass = 0; iClass < nClasses; iClass++) {
-						String className = sel.getClass(iClass);
-						addClassName(className, rule);
+					// vist CSS#class names
+					if (webResourcesType == WebResourcesType.CSS_CLASS_NAME) {
+						int nClasses = sel.getNumOfClasses();
+						for (int iClass = 0; iClass < nClasses; iClass++) {
+							String className = sel.getClass(iClass);
+							collect(className, rule);
+						}
+					}
+					// visit CSS#id
+					if (webResourcesType == WebResourcesType.CSS_ID) {
+						int nbIds = sel.getNumOfIDs();
+						for (int i = 0; i < nbIds; i++) {
+							String cssID = sel.getID(i);
+							collect(cssID, rule);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	protected abstract void addClassName(String className, ICSSStyleRule rule);
+	protected abstract void collect(String classNameOrId, ICSSStyleRule rule);
 
 	/**
 	 * 
@@ -102,7 +117,7 @@ public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
 	protected short preNode(ICSSNode node) {
 		short ret;
 		if (node instanceof ICSSStyleRule) {
-			addClassNames((ICSSStyleRule) node);
+			traverseRule((ICSSStyleRule) node);
 			ret = TRAV_PRUNE;
 		} else if (node instanceof ICSSStyleSheet
 				|| node instanceof ICSSMediaRule
@@ -116,5 +131,9 @@ public abstract class AbstractCSSClassTraverser extends AbstractCssTraverser {
 
 	public IDOMNode getNode() {
 		return node;
+	}
+
+	public WebResourcesType getWebResourcesType() {
+		return webResourcesType;
 	}
 }

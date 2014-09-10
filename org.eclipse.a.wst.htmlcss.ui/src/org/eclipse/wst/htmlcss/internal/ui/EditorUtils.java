@@ -29,7 +29,7 @@ public class EditorUtils {
 	public static IEditorPart openInEditor(IFile file, int start, int length,
 			boolean activate) {
 		IEditorPart editor = null;
-		IWorkbenchPage page = HTMLCSSUIPlugin.getActivePage();
+		IWorkbenchPage page = WebResourcesPlugin.getActivePage();
 		try {
 			if (start >= 0) {
 				editor = IDE.openEditor(page, file, activate);

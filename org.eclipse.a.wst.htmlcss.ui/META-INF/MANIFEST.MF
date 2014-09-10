@@ -5,7 +5,7 @@ Bundle-Vendor: %pluginProvider
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.a.wst.htmlcss.ui;singleton:=true
 Bundle-Version: 0.6.0.qualifier
-Bundle-Activator: org.eclipse.wst.htmlcss.internal.ui.HTMLCSSUIPlugin
+Bundle-Activator: org.eclipse.wst.htmlcss.internal.ui.WebResourcesPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.wst.sse.ui,

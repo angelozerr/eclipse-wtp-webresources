@@ -19,18 +19,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class HTMLCSSUIPlugin extends AbstractUIPlugin {
+public class WebResourcesPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.a.wst.htmlcss.ui"; //$NON-NLS-1$
 
 	// The shared instance
-	private static HTMLCSSUIPlugin plugin;
+	private static WebResourcesPlugin plugin;
 
 	/**
 	 * The constructor
 	 */
-	public HTMLCSSUIPlugin() {
+	public WebResourcesPlugin() {
 	}
 
 	/*
@@ -62,7 +62,7 @@ public class HTMLCSSUIPlugin extends AbstractUIPlugin {
 	 * 
 	 * @return the shared instance
 	 */
-	public static HTMLCSSUIPlugin getDefault() {
+	public static WebResourcesPlugin getDefault() {
 		return plugin;
 	}
 
