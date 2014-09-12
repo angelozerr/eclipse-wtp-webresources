@@ -10,8 +10,18 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.text.contentassist.CompletionProposal;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.html.webresources.core.DOMHelper;
+import org.eclipse.wst.html.webresources.core.InformationHelper;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
+import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -92,9 +102,42 @@ public class WebResourcesCompletionProposalComputer extends
 	 * @param attrValueRegion
 	 */
 	private void processFilesCompletion(
-			ContentAssistRequest contentAssistRequest,
-			CompletionProposalInvocationContext context, String attrValue,
-			WebResourcesTextRegion attrValueRegion) {
-		// TODO : implements files completion
+			final ContentAssistRequest contentAssistRequest,
+			final CompletionProposalInvocationContext context,
+			String attrValue, WebResourcesTextRegion attrValueRegion) {
+		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
+		final IFile file = DOMHelper.getFile(node);
+		final String matchingString = DOMHelper
+				.getAttrValue(contentAssistRequest.getMatchString());
+		final int replacementLength = attrValue.length();
+		final int replacementOffset = context.getInvocationOffset()
+				- matchingString.length();
+		// WorkbenchLabelProvider provider = new
+		// WorkbenchLabelProvider().getImage(resource)
+		WebResourcesType type = attrValueRegion.getType().getType();
+		WebResourcesProvidersManager.collect(node, type,
+				new IWebResourcesCollector() {
+
+					@Override
+					public void add(IResource resource) {
+						IPath location = resource.getLocation().makeRelativeTo(
+								file.getParent().getLocation());
+						String fileName = location.toString();
+						if (location.toString().startsWith(matchingString)) {
+							String info = InformationHelper
+									.getInformation(resource);
+							String displayString = resource
+									.getProjectRelativePath().toString();
+							int cursorPosition = fileName.length();
+							Image image = new WorkbenchLabelProvider()
+									.getImage(resource);
+							CompletionProposal proposal = new CompletionProposal(
+									fileName, replacementOffset,
+									replacementLength, cursorPosition, image,
+									displayString, null, info);
+							contentAssistRequest.addProposal(proposal);
+						}
+					}
+				});
 	}
 }
