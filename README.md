@@ -10,7 +10,7 @@ after try to contribute to WTP :
  * JS resources file completion, hover for script/@src
  * CSS resources file completion, hover for link/@href
  * Images resources file completion, hover for img/@src
- *  
+   
 # Completion for CSS Class name
 
 Provides completion for WTP HTML editor for CSS className : 
