@@ -11,19 +11,21 @@ after try to contribute to WTP :
  * CSS resources file completion, hover for link/@href
  * Images resources file completion, hover for img/@src
    
-# Completion for CSS Class name
+# CSS#class CSS#ID
+
+## Completion for CSS Class name
 
 Provides completion for WTP HTML editor for CSS className : 
 
 ![Class completion](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassCompletion.png)
 
-# Hyperlink for CSS Class name
+## Hyperlink for CSS Class name
 
 Provides hyperlink for WTP HTML editor for CSS className : 
 
 ![Class hyperlink](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassHyperlink.png)
 
-# Hover for CSS Class name
+## Hover for CSS Class name
 
 Provides text hover for WTP HTML editor for CSS className : 
 
