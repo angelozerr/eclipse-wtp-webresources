@@ -6,8 +6,11 @@ eclipse-wtp-htmlcss
 Eclipse WTP provides HTML editor with several completions (tags, CSS styles, etc) but it misses some features. Thoses features was created inside WTP bugzilla but WTP team seems very busy to implement it. The goal of this project is to provide some missing features and 
 after try to contribute to WTP : 
 
- * Class completion . See [bug 302125](https://bugs.eclipse.org/bugs/show_bug.cgi?id=302125) and [bug 211190](https://bugs.eclipse.org/bugs/show_bug.cgi?id=211190) 
-
+ * CSS#class CSS#ID completion, hover, hyperlink. See [bug 302125](https://bugs.eclipse.org/bugs/show_bug.cgi?id=302125) and [bug 211190](https://bugs.eclipse.org/bugs/show_bug.cgi?id=211190) 
+ * JS resources file completion, hover for script/@src
+ * CSS resources file completion, hover for link/@href
+ * Images resources file completion, hover for img/@src
+ *  
 # Completion for CSS Class name
 
 Provides completion for WTP HTML editor for CSS className : 
