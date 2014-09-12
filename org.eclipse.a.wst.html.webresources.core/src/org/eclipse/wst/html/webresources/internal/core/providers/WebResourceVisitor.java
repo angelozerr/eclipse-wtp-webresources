@@ -36,7 +36,7 @@ public class WebResourceVisitor implements IResourceVisitor {
 			return true;
 		case IResource.FILE:
 			IFile file = (IFile) resource;
-			if (file.getFileExtension().equalsIgnoreCase(resourcesType.name())) {
+			if (resourcesType.name().equalsIgnoreCase(file.getFileExtension())) {
 				collector.add(file, htmlNode, htmlFile, provider);
 			}
 			return false;
