@@ -6,8 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
@@ -26,13 +25,13 @@ public class WebResourcesProvidersManager {
 
 	private static Map<WebResourcesType, Collection<WebResourcesProviderType>> providerTypes;
 
-	public static void collect(IDOMNode node, WebResourcesType resourcesType,
-			IWebResourcesCollector collector) {
+	public static void collect(IDOMNode htmlNode,
+			WebResourcesType resourcesType, IWebResourcesCollector collector) {
 		Collection<WebResourcesProviderType> providerTypes = WebResourcesProvidersManager
 				.getProviderTypes(resourcesType);
-		IProject project = DOMHelper.getFile(node).getProject();
+		IFile htmlFile = DOMHelper.getFile(htmlNode);
 		for (WebResourcesProviderType providerType : providerTypes) {
-			providerType.collect(node, project, collector);
+			providerType.collect(htmlNode, htmlFile, collector);
 		}
 	}
 

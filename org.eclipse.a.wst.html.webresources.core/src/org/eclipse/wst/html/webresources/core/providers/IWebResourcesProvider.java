@@ -1,17 +1,13 @@
 package org.eclipse.wst.html.webresources.core.providers;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public interface IWebResourcesProvider {
 
-	IContainer[] getContainers(IProject project);
+	IContainer[] getContainers(IDOMNode htmlNode, IFile htmlFile);
 
-	//void collect(IContainer container, WebResourcesType type,
-	//		IWebResourcesCollector collector);
-
-	// boolean accept(IResource resource);
+	IURIResolver getResolver(IDOMNode htmlNode, IFile htmlFile);
 
 }

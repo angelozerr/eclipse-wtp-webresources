@@ -27,7 +27,9 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.util.AbstractCssTraverser;
 import org.eclipse.wst.html.core.internal.htmlcss.HTMLDocumentAdapter;
+import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -56,8 +58,8 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		StyleSheetList sheetList = adapter.getStyleSheets();
 		int nbSheets = sheetList.getLength();
 		if (nbSheets == 0) {
-			WebResourcesProvidersManager.collect(node,
-					WebResourcesType.css, this);
+			WebResourcesProvidersManager.collect(node, WebResourcesType.css,
+					this);
 		} else {
 			for (int i = 0; i < nbSheets; i++) {
 				org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
@@ -121,7 +123,8 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		return TRAV_CONT;
 	}
 
-	/**s
+	/**
+	 * s
 	 * 
 	 */
 	protected short preNode(ICSSNode node) {
@@ -148,8 +151,9 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 	}
 
 	@Override
-	public void add(IResource resource) {
-		ICSSModel model = DOMHelper.getModel((IFile)resource);
+	public void add(IResource resource, IDOMNode htmlNode, IFile htmlFile,
+			IWebResourcesProvider provider) {
+		ICSSModel model = DOMHelper.getModel((IFile) resource);
 		super.apply(model);
 	}
 }

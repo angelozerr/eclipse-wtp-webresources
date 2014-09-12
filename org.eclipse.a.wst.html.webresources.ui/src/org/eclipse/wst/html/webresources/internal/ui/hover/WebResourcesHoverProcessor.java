@@ -15,18 +15,16 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.contentassist.CompletionProposal;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.eclipse.wst.html.webresources.core.DOMHelper;
 import org.eclipse.wst.html.webresources.core.InformationHelper;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
-import org.eclipse.wst.html.webresources.core.DOMHelper;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.sse.ui.internal.taginfo.AbstractHoverProcessor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -54,33 +52,42 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor {
 			switch (resourceRegion.getType()) {
 			case CSS_CLASS_NAME:
 			case CSS_ID:
-				CSSHoverTraverser traverser = new CSSHoverTraverser(xmlnode,
-						((WebResourceRegion) hoverRegion));
-				traverser.process();
-				return traverser.getInfo();
+				return getCSSHoverInfo(resourceRegion, xmlnode);
 			default:
-				final String fileName = resourceRegion.getValue();
-				final IFile file = DOMHelper.getFile(xmlnode);
-				final StringBuilder info = new StringBuilder();
-				WebResourcesType type = resourceRegion.getType().getType();
-				WebResourcesProvidersManager.collect(xmlnode, type,
-						new IWebResourcesCollector() {
-
-							@Override
-							public void add(IResource resource) {
-								IPath location = resource.getLocation()
-										.makeRelativeTo(
-												file.getParent().getLocation());
-								if (location.toString().equals(fileName)) {
-									InformationHelper.addInformation(resource,
-											info);
-								}
-							}
-						});
-				return info.length() > 0 ? info.toString() : null;
+				return getFileHoverInfo(resourceRegion, xmlnode);
 			}
 		}
 		return null;
+	}
+
+	private String getCSSHoverInfo(WebResourceRegion hoverRegion,
+			IDOMNode xmlnode) {
+		CSSHoverTraverser traverser = new CSSHoverTraverser(xmlnode,
+				hoverRegion);
+		traverser.process();
+		return traverser.getInfo();
+	}
+
+	private String getFileHoverInfo(WebResourceRegion resourceRegion,
+			IDOMNode xmlnode) {
+		final String fileName = resourceRegion.getValue();
+		final StringBuilder info = new StringBuilder();
+		WebResourcesType type = resourceRegion.getType().getType();
+		WebResourcesProvidersManager.collect(xmlnode, type,
+				new IWebResourcesCollector() {
+					@Override
+					public void add(IResource resource, IDOMNode htmlNode,
+							IFile htmlFile, IWebResourcesProvider provider) {
+						IURIResolver resolver = provider.getResolver(htmlNode,
+								htmlFile);
+						IPath resourceFileLoc = resolver.resolve(resource,
+								htmlFile);
+						if (resourceFileLoc.toString().equals(fileName)) {
+							InformationHelper.addInformation(resource, info);
+						}
+					}
+				});
+		return info.length() > 0 ? info.toString() : null;
 	}
 
 	@Override

@@ -20,7 +20,9 @@ import org.eclipse.wst.html.webresources.core.DOMHelper;
 import org.eclipse.wst.html.webresources.core.InformationHelper;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
@@ -106,7 +108,6 @@ public class WebResourcesCompletionProposalComputer extends
 			final CompletionProposalInvocationContext context,
 			String attrValue, WebResourcesTextRegion attrValueRegion) {
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
-		final IFile file = DOMHelper.getFile(node);
 		final String matchingString = DOMHelper
 				.getAttrValue(contentAssistRequest.getMatchString());
 		final int replacementLength = attrValue.length();
@@ -117,9 +118,11 @@ public class WebResourcesCompletionProposalComputer extends
 				new IWebResourcesCollector() {
 
 					@Override
-					public void add(IResource resource) {
-						IPath location = resource.getLocation().makeRelativeTo(
-								file.getParent().getLocation());
+					public void add(IResource resource, IDOMNode htmlNode,
+							IFile htmlFile, IWebResourcesProvider provider) {
+						IURIResolver resolver = provider.getResolver(htmlNode,
+								htmlFile);
+						IPath location = resolver.resolve(resource, htmlFile);
 						String fileName = location.toString();
 						if (location.toString().startsWith(matchingString)) {
 							String info = InformationHelper
@@ -127,7 +130,7 @@ public class WebResourcesCompletionProposalComputer extends
 							String displayString = resource
 									.getProjectRelativePath().toString();
 							int cursorPosition = fileName.length();
-							Image image = new WorkbenchLabelProvider()
+							Image image = InformationHelper
 									.getImage(resource);
 							CompletionProposal proposal = new CompletionProposal(
 									fileName, replacementOffset,

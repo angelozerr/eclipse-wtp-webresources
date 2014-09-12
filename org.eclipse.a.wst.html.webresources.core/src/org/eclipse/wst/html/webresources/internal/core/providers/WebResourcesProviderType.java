@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
@@ -23,12 +24,13 @@ public class WebResourcesProviderType {
 		this.resourcesType = resourcesType;
 	}
 
-	public void collect(IDOMNode node, IProject project,
+	public void collect(IDOMNode htmlNode, IFile htmlFile,
 			IWebResourcesCollector collector) {
-		IContainer[] containers = provider.getContainers(project);
+		IContainer[] containers = provider.getContainers(htmlNode, htmlFile);
 		if (containers != null) {
+			IURIResolver resolver = provider.getResolver(htmlNode, htmlFile);
 			IResourceVisitor visitor = new WebResourceVisitor(collector,
-					resourcesType);
+					resourcesType, htmlNode, htmlFile, provider);
 			for (int i = 0; i < containers.length; i++) {
 				try {
 					containers[i].accept(visitor);
