@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
-import org.eclipse.wst.html.webresources.core.CSSClassNameOrIdRegion;
+import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
@@ -26,16 +26,16 @@ public class CSSHyperlinkTraverser extends AbstractCSSClassNameOrIdTraverser {
 
 	private static final IHyperlink[] EMPTY_HYPERLINK = new IHyperlink[0];
 	private List<IHyperlink> hyperlinks;
-	private final CSSClassNameOrIdRegion cssRegion;
+	private final WebResourceRegion cssRegion;
 
-	public CSSHyperlinkTraverser(IDOMNode node, CSSClassNameOrIdRegion cssRegion) {
+	public CSSHyperlinkTraverser(IDOMNode node, WebResourceRegion cssRegion) {
 		super(node, cssRegion.getType());
 		this.cssRegion = cssRegion;
 	}
 
 	@Override
 	protected void collect(String classNameOrId, ICSSStyleRule rule) {
-		if (cssRegion.getNameOrId().equals(classNameOrId)) {
+		if (cssRegion.getValue().equals(classNameOrId)) {
 			if (hyperlinks == null) {
 				hyperlinks = new ArrayList<IHyperlink>();
 			}

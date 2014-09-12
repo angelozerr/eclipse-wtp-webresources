@@ -14,7 +14,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
-import org.eclipse.wst.html.webresources.core.CSSClassNameOrIdRegion;
+import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.DOMHelper;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
@@ -46,7 +46,7 @@ public class CSSHyperlinkDetector extends AbstractHyperlinkDetector {
 				case CSS_CLASS_NAME:
 				case CSS_ID:
 					// hyperlink is done for @id or @class
-					CSSClassNameOrIdRegion classNameRegion = DOMHelper
+					WebResourceRegion classNameRegion = DOMHelper
 							.getCSSRegion(attrValueRegion, documentRegion,
 									textViewer.getDocument(),
 									region.getOffset());

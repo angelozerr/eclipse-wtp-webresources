@@ -19,7 +19,7 @@ import org.eclipse.jface.text.IDocument;
  */
 public class CSSClassNameFinder {
 
-	public static CSSClassNameOrIdRegion findClassName(IDocument document,
+	public static WebResourceRegion findClassName(IDocument document,
 			int offset, int startOffset, int endOffset) {
 
 		StringBuilder className = new StringBuilder();
@@ -56,13 +56,13 @@ public class CSSClassNameFinder {
 
 		if (start >= -1 && end > -1) {
 			if (start == offset && end == offset)
-				return new CSSClassNameOrIdRegion(offset, 0,
+				return new WebResourceRegion(offset, 0,
 						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 			else if (start == offset)
-				return new CSSClassNameOrIdRegion(start, end - start,
+				return new WebResourceRegion(start, end - start,
 						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 			else
-				return new CSSClassNameOrIdRegion(start + 1, end - start - 1,
+				return new WebResourceRegion(start + 1, end - start - 1,
 						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 		}
 

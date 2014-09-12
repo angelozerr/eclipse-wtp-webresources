@@ -118,6 +118,7 @@ public class DOMHelper {
 		}
 		return null;
 	}
+
 	public static String getFileName(ICSSStyleRule rule, IDOMNode node) {
 		String fileName = rule.getOwnerDocument().getModel().getBaseLocation();
 		if (IModelManager.UNMANAGED_MODEL.equals(fileName)) {
@@ -204,7 +205,7 @@ public class DOMHelper {
 		return null;
 	}
 
-	public static CSSClassNameOrIdRegion getCSSRegion(
+	public static WebResourceRegion getCSSRegion(
 			WebResourcesTextRegion cssRegion,
 			IStructuredDocumentRegion documentRegion, IDocument document,
 			int offset) {
@@ -218,11 +219,23 @@ public class DOMHelper {
 			return CSSClassNameFinder.findClassName(document, offset,
 					startOffset, endOffset);
 		case CSS_ID:
-			return new CSSClassNameOrIdRegion(startOffset + 1,
-					attrValue.length(), attrValue, cssRegion.getType());
+			return getAttrValueRegion(cssRegion, documentRegion, document,
+					offset);
 		default:
 			return null;
 		}
+	}
+
+	public static WebResourceRegion getAttrValueRegion(
+			WebResourcesTextRegion cssRegion,
+			IStructuredDocumentRegion documentRegion, IDocument document,
+			int offset) {
+		ITextRegion textRegion = cssRegion.getRegion();
+		int startOffset = documentRegion.getStartOffset(textRegion);
+		String attrValue = DOMHelper.getAttrValue(documentRegion
+				.getText(textRegion));
+		return new WebResourceRegion(startOffset + 1, attrValue.length(),
+				attrValue, cssRegion.getType());
 	}
 
 	public static ICSSModel getModel(IFile file) {

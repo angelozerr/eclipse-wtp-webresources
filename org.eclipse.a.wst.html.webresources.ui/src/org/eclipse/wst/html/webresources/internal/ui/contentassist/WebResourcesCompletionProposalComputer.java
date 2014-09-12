@@ -112,8 +112,6 @@ public class WebResourcesCompletionProposalComputer extends
 		final int replacementLength = attrValue.length();
 		final int replacementOffset = context.getInvocationOffset()
 				- matchingString.length();
-		// WorkbenchLabelProvider provider = new
-		// WorkbenchLabelProvider().getImage(resource)
 		WebResourcesType type = attrValueRegion.getType().getType();
 		WebResourcesProvidersManager.collect(node, type,
 				new IWebResourcesCollector() {

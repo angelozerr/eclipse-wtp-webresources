@@ -16,20 +16,20 @@ import org.eclipse.jface.text.Region;
  * {@link Region} implementation for CSS clas name or ID.
  *
  */
-public class CSSClassNameOrIdRegion extends Region {
+public class WebResourceRegion extends Region {
 
-	private final String nameOrId;
+	private final String value;
 	private final WebResourcesFinderType type;
 
-	public CSSClassNameOrIdRegion(int offset, int length, String nameOrId,
+	public WebResourceRegion(int offset, int length, String value,
 			WebResourcesFinderType type) {
 		super(offset, length);
-		this.nameOrId = nameOrId;
+		this.value = value;
 		this.type = type;
 	}
 
-	public String getNameOrId() {
-		return nameOrId;
+	public String getValue() {
+		return value;
 	}
 
 	public WebResourcesFinderType getType() {
