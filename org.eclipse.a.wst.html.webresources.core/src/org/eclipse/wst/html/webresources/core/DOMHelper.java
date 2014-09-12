@@ -13,11 +13,13 @@ package org.eclipse.wst.html.webresources.core;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.core.internal.provisional.HTML40Namespace;
@@ -66,7 +68,7 @@ public class DOMHelper {
 					.equals(DOMRegionContext.XML_TAG_ATTRIBUTE_NAME)) {
 				// attribute name region
 				attrName = documentRegion.getText(currentRegion);
-				WebResourcesType type = getWebResourcesType(elementName,
+				WebResourcesFinderType type = getWebResourcesType(elementName,
 						attrName);
 				if (type != null) { //$NON-NLS-1$
 					// the next region should be "="
@@ -89,57 +91,33 @@ public class DOMHelper {
 		return null;
 	}
 
-	private static WebResourcesType getWebResourcesType(String elementName,
-			String attrName) {
+	private static WebResourcesFinderType getWebResourcesType(
+			String elementName, String attrName) {
 		if (HTML40Namespace.ATTR_NAME_CLASS.equalsIgnoreCase(attrName)) {
 			// @class
-			return WebResourcesType.CSS_CLASS_NAME;
+			return WebResourcesFinderType.CSS_CLASS_NAME;
 		}
 		if (HTML40Namespace.ATTR_NAME_ID.equalsIgnoreCase(attrName)) {
 			// @id
-			return WebResourcesType.CSS_ID;
+			return WebResourcesFinderType.CSS_ID;
 		}
 		if (HTML40Namespace.ElementName.LINK.equalsIgnoreCase(elementName)
 				&& HTML40Namespace.ATTR_NAME_HREF.equalsIgnoreCase(attrName)) {
 			// link/@href
-			return WebResourcesType.LINK_HREF;
+			return WebResourcesFinderType.LINK_HREF;
 		}
 		if (HTML40Namespace.ElementName.SCRIPT.equalsIgnoreCase(elementName)
 				&& HTML40Namespace.ATTR_NAME_SRC.equalsIgnoreCase(attrName)) {
 			// script/@src
-			return WebResourcesType.SCRIPT_SRC;
+			return WebResourcesFinderType.SCRIPT_SRC;
 		}
 		if (HTML40Namespace.ElementName.IMG.equalsIgnoreCase(elementName)
 				&& HTML40Namespace.ATTR_NAME_SRC.equalsIgnoreCase(attrName)) {
 			// img/@src
-			return WebResourcesType.IMG_SRC;
+			return WebResourcesFinderType.IMG_SRC;
 		}
 		return null;
 	}
-
-	public static String getInformation(ICSSStyleRule rule, IDOMNode node) {
-		StringBuilder information = new StringBuilder();
-		addInformation(rule, node, information);
-		return information.toString();
-	}
-
-	public static void addInformation(ICSSStyleRule rule, IDOMNode node,
-			StringBuilder information) {
-		information.append("<b>CSS text:</b><br/>");
-		information.append("<pre>");
-		information.append(rule.getCssText());
-		information.append("</pre>");
-		information.append("<dl>");
-		String fileName = getFileName(rule, node);
-		if (fileName != null) {
-			information.append("<dt><b>File:</b></dt>");
-			information.append("<dd>");
-			information.append(fileName);
-			information.append("</dd>");
-		}
-		information.append("</dl>");
-	}
-
 	public static String getFileName(ICSSStyleRule rule, IDOMNode node) {
 		String fileName = rule.getOwnerDocument().getModel().getBaseLocation();
 		if (IModelManager.UNMANAGED_MODEL.equals(fileName)) {
@@ -166,6 +144,17 @@ public class DOMHelper {
 	 * 
 	 * @param node
 	 *            the SSE DOM Node.
+	 * @return
+	 */
+	public static final IFile getFile(IDOMNode node) {
+		return getFile(node.getModel());
+	}
+
+	/**
+	 * Returns the owner file of the SSE CSS Node {@link ICSSNode}.
+	 * 
+	 * @param node
+	 *            the SSE CSS Node.
 	 * @return
 	 */
 	public static final IFile getFile(ICSSNode node) {
@@ -234,6 +223,25 @@ public class DOMHelper {
 		default:
 			return null;
 		}
+	}
+
+	public static ICSSModel getModel(IFile file) {
+		IStructuredModel model = null;
+		try {
+			model = StructuredModelManager.getModelManager()
+					.getExistingModelForRead(file);
+			if (model == null) {
+				model = StructuredModelManager.getModelManager()
+						.getModelForRead(file);
+			}
+			return (ICSSModel) model;
+		} catch (Exception e) {
+
+		}
+		if (model != null) {
+			model.releaseFromRead();
+		}
+		return null;
 	}
 
 }

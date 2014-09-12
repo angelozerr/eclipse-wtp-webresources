@@ -16,7 +16,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.DOMHelper;
-import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.internal.ui.EditorUtils;
 import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIMessages;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -30,10 +30,10 @@ public class CSSHyperlink implements IHyperlink {
 
 	private final IRegion classNameOrIdRegion;
 	private final ICSSStyleRule rule;
-	private final WebResourcesType type;
+	private final WebResourcesFinderType type;
 
 	public CSSHyperlink(IRegion classNameOrIdRegion, ICSSStyleRule rule,
-			WebResourcesType type) {
+			WebResourcesFinderType type) {
 		this.classNameOrIdRegion = classNameOrIdRegion;
 		this.rule = rule;
 		this.type = type;
@@ -46,14 +46,14 @@ public class CSSHyperlink implements IHyperlink {
 
 	@Override
 	public String getHyperlinkText() {
-		String message = (type == WebResourcesType.CSS_ID) ? WebResourcesUIMessages.CSSIDHyperLink_text
+		String message = (type == WebResourcesFinderType.CSS_ID) ? WebResourcesUIMessages.CSSIDHyperLink_text
 				: WebResourcesUIMessages.CSSClassNameHyperLink_text;
 		return NLS.bind(message, rule.getSelectorText());
 	}
 
 	@Override
 	public String getTypeLabel() {
-		return type == WebResourcesType.CSS_ID ? WebResourcesUIMessages.CSSIDHyperLink_typeLabel
+		return type == WebResourcesFinderType.CSS_ID ? WebResourcesUIMessages.CSSIDHyperLink_typeLabel
 				: WebResourcesUIMessages.CSSClassNameHyperLink_typeLabel;
 	}
 

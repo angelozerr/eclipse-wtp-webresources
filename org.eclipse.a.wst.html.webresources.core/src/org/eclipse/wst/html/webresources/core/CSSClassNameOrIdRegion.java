@@ -19,10 +19,10 @@ import org.eclipse.jface.text.Region;
 public class CSSClassNameOrIdRegion extends Region {
 
 	private final String nameOrId;
-	private final WebResourcesType type;
+	private final WebResourcesFinderType type;
 
 	public CSSClassNameOrIdRegion(int offset, int length, String nameOrId,
-			WebResourcesType type) {
+			WebResourcesFinderType type) {
 		super(offset, length);
 		this.nameOrId = nameOrId;
 		this.type = type;
@@ -32,7 +32,7 @@ public class CSSClassNameOrIdRegion extends Region {
 		return nameOrId;
 	}
 
-	public WebResourcesType getType() {
+	public WebResourcesFinderType getType() {
 		return type;
 	}
 

@@ -12,9 +12,12 @@ package org.eclipse.wst.html.webresources.core;
 
 import java.util.Iterator;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetListAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSImportRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSMediaRule;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSSelector;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSSelectorItem;
@@ -24,6 +27,8 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.util.AbstractCssTraverser;
 import org.eclipse.wst.html.core.internal.htmlcss.HTMLDocumentAdapter;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.stylesheets.StyleSheetList;
@@ -32,13 +37,13 @@ import org.w3c.dom.stylesheets.StyleSheetList;
  * CSS class name or ID traverser.
  */
 public abstract class AbstractCSSClassNameOrIdTraverser extends
-		AbstractCssTraverser {
+		AbstractCssTraverser implements IWebResourcesCollector {
 
 	private final IDOMNode node;
-	private final WebResourcesType webResourcesType;
+	private final WebResourcesFinderType webResourcesType;
 
 	public AbstractCSSClassNameOrIdTraverser(IDOMNode node,
-			WebResourcesType webResourcesType) {
+			WebResourcesFinderType webResourcesType) {
 		this.node = node;
 		this.webResourcesType = webResourcesType;
 		super.setTraverseImported(true);
@@ -49,11 +54,16 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 				.getOwnerDocument())
 				.getAdapterFor(IStyleSheetListAdapter.class);
 		StyleSheetList sheetList = adapter.getStyleSheets();
-		int nSheets = sheetList.getLength();
-		for (int i = 0; i < nSheets; i++) {
-			org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
-			if (sheet instanceof ICSSNode) {
-				super.apply((ICSSNode) sheet);
+		int nbSheets = sheetList.getLength();
+		if (nbSheets == 0) {
+			WebResourcesProvidersManager.collect(node,
+					WebResourcesType.css, this);
+		} else {
+			for (int i = 0; i < nbSheets; i++) {
+				org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
+				if (sheet instanceof ICSSNode) {
+					super.apply((ICSSNode) sheet);
+				}
 			}
 		}
 	}
@@ -69,7 +79,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 				if (item.getItemType() == ICSSSelectorItem.SIMPLE) {
 					ICSSSimpleSelector sel = (ICSSSimpleSelector) item;
 					// vist CSS#class names
-					if (webResourcesType == WebResourcesType.CSS_CLASS_NAME) {
+					if (webResourcesType == WebResourcesFinderType.CSS_CLASS_NAME) {
 						int nClasses = sel.getNumOfClasses();
 						for (int iClass = 0; iClass < nClasses; iClass++) {
 							String className = sel.getClass(iClass);
@@ -77,7 +87,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 						}
 					}
 					// visit CSS#id
-					if (webResourcesType == WebResourcesType.CSS_ID) {
+					if (webResourcesType == WebResourcesFinderType.CSS_ID) {
 						int nbIds = sel.getNumOfIDs();
 						for (int i = 0; i < nbIds; i++) {
 							String cssID = sel.getID(i);
@@ -111,7 +121,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		return TRAV_CONT;
 	}
 
-	/**
+	/**s
 	 * 
 	 */
 	protected short preNode(ICSSNode node) {
@@ -133,7 +143,13 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		return node;
 	}
 
-	public WebResourcesType getWebResourcesType() {
+	public WebResourcesFinderType getWebResourcesType() {
 		return webResourcesType;
+	}
+
+	@Override
+	public void add(IResource resource) {
+		ICSSModel model = DOMHelper.getModel((IFile)resource);
+		super.apply(model);
 	}
 }

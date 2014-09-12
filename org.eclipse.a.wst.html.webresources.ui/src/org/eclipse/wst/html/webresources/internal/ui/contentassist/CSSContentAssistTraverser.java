@@ -14,7 +14,8 @@ import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.DOMHelper;
-import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.InformationHelper;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.internal.ui.ImageResource;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -31,7 +32,7 @@ public class CSSContentAssistTraverser extends
 	private int replacementLength;
 
 	public CSSContentAssistTraverser(ContentAssistRequest contentAssistRequest,
-			int documentPosition, String attrValue, WebResourcesType type) {
+			int documentPosition, String attrValue, WebResourcesFinderType type) {
 		super((IDOMNode) contentAssistRequest.getNode(), type);
 		this.contentAssistRequest = contentAssistRequest;
 
@@ -44,7 +45,7 @@ public class CSSContentAssistTraverser extends
 
 		// matching class name = "my"
 		matchingClassNameOrId = matchingString;
-		if (type == WebResourcesType.CSS_CLASS_NAME) {
+		if (type == WebResourcesFinderType.CSS_CLASS_NAME) {
 			int index = matchingClassNameOrId.lastIndexOf(" ");
 			if (index != -1) {
 				matchingClassNameOrId = matchingClassNameOrId.substring(
@@ -78,7 +79,7 @@ public class CSSContentAssistTraverser extends
 
 		// Compute the display string of the completion proposal
 		IDOMNode node = getNode();
-		String info = DOMHelper.getInformation(rule, node);
+		String info = InformationHelper.getInformation(rule, node);
 		String fileName = DOMHelper.getFileName(rule, node);
 		String displayString = fileName != null ? new StringBuilder(className)
 				.append(" - ").append(fileName).toString() : className;
@@ -91,7 +92,7 @@ public class CSSContentAssistTraverser extends
 						replacementOffset,
 						replacementLength,
 						cursorPosition,
-						getWebResourcesType() == WebResourcesType.CSS_ID ? ImageResource
+						getWebResourcesType() == WebResourcesFinderType.CSS_ID ? ImageResource
 								.getImage(ImageResource.IMG_CSS_ID)
 								: ImageResource
 										.getImage(ImageResource.IMG_CSS_CLASSNAME),

@@ -57,13 +57,13 @@ public class CSSClassNameFinder {
 		if (start >= -1 && end > -1) {
 			if (start == offset && end == offset)
 				return new CSSClassNameOrIdRegion(offset, 0,
-						className.toString(), WebResourcesType.CSS_CLASS_NAME);
+						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 			else if (start == offset)
 				return new CSSClassNameOrIdRegion(start, end - start,
-						className.toString(), WebResourcesType.CSS_CLASS_NAME);
+						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 			else
 				return new CSSClassNameOrIdRegion(start + 1, end - start - 1,
-						className.toString(), WebResourcesType.CSS_CLASS_NAME);
+						className.toString(), WebResourcesFinderType.CSS_CLASS_NAME);
 		}
 
 		return null;

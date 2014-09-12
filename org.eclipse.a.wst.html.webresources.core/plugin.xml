@@ -14,4 +14,15 @@
  -->
 <plugin>
     
+	<extension-point id="webResourcesProviders" name="%webResourcesProviders.name"
+		schema="schema/webResourcesProviders.exsd" />	
+		
+	<extension
+		      point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders">
+     <provider
+           class="org.eclipse.wst.html.webresources.internal.core.providers.PreferencesWebResourcesProvider"
+           types="css,js,img">
+     </provider>
+	</extension>    
+		
 </plugin>        

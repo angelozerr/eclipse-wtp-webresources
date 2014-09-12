@@ -14,15 +14,15 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 
 /**
  * Bean info which hosts {@link ITextRegion} and web resources type
- * {@link WebResourcesType}.
+ * {@link WebResourcesFinderType}.
  *
  */
 public class WebResourcesTextRegion {
 
 	private final ITextRegion region;
-	private final WebResourcesType type;
+	private final WebResourcesFinderType type;
 
-	public WebResourcesTextRegion(ITextRegion region, WebResourcesType type) {
+	public WebResourcesTextRegion(ITextRegion region, WebResourcesFinderType type) {
 		this.region = region;
 		this.type = type;
 	}
@@ -31,7 +31,7 @@ public class WebResourcesTextRegion {
 		return region;
 	}
 
-	public WebResourcesType getType() {
+	public WebResourcesFinderType getType() {
 		return type;
 	}
 }
