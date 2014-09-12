@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="org.eclipse.wst.html.webresources.feature">
+      <category name="WTP HTML - Web Resources"/>
+   </feature>
+   <category-def name="WTP HTML - Web Resources" label="WTP HTML - Web Resources">
+     <description>
+       Provides completion, hyperlink, hover inside WTP HTML editor for Web Resources (CSS, JS, Images)
+     </description>
+   </category-def>     
+</site>

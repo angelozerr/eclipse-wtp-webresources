@@ -21,9 +21,10 @@
 		</license>
 	</licenses>
 	<modules>
-		<module>org.eclipse.a.wst.htmlcss.ui</module>
-		<module>eclipse-wtp-htmlcss-feature</module>		
-		<module>org.eclipse.wst.htmlcss.repository</module>		
+		<module>org.eclipse.a.wst.html.webresources.core</module>
+		<module>org.eclipse.a.wst.html.webresources.ui</module>
+		<module>org.eclipse.wst.html.webresources.feature</module>		
+		<module>org.eclipse.wst.html.webresources.repository</module>		
 	</modules>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
