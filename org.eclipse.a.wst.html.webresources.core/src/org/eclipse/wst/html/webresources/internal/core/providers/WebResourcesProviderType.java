@@ -30,7 +30,7 @@ public class WebResourcesProviderType {
 		if (containers != null) {
 			IURIResolver resolver = provider.getResolver(htmlNode, htmlFile);
 			IResourceVisitor visitor = new WebResourceVisitor(collector,
-					resourcesType, htmlNode, htmlFile, provider);
+					resourcesType, htmlNode, htmlFile, resolver);
 			for (int i = 0; i < containers.length; i++) {
 				try {
 					containers[i].accept(visitor);

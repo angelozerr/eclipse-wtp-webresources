@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourcesType;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public class WebResourceVisitor implements IResourceVisitor {
@@ -16,16 +15,16 @@ public class WebResourceVisitor implements IResourceVisitor {
 	private final WebResourcesType resourcesType;
 	private final IDOMNode htmlNode;
 	private final IFile htmlFile;
-	private final IWebResourcesProvider provider;
+	private final IURIResolver resolver;
 
 	public WebResourceVisitor(IWebResourcesCollector collector,
 			WebResourcesType resourcesType, IDOMNode htmlNode, IFile htmlFile,
-			IWebResourcesProvider provider) {
+			IURIResolver resolver) {
 		this.collector = collector;
 		this.resourcesType = resourcesType;
 		this.htmlNode = htmlNode;
 		this.htmlFile = htmlFile;
-		this.provider = provider;
+		this.resolver = resolver;
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class WebResourceVisitor implements IResourceVisitor {
 		case IResource.FILE:
 			IFile file = (IFile) resource;
 			if (resourcesType.name().equalsIgnoreCase(file.getFileExtension())) {
-				collector.add(file, htmlNode, htmlFile, provider);
+				collector.add(file, htmlNode, htmlFile, resolver);
 			}
 			return false;
 		}

@@ -119,9 +119,8 @@ public class WebResourcesCompletionProposalComputer extends
 
 					@Override
 					public void add(IResource resource, IDOMNode htmlNode,
-							IFile htmlFile, IWebResourcesProvider provider) {
-						IURIResolver resolver = provider.getResolver(htmlNode,
-								htmlFile);
+							IFile htmlFile, IURIResolver resolver) {
+
 						IPath location = resolver.resolve(resource, htmlFile);
 						String fileName = location.toString();
 						if (location.toString().startsWith(matchingString)) {
@@ -130,8 +129,7 @@ public class WebResourcesCompletionProposalComputer extends
 							String displayString = resource
 									.getProjectRelativePath().toString();
 							int cursorPosition = fileName.length();
-							Image image = InformationHelper
-									.getImage(resource);
+							Image image = InformationHelper.getImage(resource);
 							CompletionProposal proposal = new CompletionProposal(
 									fileName, replacementOffset,
 									replacementLength, cursorPosition, image,

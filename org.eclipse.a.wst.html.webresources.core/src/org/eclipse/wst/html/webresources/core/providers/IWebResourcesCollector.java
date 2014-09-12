@@ -7,6 +7,6 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 public interface IWebResourcesCollector {
 
 	void add(IResource resource, IDOMNode htmlNode, IFile htmlFile,
-			IWebResourcesProvider provider);
+			IURIResolver resolver);
 
 }

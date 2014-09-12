@@ -77,9 +77,7 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor {
 				new IWebResourcesCollector() {
 					@Override
 					public void add(IResource resource, IDOMNode htmlNode,
-							IFile htmlFile, IWebResourcesProvider provider) {
-						IURIResolver resolver = provider.getResolver(htmlNode,
-								htmlFile);
+							IFile htmlFile, IURIResolver resolver) {
 						IPath resourceFileLoc = resolver.resolve(resource,
 								htmlFile);
 						if (resourceFileLoc.toString().equals(fileName)) {

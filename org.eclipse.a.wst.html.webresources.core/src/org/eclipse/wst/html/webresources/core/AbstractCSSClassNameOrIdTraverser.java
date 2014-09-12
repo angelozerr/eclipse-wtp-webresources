@@ -152,7 +152,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 
 	@Override
 	public void add(IResource resource, IDOMNode htmlNode, IFile htmlFile,
-			IWebResourcesProvider provider) {
+			IURIResolver resolver) {
 		ICSSModel model = DOMHelper.getModel((IFile) resource);
 		super.apply(model);
 	}
