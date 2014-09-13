@@ -10,8 +10,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.wst.html.webresources.core.DOMHelper;
-import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.internal.core.providers.WebResourcesProviderType;
@@ -23,20 +23,25 @@ public class WebResourcesProvidersManager {
 	private static final String EXTENSION_POINT_ID = "webResourcesProviders";
 	private static final Object TAG_NAME = "provider";
 
-	private static Map<WebResourcesType, Collection<WebResourcesProviderType>> providerTypes;
+	private Map<WebResourceType, Collection<WebResourcesProviderType>> providerTypes;
 
-	public static void collect(IDOMNode htmlNode,
-			WebResourcesType resourcesType, IWebResourcesCollector collector) {
-		Collection<WebResourcesProviderType> providerTypes = WebResourcesProvidersManager
-				.getProviderTypes(resourcesType);
+	private static final WebResourcesProvidersManager INSTANCE = new WebResourcesProvidersManager();
+
+	public static WebResourcesProvidersManager getInstance() {
+		return INSTANCE;
+	}
+
+	public void collect(IDOMNode htmlNode, WebResourceType resourcesType,
+			IWebResourcesCollector collector) {
+		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourcesType);
 		IFile htmlFile = DOMHelper.getFile(htmlNode);
 		for (WebResourcesProviderType providerType : providerTypes) {
 			providerType.collect(htmlNode, htmlFile, collector);
 		}
 	}
 
-	private static Collection<WebResourcesProviderType> getProviderTypes(
-			WebResourcesType resourcesType) {
+	private Collection<WebResourcesProviderType> getProviderTypes(
+			WebResourceType resourcesType) {
 		Collection<WebResourcesProviderType> providerTypes = getProvidersMap()
 				.get(resourcesType);
 		if (providerTypes != null) {
@@ -45,18 +50,18 @@ public class WebResourcesProvidersManager {
 		return Collections.emptyList();
 	}
 
-	private static Map<WebResourcesType, Collection<WebResourcesProviderType>> getProvidersMap() {
+	private Map<WebResourceType, Collection<WebResourcesProviderType>> getProvidersMap() {
 		if (providerTypes == null) {
 			providerTypes = loadProvidersMap();
 		}
 		return providerTypes;
 	}
 
-	private static synchronized Map<WebResourcesType, Collection<WebResourcesProviderType>> loadProvidersMap() {
+	private synchronized Map<WebResourceType, Collection<WebResourcesProviderType>> loadProvidersMap() {
 		if (providerTypes != null) {
 			return providerTypes;
 		}
-		Map<WebResourcesType, Collection<WebResourcesProviderType>> map = new HashMap<WebResourcesType, Collection<WebResourcesProviderType>>();
+		Map<WebResourceType, Collection<WebResourcesProviderType>> map = new HashMap<WebResourceType, Collection<WebResourcesProviderType>>();
 		IExtensionPoint point = Platform.getExtensionRegistry()
 				.getExtensionPoint(PLUGIN_ID, EXTENSION_POINT_ID);
 		if (point != null) {
@@ -68,8 +73,8 @@ public class WebResourcesProvidersManager {
 		return map;
 	}
 
-	private static void readElement(IConfigurationElement element,
-			Map<WebResourcesType, Collection<WebResourcesProviderType>> map) {
+	private void readElement(IConfigurationElement element,
+			Map<WebResourceType, Collection<WebResourcesProviderType>> map) {
 		String className = null;
 		try {
 			className = element.getAttribute("class");
@@ -77,7 +82,7 @@ public class WebResourcesProvidersManager {
 					.createExecutableExtension("class");
 			String[] types = element.getAttribute("types").split(",");
 			for (int i = 0; i < types.length; i++) {
-				WebResourcesType resourcesType = WebResourcesType.get(types[i]
+				WebResourceType resourcesType = WebResourceType.get(types[i]
 						.trim());
 				WebResourcesProviderType providerType = new WebResourcesProviderType(
 						provider, resourcesType);

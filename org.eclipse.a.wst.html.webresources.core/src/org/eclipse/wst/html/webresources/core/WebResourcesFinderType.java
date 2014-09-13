@@ -16,17 +16,17 @@ package org.eclipse.wst.html.webresources.core;
  */
 public enum WebResourcesFinderType {
 
-	CSS_ID(WebResourcesType.css), CSS_CLASS_NAME(WebResourcesType.css), SCRIPT_SRC(
-			WebResourcesType.js), LINK_HREF(WebResourcesType.css), IMG_SRC(
-			WebResourcesType.img);
+	CSS_ID(WebResourceType.css), CSS_CLASS_NAME(WebResourceType.css), SCRIPT_SRC(
+			WebResourceType.js), LINK_HREF(WebResourceType.css), IMG_SRC(
+			WebResourceType.img);
 
-	private final WebResourcesType type;
+	private final WebResourceType type;
 
-	private WebResourcesFinderType(WebResourcesType type) {
+	private WebResourcesFinderType(WebResourceType type) {
 		this.type = type;
 	}
 
-	public WebResourcesType getType() {
+	public WebResourceType getType() {
 		return type;
 	}
 

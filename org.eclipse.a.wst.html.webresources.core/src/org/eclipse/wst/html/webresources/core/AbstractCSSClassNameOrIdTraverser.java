@@ -27,6 +27,7 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.util.AbstractCssTraverser;
 import org.eclipse.wst.html.core.internal.htmlcss.HTMLDocumentAdapter;
+import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
@@ -58,7 +59,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		StyleSheetList sheetList = adapter.getStyleSheets();
 		int nbSheets = sheetList.getLength();
 		if (nbSheets == 0) {
-			WebResourcesProvidersManager.collect(node, WebResourcesType.css,
+			WebResourcesProvidersManager.getInstance().collect(node, WebResourceType.css,
 					this);
 		} else {
 			for (int i = 0; i < nbSheets; i++) {

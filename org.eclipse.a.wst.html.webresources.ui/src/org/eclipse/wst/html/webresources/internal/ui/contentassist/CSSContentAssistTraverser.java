@@ -13,9 +13,9 @@ package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
-import org.eclipse.wst.html.webresources.core.DOMHelper;
-import org.eclipse.wst.html.webresources.core.InformationHelper;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
+import org.eclipse.wst.html.webresources.core.helpers.CSSHelper;
+import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.ui.ImageResource;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -79,7 +79,7 @@ public class CSSContentAssistTraverser extends
 
 		// Compute the display string of the completion proposal
 		IDOMNode node = getNode();
-		String info = InformationHelper.getInformation(rule, node);
+		String info = CSSHelper.getInformation(rule, node);
 		String fileName = DOMHelper.getFileName(rule, node);
 		String displayString = fileName != null ? new StringBuilder(className)
 				.append(" - ").append(fileName).toString() : className;

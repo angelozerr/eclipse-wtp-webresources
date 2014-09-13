@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.core;
+package org.eclipse.wst.html.webresources.core.helpers;
 
 import java.util.Iterator;
 
@@ -23,6 +23,10 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.core.internal.provisional.HTML40Namespace;
+import org.eclipse.wst.html.webresources.core.CSSClassNameFinder;
+import org.eclipse.wst.html.webresources.core.WebResourceRegion;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
+import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;

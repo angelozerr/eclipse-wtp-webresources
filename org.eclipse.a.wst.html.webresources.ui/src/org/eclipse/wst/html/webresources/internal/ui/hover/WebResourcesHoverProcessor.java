@@ -15,14 +15,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.wst.html.webresources.core.DOMHelper;
-import org.eclipse.wst.html.webresources.core.InformationHelper;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
+import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
-import org.eclipse.wst.html.webresources.core.WebResourcesType;
+import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
+import org.eclipse.wst.html.webresources.core.helpers.ResourceHelper;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
@@ -72,8 +71,8 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor {
 			IDOMNode xmlnode) {
 		final String fileName = resourceRegion.getValue();
 		final StringBuilder info = new StringBuilder();
-		WebResourcesType type = resourceRegion.getType().getType();
-		WebResourcesProvidersManager.collect(xmlnode, type,
+		WebResourceType type = resourceRegion.getType().getType();
+		WebResourcesProvidersManager.getInstance().collect(xmlnode, type,
 				new IWebResourcesCollector() {
 					@Override
 					public void add(IResource resource, IDOMNode htmlNode,
@@ -81,7 +80,7 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor {
 						IPath resourceFileLoc = resolver.resolve(resource,
 								htmlFile);
 						if (resourceFileLoc.toString().equals(fileName)) {
-							InformationHelper.addInformation(resource, info);
+							ResourceHelper.addInformation(resource, info);
 						}
 					}
 				});
