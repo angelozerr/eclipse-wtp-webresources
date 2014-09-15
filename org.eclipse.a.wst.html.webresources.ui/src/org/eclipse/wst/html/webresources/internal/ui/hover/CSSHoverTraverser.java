@@ -13,7 +13,7 @@ package org.eclipse.wst.html.webresources.internal.ui.hover;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
-import org.eclipse.wst.html.webresources.core.helpers.CSSHelper;
+import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
@@ -22,22 +22,22 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 public class CSSHoverTraverser extends AbstractCSSClassNameOrIdTraverser {
 
 	private final WebResourceRegion cssRegion;
-	private final StringBuilder info;
+	private String info;
 
 	public CSSHoverTraverser(IDOMNode node, WebResourceRegion cssRegion) {
 		super(node, cssRegion.getType());
 		this.cssRegion = cssRegion;
-		this.info = new StringBuilder();
 	}
 
 	@Override
 	protected void collect(String className, ICSSStyleRule rule) {
 		if (cssRegion.getValue().equals(className)) {
-			CSSHelper.addInformation(rule, getNode(), info);
+			info = HTMLWebResourcesPrinter.getAdditionalProposalInfo(rule,
+					cssRegion.getType(), getNode());
 		}
 	}
 
 	public String getInfo() {
-		return info.toString();
+		return info;
 	}
 }

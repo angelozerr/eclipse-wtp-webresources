@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.core.helpers;
+package org.eclipse.wst.html.webresources.core.utils;
 
 import java.util.Iterator;
 

@@ -10,18 +10,30 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 
 /**
  * Utility class to handle image resources.
  */
 public class ImageResource {
+
+	private static final String IMAGE_DIR = "wtp-webresources-images"; //$NON-NLS-1$
+
+	private static Map<ImageDescriptor, URL> fURLMap;
+	private static File fTempDir;
+	private static int fImageCount;
+
 	// the image registry
 	private static ImageRegistry imageRegistry;
 
@@ -43,6 +55,10 @@ public class ImageResource {
 			String pathSuffix = "icons/";
 			ICON_BASE_URL = WebResourcesUIPlugin.getDefault().getBundle()
 					.getEntry(pathSuffix);
+			fURLMap = new HashMap<ImageDescriptor, URL>();
+			fTempDir = getTempDir();
+			fImageCount = 0;
+
 		} catch (Exception e) {
 			Trace.trace(Trace.SEVERE, "Images error", e);
 		}
@@ -52,14 +68,16 @@ public class ImageResource {
 	 * Cannot construct an ImageResource. Use static methods only.
 	 */
 	private ImageResource() {
-		// do nothing
 	}
 
 	/**
 	 * Dispose of element images that were created.
 	 */
-	protected static void dispose() {
-		// do nothing
+	public static void dispose() {
+		if (fTempDir != null) {
+			delete(fTempDir);
+		}
+		fURLMap = null;
 	}
 
 	/**
@@ -141,6 +159,82 @@ public class ImageResource {
 			Trace.trace(Trace.SEVERE, "Error registering image " + key
 					+ " from " + partialURL, e);
 		}
+	}
+
+	// Temp image
+
+	private static File getTempDir() {
+		try {
+			File imageDir = WebResourcesUIPlugin.getDefault()
+					.getStateLocation().append(IMAGE_DIR).toFile();
+			if (imageDir.exists()) {
+				// has not been deleted on previous shutdown
+				delete(imageDir);
+			}
+			if (!imageDir.exists()) {
+				imageDir.mkdir();
+			}
+			if (!imageDir.isDirectory()) {
+				Trace.trace(
+						Trace.SEVERE,
+						"Failed to create image directory " + imageDir.toString()); //$NON-NLS-1$
+				return null;
+			}
+			return imageDir;
+		} catch (IllegalStateException e) {
+			// no state location
+			return null;
+		}
+	}
+
+	private static void delete(File file) {
+		if (file.isDirectory()) {
+			File[] listFiles = file.listFiles();
+			for (int i = 0; i < listFiles.length; i++) {
+				delete(listFiles[i]);
+			}
+		}
+		file.delete();
+	}
+
+	public static URL getImageURL(ImageDescriptor descriptor) {
+		if (fTempDir == null)
+			return null;
+
+		URL url = fURLMap.get(descriptor);
+		if (url != null)
+			return url;
+
+		File imageFile = getNewFile();
+		ImageData imageData = descriptor.getImageData();
+		if (imageData == null) {
+			return null;
+		}
+
+		ImageLoader loader = new ImageLoader();
+		loader.data = new ImageData[] { imageData };
+		loader.save(imageFile.getAbsolutePath(), SWT.IMAGE_PNG);
+
+		try {
+			url = imageFile.toURI().toURL();
+			fURLMap.put(descriptor, url);
+			return url;
+		} catch (MalformedURLException e) {
+			Trace.trace(Trace.SEVERE, "Failed to create image directory ", e); //$NON-NLS-1$
+		}
+		return null;
+	}
+
+	private static File getNewFile() {
+		File file;
+		do {
+			file = new File(fTempDir, String.valueOf(getImageCount()) + ".png"); //$NON-NLS-1$
+		} while (file.exists());
+		return file;
+	}
+
+	private static synchronized int getImageCount() {
+		return fImageCount++;
 	}
 
 }

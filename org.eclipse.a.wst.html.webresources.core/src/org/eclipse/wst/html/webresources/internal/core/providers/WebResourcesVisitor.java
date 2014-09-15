@@ -15,9 +15,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.core.helpers.ResourceHelper;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**

@@ -16,7 +16,7 @@ import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
-import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
+import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;

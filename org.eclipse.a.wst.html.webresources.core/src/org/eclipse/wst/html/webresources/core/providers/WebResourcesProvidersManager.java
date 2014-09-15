@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
+import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.internal.core.providers.WebResourcesProviderType;

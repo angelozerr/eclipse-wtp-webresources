@@ -10,13 +10,12 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 
-import org.eclipse.jface.text.contentassist.CompletionProposal;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
-import org.eclipse.wst.html.webresources.core.helpers.CSSHelper;
-import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
-import org.eclipse.wst.html.webresources.internal.ui.ImageResource;
+import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
+import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 
@@ -79,23 +78,18 @@ public class CSSContentAssistTraverser extends
 
 		// Compute the display string of the completion proposal
 		IDOMNode node = getNode();
-		String info = CSSHelper.getInformation(rule, node);
+		String info = HTMLWebResourcesPrinter.getAdditionalProposalInfo(rule,
+				getWebResourcesType(), node);
 		String fileName = DOMHelper.getFileName(rule, node);
 		String displayString = fileName != null ? new StringBuilder(className)
 				.append(" - ").append(fileName).toString() : className;
 
 		int cursorPosition = className.length();
+		Image image = HTMLWebResourcesPrinter.getImage(getWebResourcesType());
 		// Add CSS class name or id completion proposal
-		contentAssistRequest
-				.addProposal(new CompletionProposal(
-						className,
-						replacementOffset,
-						replacementLength,
-						cursorPosition,
-						getWebResourcesType() == WebResourcesFinderType.CSS_ID ? ImageResource
-								.getImage(ImageResource.IMG_CSS_ID)
-								: ImageResource
-										.getImage(ImageResource.IMG_CSS_CLASSNAME),
-						displayString, null, info));
+		contentAssistRequest.addProposal(new WebResourcesCompletionProposal(
+				className, replacementOffset, replacementLength,
+				cursorPosition, image, displayString, null, info));
 	}
+
 }

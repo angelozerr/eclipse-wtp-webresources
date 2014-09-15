@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.internal.ui;
+package org.eclipse.wst.html.webresources.internal.ui.utils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -19,6 +19,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIPlugin;
 
 /**
  * Editor utilities.

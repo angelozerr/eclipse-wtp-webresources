@@ -16,9 +16,9 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
-import org.eclipse.wst.html.webresources.core.helpers.DOMHelper;
-import org.eclipse.wst.html.webresources.internal.ui.EditorUtils;
+import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIMessages;
+import org.eclipse.wst.html.webresources.internal.ui.utils.EditorUtils;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 
 /**

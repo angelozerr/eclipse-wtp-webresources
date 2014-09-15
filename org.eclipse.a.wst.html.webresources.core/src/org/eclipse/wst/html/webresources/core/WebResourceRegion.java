@@ -20,6 +20,7 @@ public class WebResourceRegion extends Region {
 
 	private final String value;
 	private final WebResourcesFinderType type;
+	private String additionalInfo;
 
 	public WebResourceRegion(int offset, int length, String value,
 			WebResourcesFinderType type) {
@@ -28,12 +29,42 @@ public class WebResourceRegion extends Region {
 		this.type = type;
 	}
 
+	/**
+	 * Returns the value of the hovered region.
+	 * 
+	 * @return the value of the hovered region.
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	/**
+	 * Returns the web resource type finder.
+	 * 
+	 * @return the web resource type finder.
+	 */
 	public WebResourcesFinderType getType() {
 		return type;
+	}
+
+	/**
+	 * Returns the additional info of this web resources region and null
+	 * otherwise.
+	 * 
+	 * @return the additional info of this web resources region and null
+	 *         otherwise.
+	 */
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
+
+	/**
+	 * Set the additional info of this web resources region.
+	 * 
+	 * @param additionalInfo
+	 */
+	public void setAdditionalInfo(String additionalInfo) {
+		this.additionalInfo = additionalInfo;
 	}
 
 }

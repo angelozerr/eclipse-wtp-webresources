@@ -53,6 +53,7 @@ public class WebResourcesUIPlugin extends AbstractUIPlugin {
 	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
+		ImageResource.dispose();
 		plugin = null;
 		super.stop(context);
 	}
