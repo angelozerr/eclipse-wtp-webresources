@@ -8,6 +8,4 @@ public interface IWebResourcesProvider {
 
 	IContainer[] getContainers(IDOMNode htmlNode, IFile htmlFile);
 
-	IURIResolver getResolver(IDOMNode htmlNode, IFile htmlFile);
-
 }

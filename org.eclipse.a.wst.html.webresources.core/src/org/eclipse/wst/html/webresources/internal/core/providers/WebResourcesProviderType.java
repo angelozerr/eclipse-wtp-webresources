@@ -12,9 +12,12 @@ package org.eclipse.wst.html.webresources.internal.core.providers;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.providers.DefaultURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
@@ -26,7 +29,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
  * Web resources provider type.
  *
  */
-public class WebResourcesProviderType {
+public class WebResourcesProviderType implements IURIResolver {
 
 	private final IWebResourcesProvider provider;
 	private final WebResourceType resourcesType;
@@ -55,9 +58,8 @@ public class WebResourcesProviderType {
 		if (containers != null) {
 			// Loop for each containers to visit files and collect it if it
 			// matches the given web resource type.
-			IURIResolver resolver = provider.getResolver(htmlNode, htmlFile);
 			IResourceVisitor visitor = new WebResourcesVisitor(collector,
-					resourcesType, htmlNode, htmlFile, resolver);
+					resourcesType, htmlNode, htmlFile, this);
 			for (int i = 0; i < containers.length; i++) {
 				try {
 					containers[i].accept(visitor);
@@ -68,6 +70,12 @@ public class WebResourcesProviderType {
 				}
 			}
 		}
+	}
+
+	@Override
+	public IPath resolve(IResource resource, IFile root) {
+		// TODO : manage resolver with extension point
+		return DefaultURIResolver.INSTANCE.resolve(resource, root);
 	}
 
 }

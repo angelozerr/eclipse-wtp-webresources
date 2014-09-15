@@ -7,8 +7,4 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 public abstract class AbstractWebResourcesProvider implements
 		IWebResourcesProvider {
 
-	@Override
-	public IURIResolver getResolver(IDOMNode htmlNode, IFile htmlFile) {
-		return DefaultURIResolver.INSTANCE;
-	}
 }
