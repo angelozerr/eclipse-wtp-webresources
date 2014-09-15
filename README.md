@@ -35,6 +35,14 @@ Provides text hover for WTP HTML editor for CSS className :
 
 ![CSS File Completion](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/CSSFileCompletion.png)
 
+## Images completion & hover
+
+![imagehover](https://cloud.githubusercontent.com/assets/1932211/4271513/01b62afe-3cd9-11e4-8cb0-3b1ddc5005f6.png)
+
+and completion : 
+
+![imagecompletion](https://cloud.githubusercontent.com/assets/1932211/4271537/43276e44-3cd9-11e4-9475-947a0bb25ef8.png)
+
 # Why org.eclipse.a.wst.htmlcss.ui?
 
 Plugin is named with **org.eclipse.a.wst.htmlcss.ui**, why not **org.eclipse.wst.htmlcss.ui**?
