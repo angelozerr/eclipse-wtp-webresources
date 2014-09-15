@@ -1,7 +1,7 @@
-eclipse-wtp-htmlcss
+eclipse-wtp-webresources
 ===================
 
-[![Build Status](https://secure.travis-ci.org/angelozerr/eclipse-wtp-htmlcss.png)](http://travis-ci.org/angelozerr/eclipse-wtp-htmlcss)
+[![Build Status](https://secure.travis-ci.org/angelozerr/eclipse-wtp-webresources.png)](http://travis-ci.org/angelozerr/eclipse-wtp-webresources)
 
 Eclipse WTP provides HTML editor with several completions (tags, CSS styles, etc) but it misses some features. Thoses features was created inside WTP bugzilla but WTP team seems very busy to implement it. The goal of this project is to provide some missing features and 
 after try to contribute to WTP : 
@@ -17,23 +17,23 @@ after try to contribute to WTP :
 
 Provides completion for WTP HTML editor for CSS className : 
 
-![Class completion](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassCompletion.png)
+![Class completion](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/ClassCompletion.png)
 
 ## Hyperlink for CSS Class name
 
 Provides hyperlink for WTP HTML editor for CSS className : 
 
-![Class hyperlink](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassHyperlink.png)
+![Class hyperlink](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/ClassHyperlink.png)
 
 ## Hover for CSS Class name
 
 Provides text hover for WTP HTML editor for CSS className : 
 
-![Class hover](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/ClassHover.png)
+![Class hover](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/ClassHover.png)
 
 # CSS files completion
 
-![CSS File Completion](https://github.com/angelozerr/eclipse-wtp-htmlcss/wiki/images/CSSFileCompletion.png)
+![CSS File Completion](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/CSSFileCompletion.png)
 
 # Why org.eclipse.a.wst.htmlcss.ui?
 
