@@ -43,12 +43,12 @@ and completion :
 
 ![imagecompletion](https://cloud.githubusercontent.com/assets/1932211/4271537/43276e44-3cd9-11e4-9475-947a0bb25ef8.png)
 
-# Why org.eclipse.a.wst.htmlcss.ui?
+# Why org.eclipse.a.wst.webresources.ui?
 
 See [bug 444189](https://bugs.eclipse.org/bugs/show_bug.cgi?id=444189)
 
-Plugin is named with **org.eclipse.a.wst.htmlcss.ui**, why not **org.eclipse.wst.htmlcss.ui**?
+Plugin is named with **org.eclipse.a.wst.webresources.ui**, why not **org.eclipse.wst.webresources.ui**?
 
 It's because of CSS Hover. After debugging WTP, Hover is managed with BestMatchHover class, and it's not possible to sort hover coming from extension point. The used sort is the plugin id (see org\eclipse\wst\sse\ui\internal\extension\RegistryReader#orderExtensions) 
 
-If plugin uses org.eclipse.wst.htmlcss.ui, it's org.eclipse.jst.jsf.facelet.ui.internal.hover.FaceletHover which is executed before CSS class hover and CSS class name hover doesn't work. If org.eclipse.a.wst.htmlcss.ui (before  org.eclipse.jst.jsf.facelet.ui) is executed correctly.
+If plugin uses org.eclipse.wst.webresources.ui, it's org.eclipse.jst.jsf.facelet.ui.internal.hover.FaceletHover which is executed before CSS class hover and CSS class name hover doesn't work. If org.eclipse.a.wst.webresources.ui (before  org.eclipse.jst.jsf.facelet.ui) is executed correctly.
