@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>fr.opensagres.eclipse.wtp</groupId>
-		<artifactId>eclipse-wtp-htmlcss</artifactId>
+		<artifactId>eclipse-wtp-webresources</artifactId>
 		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.eclipse.wst.html.webresources.repository</artifactId>
@@ -24,7 +24,7 @@
 			<properties>
 				<!-- Properties relative to the distant host where to upload the repo -->
 				<ftp.url>ftp://ftp.online.net</ftp.url>
-				<ftp.toDir>/oss/eclipse-wtp-htmlcss/${project.version}</ftp.toDir>
+				<ftp.toDir>/oss/eclipse-wtp-webresources/${project.version}</ftp.toDir>
 				<!-- Relative path to the repo being uploaded -->
 				<repo.path>${project.build.directory}/repository/</repo.path>
 			</properties>
