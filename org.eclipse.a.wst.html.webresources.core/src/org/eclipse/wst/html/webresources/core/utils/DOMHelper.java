@@ -123,8 +123,9 @@ public class DOMHelper {
 		return null;
 	}
 
-	public static String getFileName(ICSSStyleRule rule, IDOMNode node) {
-		String fileName = rule.getOwnerDocument().getModel().getBaseLocation();
+	public static String getFileName(ICSSNode cssNode, IDOMNode node) {
+		String fileName = cssNode.getOwnerDocument().getModel()
+				.getBaseLocation();
 		if (IModelManager.UNMANAGED_MODEL.equals(fileName)) {
 			if (node != null) {
 				return node.getModel().getBaseLocation();
@@ -132,6 +133,20 @@ public class DOMHelper {
 			return null;
 		}
 		return fileName;
+	}
+
+	/**
+	 * Returns true if the given CSS node belongs to an embedded style (style
+	 * declared inside HTML style element) and false otherwise.
+	 * 
+	 * @param cssNode
+	 *            CSS node.
+	 * @return true if the given CSS node belongs to an embedded style (style
+	 *         declared inside HTML style element) and false otherwise.
+	 */
+	public static boolean isEmbedded(ICSSNode cssNode) {
+		return ICSSModel.EMBEDDED.equals(cssNode.getOwnerDocument().getModel()
+				.getStyleSheetType());
 	}
 
 	public static String getAttrValue(String value) {
