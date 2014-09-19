@@ -10,6 +10,9 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
@@ -29,12 +32,14 @@ public class CSSContentAssistTraverser extends
 	private String matchingClassNameOrId;
 	private int replacementOffset;
 	private int replacementLength;
+	private final List<String> existingClassNames;
 
 	public CSSContentAssistTraverser(ContentAssistRequest contentAssistRequest,
 			int documentPosition, String attrValue, WebResourcesFinderType type) {
 		super((IDOMNode) contentAssistRequest.getNode(), type);
 		this.contentAssistRequest = contentAssistRequest;
-
+		this.existingClassNames = type == WebResourcesFinderType.CSS_CLASS_NAME ? new ArrayList<String>()
+				: null;
 		// ex : <input class="todo-done myClass" />
 		// completion done after my (todo-done my // Here Ctrl+Space)
 
@@ -61,6 +66,12 @@ public class CSSContentAssistTraverser extends
 			}
 			this.replacementLength = matchingClassNameOrId.length()
 					+ afterMatchingClassName.length();
+
+			// compute existing class names
+			String[] names = attrValue.split(" ");
+			for (int i = 0; i < names.length; i++) {
+				existingClassNames.add(names[i].trim());
+			}
 		} else {
 			this.replacementLength = attrValue.length();
 		}
@@ -73,6 +84,11 @@ public class CSSContentAssistTraverser extends
 	protected void collect(String className, ICSSStyleRule rule) {
 		// check if visited class name or id starts with matching class name?
 		if (!className.startsWith(matchingClassNameOrId)) {
+			return;
+		}
+		if (existingClassNames != null
+				&& existingClassNames.contains(className)) {
+			// CSS class name already exists in the @class attribute, ignore it.
 			return;
 		}
 
