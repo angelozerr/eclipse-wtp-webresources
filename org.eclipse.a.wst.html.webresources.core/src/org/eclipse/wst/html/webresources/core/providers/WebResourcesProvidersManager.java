@@ -87,7 +87,7 @@ public class WebResourcesProvidersManager {
 				WebResourcesProviderType providerType = new WebResourcesProviderType(
 						provider, resourcesType);
 				Collection<WebResourcesProviderType> providerTypes = map
-						.get(providerType);
+						.get(resourcesType);
 				if (providerTypes == null) {
 					providerTypes = new ArrayList<WebResourcesProviderType>();
 					map.put(resourcesType, providerTypes);
