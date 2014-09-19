@@ -54,20 +54,34 @@ public class WebResourcesProviderType implements IURIResolver {
 	public void collect(IDOMNode htmlNode, IFile htmlFile,
 			IWebResourcesCollector collector) {
 		// get containers for the given DOM node.
-		IContainer[] containers = provider.getContainers(htmlNode, htmlFile);
-		if (containers != null) {
+		IResource[] resources = provider.getResources(htmlNode, htmlFile,
+				resourcesType);
+		if (resources != null) {
 			// Loop for each containers to visit files and collect it if it
 			// matches the given web resource type.
+			IWebResourcesCollector collector2 = provider.getCollector(htmlNode,
+					htmlFile, resourcesType);
 			IResourceVisitor visitor = new WebResourcesVisitor(collector,
-					resourcesType, htmlNode, htmlFile, this);
-			for (int i = 0; i < containers.length; i++) {
+					collector2, resourcesType, htmlNode, htmlFile, this);
+			// start collect
+			collector.startCollect(resourcesType);
+			if (collector2 != null) {
+				collector2.startCollect(resourcesType);
+			}
+			// collect processes
+			for (int i = 0; i < resources.length; i++) {
 				try {
-					containers[i].accept(visitor);
+					resources[i].accept(visitor);
 				} catch (CoreException e) {
 					Trace.trace(Trace.SEVERE,
 							"Error while collecting resource for container "
-									+ containers[i].getName(), e);
+									+ resources[i].getName(), e);
 				}
+			}
+			// end collect
+			collector.endCollect(resourcesType);
+			if (collector2 != null) {
+				collector2.endCollect(resourcesType);
 			}
 		}
 	}

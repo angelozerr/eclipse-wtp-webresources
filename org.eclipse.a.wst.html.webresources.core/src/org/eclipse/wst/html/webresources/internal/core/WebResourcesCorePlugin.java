@@ -43,6 +43,7 @@ public class WebResourcesCorePlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		WebResourcesFileManager.getInstance().initialize();
 	}
 
 	/*
@@ -53,6 +54,7 @@ public class WebResourcesCorePlugin extends AbstractUIPlugin {
 	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
+		WebResourcesFileManager.getInstance().dispose();
 		plugin = null;
 		super.stop(context);
 	}

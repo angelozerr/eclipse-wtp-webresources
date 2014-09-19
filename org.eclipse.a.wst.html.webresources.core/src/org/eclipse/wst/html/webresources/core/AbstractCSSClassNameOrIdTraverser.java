@@ -56,18 +56,29 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		HTMLDocumentAdapter adapter = (HTMLDocumentAdapter) ((INodeNotifier) node
 				.getOwnerDocument())
 				.getAdapterFor(IStyleSheetListAdapter.class);
+		ICSSNode cssNode = null;
 		StyleSheetList sheetList = adapter.getStyleSheets();
 		int nbSheets = sheetList.getLength();
-		if (nbSheets == 0) {
-			WebResourcesProvidersManager.getInstance().collect(node, WebResourceType.css,
-					this);
-		} else {
-			for (int i = 0; i < nbSheets; i++) {
-				org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
-				if (sheet instanceof ICSSNode) {
-					super.apply((ICSSNode) sheet);
+		boolean hasExternalCSS = false;
+		// Loop for each CSS styles sheets :
+		// - embedded styles declared with <style> element
+		// - external styles declared with <link href=""
+		for (int i = 0; i < nbSheets; i++) {
+			org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
+			if (sheet instanceof ICSSNode) {
+				cssNode = (ICSSNode) sheet;
+				if (!DOMHelper.isEmbedded(cssNode)) {
+					hasExternalCSS = true;
 				}
+				super.apply(cssNode);
 			}
+		}
+		if (!hasExternalCSS) {
+			// none external styles, try to discover styles from the project.
+			WebResourcesProvidersManager.getInstance().collect(node,
+					WebResourceType.css, this);
+		} else {
+
 		}
 	}
 
@@ -156,5 +167,15 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 			IURIResolver resolver) {
 		ICSSModel model = DOMHelper.getModel((IFile) resource);
 		super.apply(model);
+	}
+
+	@Override
+	public void startCollect(WebResourceType resourcesType) {
+
+	}
+
+	@Override
+	public void endCollect(WebResourceType resourcesType) {
+
 	}
 }

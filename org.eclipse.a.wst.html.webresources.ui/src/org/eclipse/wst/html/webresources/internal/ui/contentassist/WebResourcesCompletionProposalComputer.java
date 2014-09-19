@@ -13,24 +13,15 @@ package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jface.internal.text.html.BrowserInformationControl;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.ICompletionProposalExtension3;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
-import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIPlugin;
-import org.eclipse.wst.html.webresources.internal.ui.hover.WebResourcesHoverControlCreator;
-import org.eclipse.wst.html.webresources.internal.ui.hover.PresenterControlCreator;
-import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -122,7 +113,7 @@ public class WebResourcesCompletionProposalComputer extends
 				- matchingString.length();
 		final WebResourceType type = attrValueRegion.getType().getType();
 		WebResourcesProvidersManager.getInstance().collect(node, type,
-				new IWebResourcesCollector() {
+				new WebResourcesCollectorAdapter() {
 
 					@Override
 					public void add(IResource resource, IDOMNode htmlNode,
@@ -131,17 +122,16 @@ public class WebResourcesCompletionProposalComputer extends
 						IPath location = resolver.resolve(resource, htmlFile);
 						String fileName = location.toString();
 						if (location.toString().startsWith(matchingString)) {
-							String info = HTMLWebResourcesPrinter
-									.getAdditionalProposalInfo(resource, type);
+
 							String displayString = resource
 									.getProjectRelativePath().toString();
 							int cursorPosition = fileName.length();
 							Image image = ResourceHelper
 									.getFileTypeImage(resource);
-							ICompletionProposal proposal = new WebResourcesCompletionProposal(
+							ICompletionProposal proposal = new FileWebResourcesCompletionProposal(
 									fileName, replacementOffset,
 									replacementLength, cursorPosition, image,
-									displayString, null, info);
+									displayString, null, resource, type);
 							contentAssistRequest.addProposal(proposal);
 						}
 					}

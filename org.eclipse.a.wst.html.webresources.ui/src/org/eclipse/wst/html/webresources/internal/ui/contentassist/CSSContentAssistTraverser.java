@@ -87,7 +87,7 @@ public class CSSContentAssistTraverser extends
 		int cursorPosition = className.length();
 		Image image = HTMLWebResourcesPrinter.getImage(getWebResourcesType());
 		// Add CSS class name or id completion proposal
-		contentAssistRequest.addProposal(new WebResourcesCompletionProposal(
+		contentAssistRequest.addProposal(new CSSWebResourcesCompletionProposal(
 				className, replacementOffset, replacementLength,
 				cursorPosition, image, displayString, null, info));
 	}

@@ -28,6 +28,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 public class WebResourcesVisitor implements IResourceVisitor {
 
 	private final IWebResourcesCollector collector;
+	private final IWebResourcesCollector collector2;
 	private final WebResourceType resourcesType;
 	private final IDOMNode htmlNode;
 	private final IFile htmlFile;
@@ -49,9 +50,10 @@ public class WebResourcesVisitor implements IResourceVisitor {
 	 *            the resolver to use to resolve fine name.
 	 */
 	public WebResourcesVisitor(IWebResourcesCollector collector,
-			WebResourceType resourceType, IDOMNode htmlNode, IFile htmlFile,
-			IURIResolver resolver) {
+			IWebResourcesCollector collector2, WebResourceType resourceType,
+			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
 		this.collector = collector;
+		this.collector2 = collector2;
 		this.resourcesType = resourceType;
 		this.htmlNode = htmlNode;
 		this.htmlFile = htmlFile;
@@ -67,9 +69,12 @@ public class WebResourcesVisitor implements IResourceVisitor {
 		case IResource.FILE:
 			IFile file = (IFile) resource;
 			if (ResourceHelper.isMatchingWebResourceType(file, resourcesType)) {
-				// current file matches teh given web resource type
+				// current file matches the given web resource type
 				// collect it.
 				collector.add(file, htmlNode, htmlFile, resolver);
+				if (collector2 != null) {
+					collector2.add(file, htmlNode, htmlFile, resolver);
+				}
 			}
 			return false;
 		}

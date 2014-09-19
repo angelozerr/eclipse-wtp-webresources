@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
@@ -23,7 +24,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
  * {@link IWebResourcesCollector} implentation used for the hover.
  *
  */
-public class WebResourcesCollectorForHover implements IWebResourcesCollector {
+public class WebResourcesCollectorForHover extends WebResourcesCollectorAdapter {
 
 	private final String fileName;
 	private final WebResourceType type;
