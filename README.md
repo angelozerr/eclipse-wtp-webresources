@@ -14,13 +14,17 @@ Eclipse WTP provides HTML editor with several completions (tags, CSS styles decl
 
 ## Completion for CSS Class name
 
-Provides completion for WTP HTML editor for CSS className : 
+Eclipse WTP WebResources provides completion for WTP HTML editor for CSS className : 
 
 ![Class completion](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/ClassCompletion.png)
 
+and for CSS ID : 
+
+![CSS ID completion](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/CSSIDCompletion.png)
+
 ## Hyperlink for CSS Class name
 
-Provides hyperlink for WTP HTML editor for CSS className : 
+Eclipse WTP WebResources provides hyperlink for WTP HTML editor for CSS className : 
 
 ![Class hyperlink](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/images/ClassHyperlink.png)
 
