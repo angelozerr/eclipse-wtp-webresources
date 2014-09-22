@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
@@ -73,9 +74,11 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 	}
 
 	@Override
-	public void add(IResource resource, IDOMNode htmlNode, IFile htmlFile,
-			IURIResolver resolver) {
-		resources.add(resource);
+	public void add(Object resource, WebResourceKind resourceKind,
+			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
+			resources.add((IResource) resource);
+		}
 	}
 
 	public IResource[] getResources(WebResourceType resourceType) {

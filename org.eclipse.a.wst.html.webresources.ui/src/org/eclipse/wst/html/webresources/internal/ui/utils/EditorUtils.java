@@ -10,11 +10,19 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.utils;
 
+import java.io.File;
+import java.net.URI;
+
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.graphics.Path;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
@@ -62,4 +70,33 @@ public class EditorUtils {
 		return editor;
 	}
 
+	public static IEditorPart openInEditor(File file, int start, int length) {
+		IEditorPart editor = null;
+		IWorkbenchPage page = WebResourcesUIPlugin.getActivePage();
+		try {
+			if (start >= 0) {
+				IFileStore fileStore = EFS.getStore(file.toURI());
+				editor = IDE.openEditorOnFileStore(page, fileStore);
+				ITextEditor textEditor = null;
+				if (editor instanceof ITextEditor)
+					textEditor = (ITextEditor) editor;
+				else if (editor instanceof IAdaptable)
+					textEditor = (ITextEditor) editor
+							.getAdapter(ITextEditor.class);
+				if (textEditor != null) {
+					IDocument document = textEditor.getDocumentProvider()
+							.getDocument(editor.getEditorInput());
+					// int start = document.getLineOffset(line - 1);
+					textEditor.selectAndReveal(start, length);
+					page.activate(editor);
+				}
+			} else {
+				IFileStore fileStore = EFS.getStore(file.toURI());
+				editor = IDE.openEditorOnFileStore(page, fileStore);
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return editor;
+	}
 }

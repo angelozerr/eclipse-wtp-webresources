@@ -10,11 +10,14 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.hyperlink;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.eclipse.wst.html.webresources.core.StyleSheetType;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIMessages;
@@ -61,7 +64,9 @@ public class CSSHyperlink implements IHyperlink {
 	@Override
 	public void open() {
 		// open the CSS file by selecting the given CSS rule.
-		if (DOMHelper.isEmbedded(rule)) {
+		StyleSheetType sheetType = StyleSheetType.getType(rule);
+		switch (sheetType) {
+		case EMBEDDED:
 			// embedded CSS declared in the style HTML element
 			IDOMElement styleElt = (IDOMElement) rule.getOwnerDocument()
 					.getModel().getOwnerDOMNode();
@@ -73,14 +78,23 @@ public class CSSHyperlink implements IHyperlink {
 						+ ((IndexedRegion) rule).getEndOffset() - start;
 				EditorUtils.openInEditor(file, start, length, true);
 			}
-		} else {
-			// inline CSS style rule.
+			break;
+		case EXTERNAL:
+			// external CSS style rule.
 			IFile file = DOMHelper.getFile(rule);
 			if (file != null && file.exists()) {
 				int start = ((IndexedRegion) rule).getStartOffset();
 				int length = ((IndexedRegion) rule).getEndOffset() - start;
 				EditorUtils.openInEditor(file, start, length, true);
+			} else {
+				File f = DOMHelper.getFileSystem(rule);
+				if (f.exists()) {
+					int start = ((IndexedRegion) rule).getStartOffset();
+					int length = ((IndexedRegion) rule).getEndOffset() - start;
+					EditorUtils.openInEditor(f, start, length);
+				}
 			}
+			break;
 		}
 	}
 }

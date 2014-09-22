@@ -10,17 +10,13 @@
  */
 package org.eclipse.wst.html.webresources.internal.core.providers;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.core.providers.AbstractWebResourcesProvider;
-import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesProjectConfiguration;
@@ -30,8 +26,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
  * {@link IWebResourcesProvider} implementation which uses preferences.
  *
  */
-public class PreferencesWebResourcesProvider extends
-		AbstractWebResourcesProvider {
+public class PreferencesWebResourcesProvider implements IWebResourcesProvider,
+		IWebResourcesCollectorProvider {
 
 	@Override
 	public IResource[] getResources(IDOMNode htmlNode, IFile htmlFile,

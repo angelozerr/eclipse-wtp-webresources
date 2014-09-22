@@ -1,3 +1,13 @@
+/**
+ *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ */
 package org.eclipse.wst.html.webresources.core.providers;
 
 import java.util.ArrayList;
@@ -21,7 +31,6 @@ public class WebResourcesProvidersManager {
 
 	private static final String PLUGIN_ID = WebResourcesCorePlugin.PLUGIN_ID;
 	private static final String EXTENSION_POINT_ID = "webResourcesProviders";
-	private static final Object TAG_NAME = "provider";
 
 	private Map<WebResourceType, Collection<WebResourcesProviderType>> providerTypes;
 
@@ -78,21 +87,35 @@ public class WebResourcesProvidersManager {
 		String className = null;
 		try {
 			className = element.getAttribute("class");
-			IWebResourcesProvider provider = (IWebResourcesProvider) element
-					.createExecutableExtension("class");
-			String[] types = element.getAttribute("types").split(",");
-			for (int i = 0; i < types.length; i++) {
-				WebResourceType resourcesType = WebResourceType.get(types[i]
-						.trim());
-				WebResourcesProviderType providerType = new WebResourcesProviderType(
-						provider, resourcesType);
-				Collection<WebResourcesProviderType> providerTypes = map
-						.get(resourcesType);
-				if (providerTypes == null) {
-					providerTypes = new ArrayList<WebResourcesProviderType>();
-					map.put(resourcesType, providerTypes);
+			Object provider = element.createExecutableExtension("class");
+			IWebResourcesProvider resourcesProvider = null;
+			IWebResourcesCollectorProvider collectorProvider = null;
+			IWebResourcesFileSystemProvider fileSystemProvider = null;
+			if (provider instanceof IWebResourcesProvider) {
+				resourcesProvider = (IWebResourcesProvider) provider;
+			}
+			if (provider instanceof IWebResourcesFileSystemProvider) {
+				fileSystemProvider = (IWebResourcesFileSystemProvider) provider;
+			}
+			if (provider instanceof IWebResourcesCollectorProvider) {
+				collectorProvider = (IWebResourcesCollectorProvider) provider;
+			}
+			if (resourcesProvider != null || fileSystemProvider != null) {
+				String[] types = element.getAttribute("types").split(",");
+				for (int i = 0; i < types.length; i++) {
+					WebResourceType resourcesType = WebResourceType
+							.get(types[i].trim());
+					WebResourcesProviderType providerType = new WebResourcesProviderType(
+							resourcesProvider, fileSystemProvider,
+							collectorProvider, resourcesType);
+					Collection<WebResourcesProviderType> providerTypes = map
+							.get(resourcesType);
+					if (providerTypes == null) {
+						providerTypes = new ArrayList<WebResourcesProviderType>();
+						map.put(resourcesType, providerTypes);
+					}
+					providerTypes.add(providerType);
 				}
-				providerTypes.add(providerType);
 			}
 		} catch (Throwable t) {
 			Trace.trace(

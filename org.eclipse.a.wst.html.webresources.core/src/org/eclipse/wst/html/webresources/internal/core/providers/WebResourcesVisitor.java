@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
@@ -45,7 +46,7 @@ public class WebResourcesVisitor implements IResourceVisitor {
 	 * @param htmlNode
 	 *            the DOM node which has triggered the start of this visitor.
 	 * @param htmlFile
-	 *            the owner HTML file of teh given DOM node.
+	 *            the owner HTML file of the given DOM node.
 	 * @param resolver
 	 *            the resolver to use to resolve fine name.
 	 */
@@ -71,9 +72,11 @@ public class WebResourcesVisitor implements IResourceVisitor {
 			if (ResourceHelper.isMatchingWebResourceType(file, resourcesType)) {
 				// current file matches the given web resource type
 				// collect it.
-				collector.add(file, htmlNode, htmlFile, resolver);
+				collector.add(file, WebResourceKind.ECLIPSE_RESOURCE, htmlNode,
+						htmlFile, resolver);
 				if (collector2 != null) {
-					collector2.add(file, htmlNode, htmlFile, resolver);
+					collector2.add(file, WebResourceKind.ECLIPSE_RESOURCE,
+							htmlNode, htmlFile, resolver);
 				}
 			}
 			return false;

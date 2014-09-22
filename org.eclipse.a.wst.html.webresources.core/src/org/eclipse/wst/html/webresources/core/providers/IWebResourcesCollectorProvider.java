@@ -11,10 +11,11 @@
 package org.eclipse.wst.html.webresources.core.providers;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
-public interface IURIResolver {
+public interface IWebResourcesCollectorProvider {
 
-	IPath resolve(IResource resource, IFile root);
+	IWebResourcesCollector getCollector(IDOMNode htmlNode, IFile htmlFile,
+			WebResourceType resourceType);
 }

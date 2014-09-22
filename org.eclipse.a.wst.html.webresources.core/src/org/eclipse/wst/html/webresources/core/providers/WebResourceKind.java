@@ -10,11 +10,20 @@
  */
 package org.eclipse.wst.html.webresources.core.providers;
 
-import org.eclipse.core.resources.IFile;
+import java.io.File;
+
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 
-public interface IURIResolver {
+/**
+ * Web resource kind :
+ * 
+ * <ul>
+ * <li>{@link #WebResourceKind#ECLIPSE_RESOURCE} : eclipse {@link IResource}. *
+ * <li>{@link #WebResourceKind#FILESYSTEM} : file system {@link File}.
+ * </ul>
+ *
+ */
+public enum WebResourceKind {
 
-	IPath resolve(IResource resource, IFile root);
+	ECLIPSE_RESOURCE, FILESYSTEM;
 }

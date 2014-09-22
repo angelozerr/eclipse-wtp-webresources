@@ -10,6 +10,9 @@
  */
 package org.eclipse.wst.html.webresources.core.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
@@ -32,6 +35,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
@@ -135,20 +139,6 @@ public class DOMHelper {
 		return fileName;
 	}
 
-	/**
-	 * Returns true if the given CSS node belongs to an embedded style (style
-	 * declared inside HTML style element) and false otherwise.
-	 * 
-	 * @param cssNode
-	 *            CSS node.
-	 * @return true if the given CSS node belongs to an embedded style (style
-	 *         declared inside HTML style element) and false otherwise.
-	 */
-	public static boolean isEmbedded(ICSSNode cssNode) {
-		return ICSSModel.EMBEDDED.equals(cssNode.getOwnerDocument().getModel()
-				.getStyleSheetType());
-	}
-
 	public static String getAttrValue(String value) {
 		if (value.startsWith("\"")) {
 			value = value.substring(1, value.length());
@@ -224,6 +214,32 @@ public class DOMHelper {
 		return null;
 	}
 
+	/**
+	 * Returns the owner file of the SSE CSS Node {@link ICSSNode}.
+	 * 
+	 * @param node
+	 *            the SSE CSS Node.
+	 * @return
+	 */
+	public static final File getFileSystem(ICSSNode node) {
+		return getFileSystem(node.getOwnerDocument().getModel());
+	}
+
+	/**
+	 * Returns the owner file of the SSE model {@link IStructuredModel}.
+	 * 
+	 * @param node
+	 *            the SSE model.
+	 * @return
+	 */
+	public static final File getFileSystem(IStructuredModel model) {
+		String baselocation = model.getBaseLocation();
+		if (baselocation != null) {
+			return new File(baselocation);
+		}
+		return null;
+	}
+
 	public static WebResourceRegion getCSSRegion(
 			WebResourcesTextRegion cssRegion,
 			IStructuredDocumentRegion documentRegion, IDocument document,
@@ -265,6 +281,26 @@ public class DOMHelper {
 			if (model == null) {
 				model = StructuredModelManager.getModelManager()
 						.getModelForRead(file);
+			}
+			return (ICSSModel) model;
+		} catch (Exception e) {
+
+		}
+		if (model != null) {
+			model.releaseFromRead();
+		}
+		return null;
+	}
+
+	public static ICSSModel getModel(File file) {
+		IStructuredModel model = null;
+		try {
+			model = StructuredModelManager.getModelManager()
+					.getExistingModelForRead(file);
+			if (model == null) {
+				model = StructuredModelManager.getModelManager()
+						.getModelForRead(file.getPath(),
+								new FileInputStream(file), null);
 			}
 			return (ICSSModel) model;
 		} catch (Exception e) {

@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
+import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
@@ -116,23 +117,28 @@ public class WebResourcesCompletionProposalComputer extends
 				new WebResourcesCollectorAdapter() {
 
 					@Override
-					public void add(IResource resource, IDOMNode htmlNode,
-							IFile htmlFile, IURIResolver resolver) {
+					public void add(Object r, WebResourceKind resourceKind,
+							IDOMNode htmlNode, IFile htmlFile,
+							IURIResolver resolver) {
+						if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
+							IResource resource = (IResource) r;
+							IPath location = resolver.resolve(resource,
+									htmlFile);
+							String fileName = location.toString();
+							if (location.toString().startsWith(matchingString)) {
 
-						IPath location = resolver.resolve(resource, htmlFile);
-						String fileName = location.toString();
-						if (location.toString().startsWith(matchingString)) {
-
-							String displayString = resource
-									.getProjectRelativePath().toString();
-							int cursorPosition = fileName.length();
-							Image image = ResourceHelper
-									.getFileTypeImage(resource);
-							ICompletionProposal proposal = new FileWebResourcesCompletionProposal(
-									fileName, replacementOffset,
-									replacementLength, cursorPosition, image,
-									displayString, null, resource, type);
-							contentAssistRequest.addProposal(proposal);
+								String displayString = resource
+										.getProjectRelativePath().toString();
+								int cursorPosition = fileName.length();
+								Image image = ResourceHelper
+										.getFileTypeImage(resource);
+								ICompletionProposal proposal = new FileWebResourcesCompletionProposal(
+										fileName, replacementOffset,
+										replacementLength, cursorPosition,
+										image, displayString, null, resource,
+										type);
+								contentAssistRequest.addProposal(proposal);
+							}
 						}
 					}
 				});

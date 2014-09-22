@@ -54,7 +54,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector"/>
                </appInfo>
             </annotation>
          </attribute>

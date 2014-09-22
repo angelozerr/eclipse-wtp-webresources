@@ -10,6 +10,7 @@
  */
 package org.eclipse.wst.html.webresources.core.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -83,21 +84,37 @@ public class ResourceHelper {
 	 * 
 	 * @param resource
 	 *            the file.
-	 * @param type
-	 *            teh web resource type.
+	 * @param resourceType
+	 *            the web resource type.
 	 * @return true if the given resources matches the web resource type and
 	 *         false otherwise.
 	 */
 	public static boolean isMatchingWebResourceType(IResource resource,
-			WebResourceType type) {
+			WebResourceType resourceType) {
 		String extension = resource.getFileExtension();
+		return isMatching(extension, resourceType);
+	}
+
+	public static boolean isMatchingWebResourceType(File file,
+			WebResourceType resourceType) {
+		String filename = file.getName();
+		int index = filename.lastIndexOf('.');
+		if (index == -1) {
+			return false;
+		}
+		String extension = filename.substring(index + 1, filename.length());
+		return isMatching(extension, resourceType);
+	}
+
+	private static boolean isMatching(String extension,
+			WebResourceType resourceType) {
 		if (extension == null) {
 			return false;
 		}
-		switch (type) {
+		switch (resourceType) {
 		case css:
 		case js:
-			return type.name().equalsIgnoreCase(extension);
+			return resourceType.name().equalsIgnoreCase(extension);
 		case img:
 			return IMG_EXTENSIONS.contains(extension.toLowerCase());
 		}
@@ -124,4 +141,5 @@ public class ResourceHelper {
 		}
 		return null;
 	}
+
 }

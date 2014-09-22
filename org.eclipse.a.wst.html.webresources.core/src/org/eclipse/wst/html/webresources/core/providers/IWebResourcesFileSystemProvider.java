@@ -10,17 +10,18 @@
  */
 package org.eclipse.wst.html.webresources.core.providers;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
- * API for web resources provider which works with eclipse resource
- * {@link IResource}.
+ * API for web resources provider which works with file system resource
+ * {@link File}.
  *
  */
-public interface IWebResourcesProvider {
+public interface IWebResourcesFileSystemProvider {
 
 	/**
 	 * Returns the list of web resources (css, js, img files, or folders)
@@ -35,7 +36,7 @@ public interface IWebResourcesProvider {
 	 *            the resource type (css, js, img);
 	 * @return
 	 */
-	IResource[] getResources(IDOMNode htmlNode, IFile htmlFile,
+	File[] getResources(IDOMNode htmlNode, IFile htmlFile,
 			WebResourceType resourceType);
 
 }

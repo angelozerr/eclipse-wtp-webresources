@@ -10,10 +10,12 @@
  */
 package org.eclipse.wst.html.webresources.core;
 
+import java.io.File;
 import java.util.Iterator;
 
+import javax.swing.text.html.InlineView;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetListAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSImportRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSMediaRule;
@@ -29,7 +31,7 @@ import org.eclipse.wst.css.core.internal.util.AbstractCssTraverser;
 import org.eclipse.wst.html.core.internal.htmlcss.HTMLDocumentAdapter;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
+import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
@@ -67,7 +69,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 			org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
 			if (sheet instanceof ICSSNode) {
 				cssNode = (ICSSNode) sheet;
-				if (!DOMHelper.isEmbedded(cssNode)) {
+				if (StyleSheetType.getType(cssNode) != StyleSheetType.EMBEDDED) {
 					hasExternalCSS = true;
 				}
 				super.apply(cssNode);
@@ -163,10 +165,22 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 	}
 
 	@Override
-	public void add(IResource resource, IDOMNode htmlNode, IFile htmlFile,
-			IURIResolver resolver) {
-		ICSSModel model = DOMHelper.getModel((IFile) resource);
-		super.apply(model);
+	public void add(Object resource, WebResourceKind resourceKind,
+			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+		ICSSModel model = getModel(resource, resourceKind);
+		if (model != null) {
+			super.apply(model);
+		}
+	}
+
+	private ICSSModel getModel(Object resource, WebResourceKind resourceKind) {
+		switch (resourceKind) {
+		case ECLIPSE_RESOURCE:
+			return DOMHelper.getModel((IFile) resource);
+		case FILESYSTEM:
+			return DOMHelper.getModel((File) resource);
+		}
+		return null;
 	}
 
 	@Override
