@@ -121,8 +121,9 @@ public class ResourceHelper {
 		}
 		switch (resourceType) {
 		case css:
-		case js:
 			return CSS_EXTENSIONS.contains(extension.toLowerCase());
+		case js:
+			return resourceType.name().equalsIgnoreCase(extension);
 		case img:
 			return IMG_EXTENSIONS.contains(extension.toLowerCase());
 		}
