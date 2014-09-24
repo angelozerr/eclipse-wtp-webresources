@@ -58,6 +58,14 @@ public class ResourceHelper {
 		IMG_EXTENSIONS.add("wbmp");
 	}
 
+	private final static Collection<String> CSS_EXTENSIONS;
+
+	static {
+		CSS_EXTENSIONS = new ArrayList<String>();
+		CSS_EXTENSIONS.add("css");
+		CSS_EXTENSIONS.add("scss");
+	}
+
 	/**
 	 * Returns the image file type of the given file.
 	 * 
@@ -114,7 +122,7 @@ public class ResourceHelper {
 		switch (resourceType) {
 		case css:
 		case js:
-			return resourceType.name().equalsIgnoreCase(extension);
+			return CSS_EXTENSIONS.contains(extension.toLowerCase());
 		case img:
 			return IMG_EXTENSIONS.contains(extension.toLowerCase());
 		}
