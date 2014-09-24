@@ -69,8 +69,9 @@ public class WebResourcesCompletionProposal extends CustomCompletionProposal
 
 	@Override
 	public int getRelevance() {
-		int relevance = 0;
-		char c;
+		return 0;
+		/*int relevance = 0;
+		/*char c;
 		char[] ch = getReplacementString().toCharArray();
 		for (int i = 0; i < ch.length; i++) {
 			c = ch[i];
@@ -80,7 +81,7 @@ public class WebResourcesCompletionProposal extends CustomCompletionProposal
 				// break;
 			}
 		}
-		return -relevance;
+		return -relevance;*/
 		/*
 		 * return super.getRelevance() -
 		 * StringUtils.countMatches(getReplacementString(), "/");

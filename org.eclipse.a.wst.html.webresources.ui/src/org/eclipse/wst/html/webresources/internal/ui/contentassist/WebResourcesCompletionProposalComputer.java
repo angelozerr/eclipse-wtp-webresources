@@ -127,8 +127,11 @@ public class WebResourcesCompletionProposalComputer extends
 							String fileName = location.toString();
 							if (location.toString().startsWith(matchingString)) {
 
-								String displayString = resource
-										.getProjectRelativePath().toString();
+								/*
+								 * String displayString = resource
+								 * .getProjectRelativePath().toString();
+								 */
+								String displayString = fileName;
 								int cursorPosition = fileName.length();
 								Image image = ResourceHelper
 										.getFileTypeImage(resource);

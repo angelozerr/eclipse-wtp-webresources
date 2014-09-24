@@ -16,7 +16,9 @@
     
 	<extension-point id="webResourcesProviders" name="%webResourcesProviders.name"
 		schema="schema/webResourcesProviders.exsd" />	
-		
+	<extension-point id="webResourcesFinderTypeProviders" name="%webResourcesFinderTypeProviders.name"
+		schema="schema/webResourcesFinderTypeProviders.exsd" />	
+				
 	<extension
 		      point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders">
      <provider
@@ -25,4 +27,11 @@
      </provider>
 	</extension>    
 		
+	<extension
+	      point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders">
+	   <provider
+	         class="org.eclipse.wst.html.webresources.internal.core.HTMLWebResourcesFinderTypeProvider">
+	   </provider>
+	</extension>
+	
 </plugin>        

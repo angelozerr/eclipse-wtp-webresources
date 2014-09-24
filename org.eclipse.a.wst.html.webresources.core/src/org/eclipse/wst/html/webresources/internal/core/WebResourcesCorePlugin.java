@@ -44,6 +44,7 @@ public class WebResourcesCorePlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		WebResourcesFileManager.getInstance().initialize();
+		WebResourcesFinderTypeProviderManager.getManager().initialize();
 	}
 
 	/*
@@ -55,6 +56,7 @@ public class WebResourcesCorePlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		WebResourcesFileManager.getInstance().dispose();
+		WebResourcesFinderTypeProviderManager.getManager().destroy();
 		plugin = null;
 		super.stop(context);
 	}
