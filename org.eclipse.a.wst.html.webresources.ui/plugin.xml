@@ -46,6 +46,18 @@
 	      <partitionType
 	          id="org.eclipse.wst.html.HTML_DEFAULT">
 	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.wst.html.HTML_COMMENT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.wst.sse.ST_DEFAULT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.jst.jsp.JSP_COMMENT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.jst.jsp.JSP_DIRECTIVE">
+	      </partitionType>
 	    </contentType>
 	  </proposalComputerExtendedActivation>
 	</extension>
