@@ -13,8 +13,6 @@ package org.eclipse.wst.html.webresources.core;
 import java.io.File;
 import java.util.Iterator;
 
-import javax.swing.text.html.InlineView;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetListAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSImportRule;
@@ -61,7 +59,6 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		ICSSNode cssNode = null;
 		StyleSheetList sheetList = adapter.getStyleSheets();
 		int nbSheets = sheetList.getLength();
-		boolean hasExternalCSS = false;
 		// Loop for each CSS styles sheets :
 		// - embedded styles declared with <style> element
 		// - external styles declared with <link href=""
@@ -69,19 +66,12 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 			org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
 			if (sheet instanceof ICSSNode) {
 				cssNode = (ICSSNode) sheet;
-				if (StyleSheetType.getType(cssNode) != StyleSheetType.EMBEDDED) {
-					hasExternalCSS = true;
-				}
 				super.apply(cssNode);
 			}
 		}
-		if (!hasExternalCSS) {
-			// none external styles, try to discover styles from the project.
-			WebResourcesProvidersManager.getInstance().collect(node,
+		// to discover styles from the project.
+		WebResourcesProvidersManager.getInstance().collect(node,
 					WebResourceType.css, this);
-		} else {
-
-		}
 	}
 
 	private void traverseRule(ICSSStyleRule rule) {
