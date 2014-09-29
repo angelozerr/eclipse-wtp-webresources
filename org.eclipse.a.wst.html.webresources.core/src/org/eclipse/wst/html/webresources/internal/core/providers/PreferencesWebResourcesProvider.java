@@ -17,11 +17,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
-import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesProjectConfiguration;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * {@link IWebResourcesProvider} implementation which uses preferences.
@@ -31,20 +30,21 @@ public class PreferencesWebResourcesProvider implements IWebResourcesProvider,
 		IWebResourcesCollectorProvider {
 
 	@Override
-	public IResource[] getResources(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType, WebResourcesProviderContext context) {
-		if (context != null && context.hasExternalCSS()) {
+	public IResource[] getResources(IWebResourcesContext context) {
+		if (context.hasExternalCSS()) {
 			// the given HTML file has external CSS, don't search CSS from the
 			// given project.
 			// TODO : manage that with preferences.
 			return null;
 		}
+		IFile htmlFile = context.getHtmlFile();
 		IProject project = htmlFile.getProject();
 		// 1) check if the project is already linked to a web resources
 		// configuration.
 		try {
 			WebResourcesProjectConfiguration configuration = WebResourcesProjectConfiguration
 					.getOrCreateConfiguration(project);
+			WebResourceType resourceType = context.getResourceType();
 			IResource[] resources = configuration.getResources(resourceType);
 			if (resources != null) {
 				return resources;
@@ -72,13 +72,14 @@ public class PreferencesWebResourcesProvider implements IWebResourcesProvider,
 	}
 
 	@Override
-	public IWebResourcesCollector getCollector(IDOMNode htmlNode,
-			IFile htmlFile, WebResourceType resourceType) {
+	public IWebResourcesCollector getCollector(IWebResourcesContext context) {
+		IFile htmlFile = context.getHtmlFile();
 		IProject project = htmlFile.getProject();
 		try {
 			WebResourcesProjectConfiguration configuration = WebResourcesProjectConfiguration
 					.getOrCreateConfiguration(project);
-			IResource[] resources = configuration.getResources(resourceType);
+			IResource[] resources = configuration.getResources(context
+					.getResourceType());
 			if (resources == null) {
 				return configuration;
 			}

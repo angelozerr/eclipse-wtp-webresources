@@ -16,6 +16,5 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public interface IWebResourcesCollectorProvider {
 
-	IWebResourcesCollector getCollector(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType);
+	IWebResourcesCollector getCollector(IWebResourcesContext context);
 }

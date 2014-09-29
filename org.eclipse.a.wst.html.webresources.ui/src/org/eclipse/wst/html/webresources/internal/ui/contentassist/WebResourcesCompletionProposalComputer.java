@@ -18,8 +18,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
@@ -112,16 +114,19 @@ public class WebResourcesCompletionProposalComputer extends
 		final int replacementLength = attrValue.length();
 		final int replacementOffset = context.getInvocationOffset()
 				- matchingString.length();
-		final WebResourceType type = attrValueRegion.getType().getType();
-		WebResourcesProvidersManager.getInstance().collect(node, type, null,
+		final WebResourceType resourceType = attrValueRegion.getType()
+				.getType();
+		IWebResourcesContext resourcesContext = new WebResourcesContext(node,
+				resourceType);
+		WebResourcesProvidersManager.getInstance().collect(resourcesContext,
 				new WebResourcesCollectorAdapter() {
 
 					@Override
 					public void add(Object r, WebResourceKind resourceKind,
-							IDOMNode htmlNode, IFile htmlFile,
-							IURIResolver resolver) {
+							IWebResourcesContext context, IURIResolver resolver) {
 						if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 							IResource resource = (IResource) r;
+							IFile htmlFile = context.getHtmlFile();
 							IPath location = resolver.resolve(resource,
 									htmlFile);
 							String fileName = location.toString();
@@ -139,7 +144,7 @@ public class WebResourcesCompletionProposalComputer extends
 										fileName, replacementOffset,
 										replacementLength, cursorPosition,
 										image, displayString, null, resource,
-										type);
+										resourceType);
 								contentAssistRequest.addProposal(proposal);
 							}
 						}

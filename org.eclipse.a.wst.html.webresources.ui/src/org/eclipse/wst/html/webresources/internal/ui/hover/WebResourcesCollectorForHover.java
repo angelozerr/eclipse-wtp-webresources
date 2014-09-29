@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
@@ -38,9 +39,10 @@ public class WebResourcesCollectorForHover extends WebResourcesCollectorAdapter 
 
 	@Override
 	public void add(Object resource, WebResourceKind resourceKind,
-			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+			IWebResourcesContext context, IURIResolver resolver) {
 		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 			IResource r = (IResource) resource;
+			IFile htmlFile = context.getHtmlFile();
 			IPath resourceFileLoc = resolver.resolve(r, htmlFile);
 			if (resourceFileLoc.toString().equals(fileName)) {
 				info = HTMLWebResourcesPrinter.getAdditionalProposalInfo(r,

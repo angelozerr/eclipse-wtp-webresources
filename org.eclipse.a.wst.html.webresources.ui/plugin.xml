@@ -37,44 +37,6 @@
 	    </proposalComputer>
 	</extension>
 
-	<!-- Activate CSS class name completion for JSP : this declaration should be moved to JSP plugins -->
-	<extension point="org.eclipse.wst.sse.ui.completionProposal">
-	  <proposalComputerExtendedActivation
-	      id="org.eclipse.wst.html.webresources.ui.contentassist.WebResourcesCompletionProposalComputer">
-	    <contentType
-	        id="org.eclipse.jst.jsp.core.jspsource">
-	      <partitionType
-	          id="org.eclipse.wst.html.HTML_DEFAULT">
-	      </partitionType>
-	      <partitionType
-	            id="org.eclipse.wst.html.HTML_COMMENT">
-	      </partitionType>
-	      <partitionType
-	            id="org.eclipse.wst.sse.ST_DEFAULT">
-	      </partitionType>
-	      <partitionType
-	            id="org.eclipse.jst.jsp.JSP_COMMENT">
-	      </partitionType>
-	      <partitionType
-	            id="org.eclipse.jst.jsp.JSP_DIRECTIVE">
-	      </partitionType>
-	    </contentType>
-	  </proposalComputerExtendedActivation>
-	</extension>
-
-	<!-- Activate CSS class name completion for PHP : this declaration should be moved to JSP plugins -->
-	<extension point="org.eclipse.wst.sse.ui.completionProposal">
-	  <proposalComputerExtendedActivation
-	      id="org.eclipse.wst.html.webresources.ui.contentassist.WebResourcesCompletionProposalComputer">
-	    <contentType
-	        id="org.eclipse.php.core.phpsource">
-	      <partitionType
-	          id="org.eclipse.wst.html.HTML_DEFAULT">
-	      </partitionType>
-	    </contentType>
-	  </proposalComputerExtendedActivation>
-	</extension>
-
 	<!--======================================================================================-->
 	<!-- Hyperlink                                      						              -->
 	<!--======================================================================================-->
@@ -106,24 +68,6 @@
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
 				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
 			</contentTypeIdentifier>
-			<contentTypeIdentifier
-				id="org.eclipse.jst.jsp.core.jspsource">
-				<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE"/>
-				<partitionType id="org.eclipse.jst.jsp.JSP_COMMENT"/>
-				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
-				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
-				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
-				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
-				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
-			</contentTypeIdentifier>
-			<contentTypeIdentifier
-				id="org.eclipse.php.core.phpsource">
-				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
-				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
-				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
-				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
-				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
-			</contentTypeIdentifier>						
 		</validator>
 	</extension>
 	
@@ -151,5 +95,80 @@
 			</enabledWhen>
 		</page>
 	</extension>
-		    
+	
+	<!-- ============ JSP support ================ -->
+	
+	<!-- Activate CSS class name completion for JSP : this declaration should be moved to JSP plugins -->
+	<extension point="org.eclipse.wst.sse.ui.completionProposal">
+	  <proposalComputerExtendedActivation
+	      id="org.eclipse.wst.html.webresources.ui.contentassist.WebResourcesCompletionProposalComputer">
+	    <contentType
+	        id="org.eclipse.jst.jsp.core.jspsource">
+	      <partitionType
+	          id="org.eclipse.wst.html.HTML_DEFAULT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.wst.html.HTML_COMMENT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.wst.sse.ST_DEFAULT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.jst.jsp.JSP_COMMENT">
+	      </partitionType>
+	      <partitionType
+	            id="org.eclipse.jst.jsp.JSP_DIRECTIVE">
+	      </partitionType>
+	    </contentType>
+	  </proposalComputerExtendedActivation>
+	</extension>
+
+	<extension point="org.eclipse.wst.sse.ui.sourcevalidation">
+		<validator
+			scope="total"
+			class="org.eclipse.wst.html.webresources.ui.validation.WebResourcesSourceValidator"
+			id="org.eclipse.wst.jsp.webresources.ui.validation.webresourcessourcevalidator">
+			<contentTypeIdentifier
+				id="org.eclipse.jst.jsp.core.jspsource">
+				<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE"/>
+				<partitionType id="org.eclipse.jst.jsp.JSP_COMMENT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
+				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
+			</contentTypeIdentifier>
+		</validator>
+	</extension>
+	
+	<!-- ============ PHP support ================ -->
+	
+	<!-- Activate CSS class name completion for PHP : this declaration should be moved to JSP plugins -->
+	<extension point="org.eclipse.wst.sse.ui.completionProposal">
+	  <proposalComputerExtendedActivation
+	      id="org.eclipse.wst.html.webresources.ui.contentassist.WebResourcesCompletionProposalComputer">
+	    <contentType
+	        id="org.eclipse.php.core.phpsource">
+	      <partitionType
+	          id="org.eclipse.wst.html.HTML_DEFAULT">
+	      </partitionType>
+	    </contentType>
+	  </proposalComputerExtendedActivation>
+	</extension>	    
+	
+	<extension point="org.eclipse.wst.sse.ui.sourcevalidation">
+		<validator
+			scope="total"
+			class="org.eclipse.wst.html.webresources.ui.validation.WebResourcesSourceValidator"
+			id="org.eclipse.wst.php.webresources.ui.validation.webresourcessourcevalidator">
+			<contentTypeIdentifier
+				id="org.eclipse.php.core.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
+				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
+			</contentTypeIdentifier>						
+		</validator>
+	</extension>	
 </plugin>        

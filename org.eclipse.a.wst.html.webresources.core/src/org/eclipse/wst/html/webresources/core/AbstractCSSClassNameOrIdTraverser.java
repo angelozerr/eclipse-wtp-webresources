@@ -29,8 +29,9 @@ import org.eclipse.wst.css.core.internal.util.AbstractCssTraverser;
 import org.eclipse.wst.html.core.internal.htmlcss.HTMLDocumentAdapter;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
-import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
@@ -74,14 +75,10 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 				super.apply(cssNode);
 			}
 		}
-		WebResourcesProviderContext context = null;
-		if (hasExternalCSS) {
-			context = new WebResourcesProviderContext();
-			context.setHasExternalCSS(hasExternalCSS);
-		}
+		WebResourcesContext context = new WebResourcesContext(node,
+				WebResourceType.css, hasExternalCSS);
 		// try to discover styles from the project.
-		WebResourcesProvidersManager.getInstance().collect(node,
-				WebResourceType.css, context, this);
+		WebResourcesProvidersManager.getInstance().collect(context, this);
 	}
 
 	private void traverseRule(ICSSStyleRule rule) {
@@ -166,7 +163,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 
 	@Override
 	public void add(Object resource, WebResourceKind resourceKind,
-			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+			IWebResourcesContext context, IURIResolver resolver) {
 		ICSSModel model = getModel(resource, resourceKind);
 		if (model != null) {
 			super.apply(model);

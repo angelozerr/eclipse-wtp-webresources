@@ -22,8 +22,8 @@ import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
-import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
@@ -63,20 +63,19 @@ public class WebResourcesProviderType {
 	 *            the owner HTML file of teh given DOM node.
 	 * @param context
 	 */
-	public void collect(IDOMNode htmlNode, IFile htmlFile,
-			WebResourcesProviderContext context, IWebResourcesCollector collector) {
+	public void collect(IWebResourcesContext context,
+			IWebResourcesCollector collector) {
 		IWebResourcesCollector collector2 = collectorProvider != null ? collectorProvider
-				.getCollector(htmlNode, htmlFile, resourcesType) : null;
+				.getCollector(context) : null;
 		IURIResolver resolver = WebResourcesProvidersManager.getInstance();
 		if (resourcesProvider != null) {
 			// get containers for the given DOM node.
-			IResource[] resources = resourcesProvider.getResources(htmlNode,
-					htmlFile, resourcesType, context);
+			IResource[] resources = resourcesProvider.getResources(context);
 			if (resources != null) {
 				// Loop for each containers to visit files and collect it if it
 				// matches the given web resource type.
 				IResourceVisitor visitor = new WebResourcesVisitor(collector,
-						collector2, resourcesType, htmlNode, htmlFile, resolver);
+						collector2, context, resolver);
 				// start collect
 				collector.startCollect(resourcesType);
 				if (collector2 != null) {
@@ -101,8 +100,7 @@ public class WebResourcesProviderType {
 		}
 		if (fileSystemProvider != null) {
 			// get containers for the given DOM node.
-			File[] files = fileSystemProvider.getResources(htmlNode, htmlFile,
-					resourcesType, context);
+			File[] files = fileSystemProvider.getResources(context);
 			if (files != null) {
 				collector.startCollect(resourcesType);
 				if (collector2 != null) {
@@ -111,8 +109,8 @@ public class WebResourcesProviderType {
 				// collect processes
 				for (int i = 0; i < files.length; i++) {
 					try {
-						processFile(files[i], collector, collector2,
-								resourcesType, htmlNode, htmlFile, resolver);
+						processFile(files[i], collector, collector2, context,
+								resolver);
 					} catch (Exception e) {
 						Trace.trace(Trace.SEVERE,
 								"Error while collecting file system resources for container "
@@ -129,24 +127,23 @@ public class WebResourcesProviderType {
 		}
 	}
 
-	public void processFile(File file, IWebResourcesCollector collector,
-			IWebResourcesCollector collector2, WebResourceType resourceType,
-			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+	private void processFile(File file, IWebResourcesCollector collector,
+			IWebResourcesCollector collector2, IWebResourcesContext context,
+			IURIResolver resolver) {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (int i = 0; i < files.length; i++) {
-				processFile(files[i], collector, collector2, resourceType,
-						htmlNode, htmlFile, resolver);
+				processFile(files[i], collector, collector2, context, resolver);
 			}
 		} else if (file.isFile()) {
 			if (ResourceHelper.isMatchingWebResourceType(file, resourcesType)) {
 				// current file matches the given web resource type
 				// collect it.
-				collector.add(file, WebResourceKind.FILESYSTEM, htmlNode,
-						htmlFile, resolver);
+				collector.add(file, WebResourceKind.FILESYSTEM, context,
+						resolver);
 				if (collector2 != null) {
-					collector2.add(file, WebResourceKind.FILESYSTEM, htmlNode,
-							htmlFile, resolver);
+					collector2.add(file, WebResourceKind.FILESYSTEM, context,
+							resolver);
 				}
 			}
 		}

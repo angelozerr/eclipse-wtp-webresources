@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
@@ -197,7 +198,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 		return true;
 	}
 
-	private void validateFile(IValidationContext helper, IReporter reporter,
+	protected void validateFile(IValidationContext helper, IReporter reporter,
 			IFile file, ValidationResult result) {
 		if ((reporter != null) && (reporter.isCancelled() == true)) {
 			throw new OperationCanceledException();
@@ -416,7 +417,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 	public void validateFile(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
-			WebResourceType type) {
+			WebResourceType resourceType) {
 		IDOMNode xmlnode;
 		String attrValue = DOMHelper.getAttrValue(documentRegion
 				.getText(attrValueRegion.getRegion()));
@@ -428,8 +429,10 @@ public class WebResourcesValidator extends AbstractValidator implements
 							+ attrValueRegion.getRegion().getStart());
 			WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
 					attrValue);
-			WebResourcesProvidersManager.getInstance().collect(xmlnode, type,
-					null, collector);
+			WebResourcesContext context = new WebResourcesContext(xmlnode,
+					resourceType);
+			WebResourcesProvidersManager.getInstance().collect(context,
+					collector);
 			if (collector.getNbFiles() == 0) {
 				IMessage message = factory.createMessage((IDOMAttr) xmlnode,
 						attrValueRegion.getType(), file);

@@ -24,6 +24,7 @@ import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
@@ -76,7 +77,7 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 
 	@Override
 	public void add(Object resource, WebResourceKind resourceKind,
-			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
+			IWebResourcesContext context, IURIResolver resolver) {
 		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 			resources.add((IResource) resource);
 		}

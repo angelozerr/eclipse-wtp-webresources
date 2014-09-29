@@ -10,9 +10,7 @@
  */
 package org.eclipse.wst.html.webresources.core.providers;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * This adapter class provides default implementations for the methods described
@@ -31,8 +29,7 @@ public class WebResourcesCollectorAdapter implements IWebResourcesCollector {
 
 	@Override
 	public void add(Object resource, WebResourceKind resourceKind,
-			IDOMNode htmlNode, IFile htmlFile, IURIResolver resolver) {
-
+			IWebResourcesContext context, IURIResolver resolver) {
 	}
 
 	@Override

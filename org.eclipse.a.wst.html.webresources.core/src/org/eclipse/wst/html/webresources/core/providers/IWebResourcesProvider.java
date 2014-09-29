@@ -10,12 +10,8 @@
  */
 package org.eclipse.wst.html.webresources.core.providers;
 
-import java.util.Map;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * API for web resources provider which works with eclipse resource
@@ -38,7 +34,6 @@ public interface IWebResourcesProvider {
 	 * @param context
 	 * @return
 	 */
-	IResource[] getResources(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType, WebResourcesProviderContext context);
+	IResource[] getResources(IWebResourcesContext context);
 
 }

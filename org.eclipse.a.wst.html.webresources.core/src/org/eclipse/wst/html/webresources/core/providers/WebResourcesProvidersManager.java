@@ -42,13 +42,12 @@ public class WebResourcesProvidersManager implements IURIResolver {
 		return INSTANCE;
 	}
 
-	public void collect(IDOMNode htmlNode, WebResourceType resourcesType,
-			WebResourcesProviderContext context,
+	public void collect(IWebResourcesContext context,
 			IWebResourcesCollector collector) {
-		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourcesType);
-		IFile htmlFile = DOMHelper.getFile(htmlNode);
+		WebResourceType resourceType = context.getResourceType();
+		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourceType);
 		for (WebResourcesProviderType providerType : providerTypes) {
-			providerType.collect(htmlNode, htmlFile, context, collector);
+			providerType.collect(context, collector);
 		}
 	}
 

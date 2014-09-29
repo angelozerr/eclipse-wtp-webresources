@@ -29,16 +29,9 @@ public interface IWebResourcesFileSystemProvider {
 	 * available for the given DOM node and which matches the given resource
 	 * type.
 	 * 
-	 * @param htmlNode
-	 *            the HTML node which have triggers this provider.
-	 * @param htmlFile
-	 *            the HTML file of the HTML node.
-	 * @param resourceType
-	 *            the resource type (css, js, img);
 	 * @param context
 	 * @return
 	 */
-	File[] getResources(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType, WebResourcesProviderContext context);
+	File[] getResources(IWebResourcesContext context);
 
 }
