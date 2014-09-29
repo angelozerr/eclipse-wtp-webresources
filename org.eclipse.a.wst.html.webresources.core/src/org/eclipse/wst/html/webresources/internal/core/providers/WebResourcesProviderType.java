@@ -23,6 +23,7 @@ import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorPr
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
@@ -60,16 +61,17 @@ public class WebResourcesProviderType {
 	 *            the DOM node which has triggered the start of this visitor.
 	 * @param htmlFile
 	 *            the owner HTML file of teh given DOM node.
+	 * @param context
 	 */
 	public void collect(IDOMNode htmlNode, IFile htmlFile,
-			IWebResourcesCollector collector) {
+			WebResourcesProviderContext context, IWebResourcesCollector collector) {
 		IWebResourcesCollector collector2 = collectorProvider != null ? collectorProvider
 				.getCollector(htmlNode, htmlFile, resourcesType) : null;
 		IURIResolver resolver = WebResourcesProvidersManager.getInstance();
 		if (resourcesProvider != null) {
 			// get containers for the given DOM node.
 			IResource[] resources = resourcesProvider.getResources(htmlNode,
-					htmlFile, resourcesType);
+					htmlFile, resourcesType, context);
 			if (resources != null) {
 				// Loop for each containers to visit files and collect it if it
 				// matches the given web resource type.
@@ -100,7 +102,7 @@ public class WebResourcesProviderType {
 		if (fileSystemProvider != null) {
 			// get containers for the given DOM node.
 			File[] files = fileSystemProvider.getResources(htmlNode, htmlFile,
-					resourcesType);
+					resourcesType, context);
 			if (files != null) {
 				collector.startCollect(resourcesType);
 				if (collector2 != null) {

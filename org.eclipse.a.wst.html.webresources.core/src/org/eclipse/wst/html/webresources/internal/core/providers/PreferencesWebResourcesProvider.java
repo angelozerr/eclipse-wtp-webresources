@@ -18,6 +18,7 @@ import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesProjectConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -31,7 +32,13 @@ public class PreferencesWebResourcesProvider implements IWebResourcesProvider,
 
 	@Override
 	public IResource[] getResources(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType) {
+			WebResourceType resourceType, WebResourcesProviderContext context) {
+		if (context != null && context.hasExternalCSS()) {
+			// the given HTML file has external CSS, don't search CSS from the
+			// given project.
+			// TODO : manage that with preferences.
+			return null;
+		}
 		IProject project = htmlFile.getProject();
 		// 1) check if the project is already linked to a web resources
 		// configuration.

@@ -126,7 +126,7 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 		WebResourceType type = resourceRegion.getType().getType();
 		WebResourcesCollectorForHover collector = new WebResourcesCollectorForHover(
 				fileName, type);
-		WebResourcesProvidersManager.getInstance().collect(xmlnode, type,
+		WebResourcesProvidersManager.getInstance().collect(xmlnode, type, null,
 				collector);
 		return collector.getInfo();
 	}

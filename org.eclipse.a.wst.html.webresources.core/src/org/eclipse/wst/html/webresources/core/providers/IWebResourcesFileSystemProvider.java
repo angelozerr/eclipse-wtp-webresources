@@ -11,6 +11,7 @@
 package org.eclipse.wst.html.webresources.core.providers;
 
 import java.io.File;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
@@ -34,9 +35,10 @@ public interface IWebResourcesFileSystemProvider {
 	 *            the HTML file of the HTML node.
 	 * @param resourceType
 	 *            the resource type (css, js, img);
+	 * @param context
 	 * @return
 	 */
 	File[] getResources(IDOMNode htmlNode, IFile htmlFile,
-			WebResourceType resourceType);
+			WebResourceType resourceType, WebResourcesProviderContext context);
 
 }

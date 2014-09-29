@@ -113,7 +113,7 @@ public class WebResourcesCompletionProposalComputer extends
 		final int replacementOffset = context.getInvocationOffset()
 				- matchingString.length();
 		final WebResourceType type = attrValueRegion.getType().getType();
-		WebResourcesProvidersManager.getInstance().collect(node, type,
+		WebResourcesProvidersManager.getInstance().collect(node, type, null,
 				new WebResourcesCollectorAdapter() {
 
 					@Override

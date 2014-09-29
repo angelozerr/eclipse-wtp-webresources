@@ -429,7 +429,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 			WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
 					attrValue);
 			WebResourcesProvidersManager.getInstance().collect(xmlnode, type,
-					collector);
+					null, collector);
 			if (collector.getNbFiles() == 0) {
 				IMessage message = factory.createMessage((IDOMAttr) xmlnode,
 						attrValueRegion.getType(), file);
