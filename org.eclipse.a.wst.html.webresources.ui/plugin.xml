@@ -89,4 +89,67 @@
 		</hyperlinkDetector>		
    	</extension>	
     
+	<!--======================================================================================-->
+	<!-- As you type validation                                      						  -->
+	<!--======================================================================================-->
+
+	<extension point="org.eclipse.wst.sse.ui.sourcevalidation">
+		<validator
+			scope="total"
+			class="org.eclipse.wst.html.webresources.ui.validation.WebResourcesSourceValidator"
+			id="org.eclipse.wst.html.webresources.ui.validation.webresourcessourcevalidator">
+			<contentTypeIdentifier
+				id="org.eclipse.wst.html.core.htmlsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
+				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
+			</contentTypeIdentifier>
+			<contentTypeIdentifier
+				id="org.eclipse.jst.jsp.core.jspsource">
+				<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE"/>
+				<partitionType id="org.eclipse.jst.jsp.JSP_COMMENT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
+				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
+			</contentTypeIdentifier>
+			<contentTypeIdentifier
+				id="org.eclipse.php.core.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.html.HTML_DECLARATION"/>
+				<partitionType id="org.eclipse.wst.html.HTML_COMMENT"/>
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT"/>
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT"/>
+			</contentTypeIdentifier>						
+		</validator>
+	</extension>
+	
+	<!-- Preferences -->
+	    
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			name="%WebResources_Validation"
+			category="org.eclipse.wst.html.ui.preferences.html"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesValidationPreferencePage"
+			id="org.eclipse.wst.html.webresources.ui.preferences.validation">
+		</page>
+	</extension>
+			    
+	<!-- Web content settings -->
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			name="%WebResources_Property_validation"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesValidationPreferencePage"
+			id="org.eclipse.wst.html.webresources.ui.preferences.validation"
+			category="ValidationPropertiesPage">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">					
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension>
+		    
 </plugin>        

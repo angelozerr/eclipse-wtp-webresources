@@ -16,15 +16,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.core.providers.DefaultURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -34,7 +33,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
  * Web resources provider type.
  *
  */
-public class WebResourcesProviderType implements IURIResolver {
+public class WebResourcesProviderType {
 
 	private final IWebResourcesProvider resourcesProvider;
 	private final IWebResourcesCollectorProvider collectorProvider;
@@ -66,6 +65,7 @@ public class WebResourcesProviderType implements IURIResolver {
 			IWebResourcesCollector collector) {
 		IWebResourcesCollector collector2 = collectorProvider != null ? collectorProvider
 				.getCollector(htmlNode, htmlFile, resourcesType) : null;
+		IURIResolver resolver = WebResourcesProvidersManager.getInstance();
 		if (resourcesProvider != null) {
 			// get containers for the given DOM node.
 			IResource[] resources = resourcesProvider.getResources(htmlNode,
@@ -74,7 +74,7 @@ public class WebResourcesProviderType implements IURIResolver {
 				// Loop for each containers to visit files and collect it if it
 				// matches the given web resource type.
 				IResourceVisitor visitor = new WebResourcesVisitor(collector,
-						collector2, resourcesType, htmlNode, htmlFile, this);
+						collector2, resourcesType, htmlNode, htmlFile, resolver);
 				// start collect
 				collector.startCollect(resourcesType);
 				if (collector2 != null) {
@@ -110,7 +110,7 @@ public class WebResourcesProviderType implements IURIResolver {
 				for (int i = 0; i < files.length; i++) {
 					try {
 						processFile(files[i], collector, collector2,
-								resourcesType, htmlNode, htmlFile, this);
+								resourcesType, htmlNode, htmlFile, resolver);
 					} catch (Exception e) {
 						Trace.trace(Trace.SEVERE,
 								"Error while collecting file system resources for container "
@@ -149,12 +149,6 @@ public class WebResourcesProviderType implements IURIResolver {
 			}
 		}
 
-	}
-
-	@Override
-	public IPath resolve(IResource resource, IFile root) {
-		// TODO : manage resolver with extension point
-		return DefaultURIResolver.INSTANCE.resolve(resource, root);
 	}
 
 }

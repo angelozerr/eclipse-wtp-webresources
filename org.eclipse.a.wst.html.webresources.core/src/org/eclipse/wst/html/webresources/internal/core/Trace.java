@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
 
 /**
  * Helper class to route trace output.

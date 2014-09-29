@@ -22,6 +22,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  org.eclipse.wst.css.core,
  org.eclipse.a.wst.html.webresources.core,
- org.eclipse.core.filesystem
+ org.eclipse.core.filesystem,
+ org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.wst.html.webresources.ui.validation

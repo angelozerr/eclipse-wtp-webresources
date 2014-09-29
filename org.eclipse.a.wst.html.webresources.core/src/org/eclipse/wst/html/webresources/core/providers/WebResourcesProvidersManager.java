@@ -17,17 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
-import org.eclipse.wst.html.webresources.internal.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.internal.core.providers.WebResourcesProviderType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
-public class WebResourcesProvidersManager {
+public class WebResourcesProvidersManager implements IURIResolver {
 
 	private static final String PLUGIN_ID = WebResourcesCorePlugin.PLUGIN_ID;
 	private static final String EXTENSION_POINT_ID = "webResourcesProviders";
@@ -123,5 +125,11 @@ public class WebResourcesProvidersManager {
 					"  Could not load web resources providers: " + className != null ? className
 							: "", t);
 		}
+	}
+
+	@Override
+	public IPath resolve(IResource resource, IFile root) {
+		// TODO : manage resolver with extension point
+		return DefaultURIResolver.INSTANCE.resolve(resource, root);
 	}
 }

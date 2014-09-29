@@ -34,11 +34,14 @@ import org.eclipse.wst.html.webresources.internal.core.WebResourcesFinderTypePro
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.w3c.dom.NamedNodeMap;
 
 /**
  * DOM-SSE Utilities.
@@ -60,7 +63,8 @@ public class DOMHelper {
 	 *         position and null otherwise.
 	 */
 	public static WebResourcesTextRegion getTextRegion(
-			IStructuredDocumentRegion documentRegion, int documentPosition) {
+			IStructuredDocumentRegion documentRegion, int documentPosition,
+			boolean ignoreOffset) {
 		Iterator regions = documentRegion.getRegions().iterator();
 		int startOffset = documentPosition - documentRegion.getStartOffset();
 		ITextRegion currentRegion = null;
@@ -87,8 +91,10 @@ public class DOMHelper {
 						if (regions.hasNext()) {
 							ITextRegion attrValueRegion = (ITextRegion) regions
 									.next();
-							if (startOffset >= attrValueRegion.getStart()
-									&& startOffset <= attrValueRegion.getEnd()) {
+							if (ignoreOffset
+									|| (startOffset >= attrValueRegion
+											.getStart() && startOffset <= attrValueRegion
+											.getEnd())) {
 								return new WebResourcesTextRegion(
 										attrValueRegion, type);
 							}
@@ -98,6 +104,11 @@ public class DOMHelper {
 			}
 		}
 		return null;
+	}
+
+	public static WebResourcesTextRegion getTextRegion(
+			IStructuredDocumentRegion documentRegion, int documentPosition) {
+		return getTextRegion(documentRegion, documentPosition, false);
 	}
 
 	private static WebResourcesFinderType getWebResourcesFinderType(
@@ -293,4 +304,31 @@ public class DOMHelper {
 		return null;
 	}
 
+	public static final IDOMNode getNodeByOffset(IStructuredModel model,
+			int offset) {
+		IndexedRegion node = null;
+		if (model != null) {
+			node = model.getIndexedRegion(offset);
+			if (node instanceof IDOMNode) {
+				
+				NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
+				for (int i = 0; i < attrs.getLength(); i++) {
+					IndexedRegion attRegion = (IndexedRegion) attrs.item(i);
+					if (attRegion.contains(offset))
+						return (IDOMAttr) attrs.item(i);
+				}
+				return (IDOMNode) node;
+			}
+
+			if (model != null) {
+				int lastOffset = offset;
+				node = model.getIndexedRegion(offset);
+				while (node == null && lastOffset >= 0) {
+					lastOffset--;
+					node = model.getIndexedRegion(lastOffset);
+				}
+			}
+		}
+		return (IDOMNode) node;
+	}
 }

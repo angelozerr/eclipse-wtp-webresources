@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.html.webresources.core.IWebResourcesFinderTypeProvider;
+import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 

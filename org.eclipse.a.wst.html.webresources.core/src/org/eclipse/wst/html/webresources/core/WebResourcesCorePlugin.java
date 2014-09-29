@@ -8,12 +8,14 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.internal.core;
+package org.eclipse.wst.html.webresources.core;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.wst.html.webresources.internal.core.WebResourcesFileManager;
+import org.eclipse.wst.html.webresources.internal.core.WebResourcesFinderTypeProviderManager;
 import org.osgi.framework.BundleContext;
 
 /**

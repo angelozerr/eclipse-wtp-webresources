@@ -31,6 +31,19 @@ public final class WebResourcesUIMessages extends NLS {
 	public static String CSSClassNameHyperLink_typeLabel;
 	public static String CSSClassNameHyperLink_text;
 
+	// below are the strings for the validation page
+	public static String Validation_description;
+	public static String Validation_Warning;
+	public static String Validation_Error;
+	public static String Validation_Ignore;
+	public static String Expandable_label_files;
+	public static String Expandable_label_css;
+	public static String WebResourcesValidationPreferencePage_FILE_JS_UNKNOWN;
+	public static String WebResourcesValidationPreferencePage_FILE_CSS_UNKNOWN;
+	public static String WebResourcesValidationPreferencePage_FILE_IMG_UNKNOWN;
+	public static String WebResourcesValidationPreferencePage_CSS_CLASS_UNKNOWN;
+	public static String WebResourcesValidationPreferencePage_CSS_ID_UNKNOWN;
+	
 	private WebResourcesUIMessages() {
 	}
 
