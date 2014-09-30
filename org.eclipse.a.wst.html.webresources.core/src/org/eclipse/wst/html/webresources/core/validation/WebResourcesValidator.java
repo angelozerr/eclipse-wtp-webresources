@@ -22,8 +22,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -47,10 +45,12 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
+import org.eclipse.wst.validation.Validator;
+import org.eclipse.wst.validation.internal.ValManager;
+import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.operations.IWorkbenchContext;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
@@ -70,6 +70,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 public class WebResourcesValidator extends AbstractValidator implements
 		IValidatorJob {
 
+	public static final String ID = "org.eclipse.a.wst.html.webresources.core.WebResourcesValidator";
 	private static final String ORG_ECLIPSE_WST_HTML_CORE_HTMLSOURCE = "org.eclipse.wst.html.core.htmlsource"; //$NON-NLS-1$
 
 	private IContentType[] fOtherSupportedContentTypes = null;
@@ -195,7 +196,16 @@ public class WebResourcesValidator extends AbstractValidator implements
 			}
 			resource = resource.getParent();
 		} while ((resource.getType() & IResource.PROJECT) == 0);
-		return true;
+
+		boolean shouldValidate = false;
+		try {
+			Validator v = ValManager.getDefault().getValidator(ID, file.getProject());
+			shouldValidate = v.shouldValidate(file, ValType.Build);
+		}
+		catch( Exception e ) {
+		}
+
+		return shouldValidate;
 	}
 
 	protected void validateFile(IValidationContext helper, IReporter reporter,
