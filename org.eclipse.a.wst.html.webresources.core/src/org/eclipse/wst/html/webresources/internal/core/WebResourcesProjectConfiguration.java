@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,10 +25,9 @@ import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
- * Web Resources for a project.
+ * Web Resources configuration for a project.
  *
  */
 public class WebResourcesProjectConfiguration implements IWebResourcesCollector {
@@ -59,9 +57,18 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 			IProject project) throws CoreException {
 		WebResourcesProjectConfiguration configuration = getConfiguration(project);
 		if (configuration == null) {
-			configuration = new WebResourcesProjectConfiguration(project);
+			configuration = createConfiguration(project);
 		}
 		return configuration;
+	}
+
+	private static synchronized WebResourcesProjectConfiguration createConfiguration(
+			IProject project) throws CoreException {
+		WebResourcesProjectConfiguration configuration = getConfiguration(project);
+		if (configuration != null) {
+			return configuration;
+		}
+		return new WebResourcesProjectConfiguration(project);
 	}
 
 	@Override

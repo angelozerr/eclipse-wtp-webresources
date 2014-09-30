@@ -98,13 +98,17 @@ public class WebResourcesFileManager implements IResourceChangeListener,
 				try {
 					WebResourcesProjectConfiguration configuration = WebResourcesProjectConfiguration
 							.getConfiguration(project);
-					switch (delta.getKind()) {
-					case IResourceDelta.ADDED:
-						configuration.addWebResource(resource, resourceType);
-						break;
-					case IResourceDelta.REMOVED:
-						configuration.removeWebResource(resource, resourceType);
-						break;
+					if (configuration != null) {
+						switch (delta.getKind()) {
+						case IResourceDelta.ADDED:
+							configuration
+									.addWebResource(resource, resourceType);
+							break;
+						case IResourceDelta.REMOVED:
+							configuration.removeWebResource(resource,
+									resourceType);
+							break;
+						}
 					}
 				} catch (CoreException e) {
 					Trace.trace(Trace.SEVERE,
