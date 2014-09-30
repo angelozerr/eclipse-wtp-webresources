@@ -16,7 +16,17 @@ public interface IWebResourcesCollector {
 
 	void startCollect(WebResourceType resourcesType);
 
-	void add(Object resource, WebResourceKind resourceKind,
+	/**
+	 * Collect the given resource and returns true if the search must be
+	 * stopped.
+	 * 
+	 * @param resource
+	 * @param resourceKind
+	 * @param context
+	 * @param resolver
+	 * @return
+	 */
+	boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver);
 
 	void endCollect(WebResourceType resourcesType);

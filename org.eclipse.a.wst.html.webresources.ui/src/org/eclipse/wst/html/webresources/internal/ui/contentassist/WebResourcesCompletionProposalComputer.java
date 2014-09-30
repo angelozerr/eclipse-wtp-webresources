@@ -122,7 +122,7 @@ public class WebResourcesCompletionProposalComputer extends
 				new WebResourcesCollectorAdapter() {
 
 					@Override
-					public void add(Object r, WebResourceKind resourceKind,
+					public boolean add(Object r, WebResourceKind resourceKind,
 							IWebResourcesContext context, IURIResolver resolver) {
 						if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 							IResource resource = (IResource) r;
@@ -148,6 +148,7 @@ public class WebResourcesCompletionProposalComputer extends
 								contentAssistRequest.addProposal(proposal);
 							}
 						}
+						return false;
 					}
 				});
 	}

@@ -33,6 +33,7 @@ public class WebResourcesVisitor implements IResourceVisitor {
 	private final IWebResourcesCollector collector2;
 	private final IWebResourcesContext context;
 	private final IURIResolver resolver;
+	private boolean stop;
 
 	/**
 	 * Constrctor of the web resources visitor;
@@ -53,6 +54,7 @@ public class WebResourcesVisitor implements IResourceVisitor {
 		this.collector2 = collector2;
 		this.context = context;
 		this.resolver = resolver;
+		this.stop = false;
 	}
 
 	@Override
@@ -60,23 +62,26 @@ public class WebResourcesVisitor implements IResourceVisitor {
 		switch (resource.getType()) {
 		case IResource.FOLDER:
 		case IResource.PROJECT:
-			return true;
+			return !stop;
 		case IResource.FILE:
 			IFile file = (IFile) resource;
 			if (ResourceHelper.isMatchingWebResourceType(file,
 					context.getResourceType())) {
 				// current file matches the given web resource type
 				// collect it.
-				collector.add(file, WebResourceKind.ECLIPSE_RESOURCE, context,
-						resolver);
+				if (collector.add(file, WebResourceKind.ECLIPSE_RESOURCE,
+						context, resolver)) {
+					stop = true;
+				}
 				if (collector2 != null) {
-					collector2.add(file, WebResourceKind.ECLIPSE_RESOURCE,
-							context, resolver);
+					if (collector2.add(file, WebResourceKind.ECLIPSE_RESOURCE,
+							context, resolver)) {
+						stop = true;
+					}
 				}
 			}
-			return false;
 		}
-		return false;
+		return !stop;
 	}
 
 }

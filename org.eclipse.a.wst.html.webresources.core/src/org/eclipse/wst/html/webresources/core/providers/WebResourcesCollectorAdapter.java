@@ -28,8 +28,9 @@ public class WebResourcesCollectorAdapter implements IWebResourcesCollector {
 	}
 
 	@Override
-	public void add(Object resource, WebResourceKind resourceKind,
+	public boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver) {
+		return false;
 	}
 
 	@Override

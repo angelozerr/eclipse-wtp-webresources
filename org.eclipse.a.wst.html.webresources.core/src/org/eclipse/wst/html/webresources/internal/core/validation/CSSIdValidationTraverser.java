@@ -8,35 +8,47 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.core.validation;
+package org.eclipse.wst.html.webresources.internal.core.validation;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
 /**
  * CSS traverser implementation for CSS class name and CSS id validation.
  */
-public class CSSValidationTraverser extends AbstractCSSClassNameOrIdTraverser {
+public class CSSIdValidationTraverser extends AbstractCSSClassNameOrIdTraverser {
 
+	private final IFile file;
 	private final WebResourceRegion cssRegion;
+	private final MessageFactory factory;
 	private int nbFiles;
 
-	public CSSValidationTraverser(IDOMNode node, WebResourceRegion cssRegion) {
+	public CSSIdValidationTraverser(IDOMAttr node, IFile file,
+			WebResourceRegion cssRegion, MessageFactory factory) {
 		super(node, cssRegion.getType());
 		this.cssRegion = cssRegion;
+		this.factory = factory;
 		this.nbFiles = 0;
+		this.file = file;
 	}
 
 	@Override
-	protected void collect(String className, ICSSStyleRule rule) {
+	protected boolean collect(String className, ICSSStyleRule rule) {
 		if (cssRegion.getValue().equals(className)) {
 			nbFiles++;
+			return true;
 		}
+		return false;
 	}
 
-	public int getNbFiles() {
-		return nbFiles;
+	@Override
+	public void process() {
+		super.process();
+		if (nbFiles == 0) {
+			factory.addMessage((IDOMAttr) getNode(), cssRegion.getType(), file);
+		}
 	}
 }

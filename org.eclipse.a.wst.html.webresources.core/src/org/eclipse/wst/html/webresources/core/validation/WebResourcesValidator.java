@@ -22,8 +22,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,13 +39,16 @@ import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
+import org.eclipse.wst.html.webresources.internal.core.validation.CSSClassNameValidationTraverser;
+import org.eclipse.wst.html.webresources.internal.core.validation.CSSIdValidationTraverser;
 import org.eclipse.wst.html.webresources.internal.core.validation.LocalizedMessage;
+import org.eclipse.wst.html.webresources.internal.core.validation.MessageFactory;
+import org.eclipse.wst.html.webresources.internal.core.validation.WebResourcesCollectorForValidation;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
@@ -61,7 +62,6 @@ import org.eclipse.wst.xml.core.internal.document.NodeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * Web resources validator.
@@ -95,10 +95,6 @@ public class WebResourcesValidator extends AbstractValidator implements
 		IStructuredDocumentRegion[] regions = model.getStructuredDocument()
 				.getStructuredDocumentRegions();
 		validateRegions(reporter, model, file, regions);
-	}
-
-	protected MessageFactory createMessageFactory(IProject project) {
-		return new MessageFactory(project);
 	}
 
 	@Override
@@ -358,7 +354,8 @@ public class WebResourcesValidator extends AbstractValidator implements
 
 	public void validateRegions(IReporter reporter, IStructuredModel model,
 			IFile file, IStructuredDocumentRegion[] regions) {
-		MessageFactory factory = createMessageFactory(file.getProject());
+		MessageFactory factory = new MessageFactory(file.getProject(), this,
+				reporter);
 		for (int i = 0; i < regions.length; i++) {
 			validate(regions[i], reporter, model, file, factory);
 		}
@@ -397,20 +394,26 @@ public class WebResourcesValidator extends AbstractValidator implements
 	protected void validateCSS(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion) {
-		int offset = documentRegion.getStartOffset()
+		int startOffset = documentRegion.getStartOffset()
 				+ attrValueRegion.getRegion().getStart();
-		WebResourceRegion hoverRegion = DOMHelper.getCSSRegion(attrValueRegion,
-				documentRegion, documentRegion.getParentDocument(), offset);
-		IDOMNode xmlnode = DOMHelper.getNodeByOffset(model, offset);
-		CSSValidationTraverser traverser = new CSSValidationTraverser(xmlnode,
-				hoverRegion);
-		traverser.process();
-		if (traverser.getNbFiles() == 0) {
-			IMessage message = factory.createMessage((IDOMAttr) xmlnode,
-					attrValueRegion.getType(), file);
-			if (message != null) {
-				reporter.addMessage(this, message);
-			}
+		WebResourceRegion hoverRegion = DOMHelper
+				.getCSSRegion(attrValueRegion, documentRegion,
+						documentRegion.getParentDocument(), startOffset);
+		IDOMAttr xmlnode = DOMHelper.getAttrByOffset(model, startOffset);
+
+		switch (hoverRegion.getType()) {
+		case CSS_ID:
+			// Validate CSS/@id
+			CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
+					xmlnode, file, hoverRegion, factory);
+			cssIdTraverser.process();
+			break;
+		case CSS_CLASS_NAME:
+			// Validate CSS/@class
+			CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
+					xmlnode, file, hoverRegion, factory);
+			cssClassNameTraverser.process();
+			break;
 		}
 	}
 
@@ -418,28 +421,22 @@ public class WebResourcesValidator extends AbstractValidator implements
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			WebResourceType resourceType) {
-		IDOMNode xmlnode;
+		IDOMAttr xmlnode;
 		String attrValue = DOMHelper.getAttrValue(documentRegion
 				.getText(attrValueRegion.getRegion()));
 		if (attrValue.startsWith("http")) {
 			// TODO : validate http web resources.
 		} else {
-			xmlnode = DOMHelper.getNodeByOffset(model,
+			xmlnode = DOMHelper.getAttrByOffset(model,
 					documentRegion.getStartOffset()
 							+ attrValueRegion.getRegion().getStart());
 			WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
-					attrValue);
+					attrValue, xmlnode, file, attrValueRegion.getType(),
+					factory);
 			WebResourcesContext context = new WebResourcesContext(xmlnode,
 					resourceType);
 			WebResourcesProvidersManager.getInstance().collect(context,
 					collector);
-			if (collector.getNbFiles() == 0) {
-				IMessage message = factory.createMessage((IDOMAttr) xmlnode,
-						attrValueRegion.getType(), file);
-				if (message != null) {
-					reporter.addMessage(this, message);
-				}
-			}
 		}
 	}
 

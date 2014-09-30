@@ -46,11 +46,13 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 
 	private final IDOMNode node;
 	private final WebResourcesFinderType webResourcesType;
+	private boolean stop;
 
 	public AbstractCSSClassNameOrIdTraverser(IDOMNode node,
 			WebResourcesFinderType webResourcesType) {
 		this.node = node;
 		this.webResourcesType = webResourcesType;
+		this.stop = false;
 		super.setTraverseImported(true);
 	}
 
@@ -65,7 +67,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		// Loop for each CSS styles sheets :
 		// - embedded styles declared with <style> element
 		// - external styles declared with <link href=""
-		for (int i = 0; i < nbSheets; i++) {
+		for (int i = 0; i < nbSheets && !stop; i++) {
 			org.w3c.dom.stylesheets.StyleSheet sheet = sheetList.item(i);
 			if (sheet instanceof ICSSNode) {
 				cssNode = (ICSSNode) sheet;
@@ -87,7 +89,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		while (iSelector.hasNext()) {
 			ICSSSelector selector = (ICSSSelector) iSelector.next();
 			Iterator iItem = selector.getIterator();
-			while (iItem.hasNext()) {
+			while (iItem.hasNext() && !stop) {
 				ICSSSelectorItem item = (ICSSSelectorItem) iItem.next();
 				if (item.getItemType() == ICSSSelectorItem.SIMPLE) {
 					ICSSSimpleSelector sel = (ICSSSimpleSelector) item;
@@ -96,7 +98,9 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 						int nClasses = sel.getNumOfClasses();
 						for (int iClass = 0; iClass < nClasses; iClass++) {
 							String className = sel.getClass(iClass);
-							collect(className, rule);
+							if (collect(className, rule)) {
+								stop = true;
+							}
 						}
 					}
 					// visit CSS#id
@@ -104,7 +108,9 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 						int nbIds = sel.getNumOfIDs();
 						for (int i = 0; i < nbIds; i++) {
 							String cssID = sel.getID(i);
-							collect(cssID, rule);
+							if (collect(cssID, rule)) {
+								stop = true;
+							}
 						}
 					}
 				}
@@ -112,7 +118,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		}
 	}
 
-	protected abstract void collect(String classNameOrId, ICSSStyleRule rule);
+	protected abstract boolean collect(String classNameOrId, ICSSStyleRule rule);
 
 	/**
 	 * 
@@ -162,12 +168,13 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 	}
 
 	@Override
-	public void add(Object resource, WebResourceKind resourceKind,
+	public boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver) {
 		ICSSModel model = getModel(resource, resourceKind);
 		if (model != null) {
 			super.apply(model);
 		}
+		return stop;
 	}
 
 	private ICSSModel getModel(Object resource, WebResourceKind resourceKind) {

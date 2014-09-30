@@ -76,11 +76,12 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 	}
 
 	@Override
-	public void add(Object resource, WebResourceKind resourceKind,
+	public boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver) {
 		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 			resources.add((IResource) resource);
 		}
+		return false;
 	}
 
 	public IResource[] getResources(WebResourceType resourceType) {

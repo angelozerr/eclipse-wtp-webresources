@@ -30,11 +30,13 @@ public class CSSHoverTraverser extends AbstractCSSClassNameOrIdTraverser {
 	}
 
 	@Override
-	protected void collect(String className, ICSSStyleRule rule) {
+	protected boolean collect(String className, ICSSStyleRule rule) {
 		if (cssRegion.getValue().equals(className)) {
 			info = HTMLWebResourcesPrinter.getAdditionalProposalInfo(rule,
 					cssRegion.getType(), getNode());
+			return true;
 		}
+		return false;
 	}
 
 	public String getInfo() {

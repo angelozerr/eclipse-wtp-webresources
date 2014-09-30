@@ -34,7 +34,7 @@ public class CSSHyperlinkTraverser extends AbstractCSSClassNameOrIdTraverser {
 	}
 
 	@Override
-	protected void collect(String classNameOrId, ICSSStyleRule rule) {
+	protected boolean collect(String classNameOrId, ICSSStyleRule rule) {
 		if (cssRegion.getValue().equals(classNameOrId)) {
 			if (hyperlinks == null) {
 				hyperlinks = new ArrayList<IHyperlink>();
@@ -42,6 +42,7 @@ public class CSSHyperlinkTraverser extends AbstractCSSClassNameOrIdTraverser {
 			hyperlinks.add(new CSSHyperlink(cssRegion, rule, cssRegion
 					.getType()));
 		}
+		return false;
 	}
 
 	public IHyperlink[] getHyperlinks() {

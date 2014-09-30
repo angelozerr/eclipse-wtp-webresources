@@ -81,15 +81,15 @@ public class CSSContentAssistTraverser extends
 	}
 
 	@Override
-	protected void collect(String className, ICSSStyleRule rule) {
+	protected boolean collect(String className, ICSSStyleRule rule) {
 		// check if visited class name or id starts with matching class name?
 		if (!className.startsWith(matchingClassNameOrId)) {
-			return;
+			return false;
 		}
 		if (existingClassNames != null
 				&& existingClassNames.contains(className)) {
 			// CSS class name already exists in the @class attribute, ignore it.
-			return;
+			return false;
 		}
 
 		// Compute the display string of the completion proposal
@@ -106,6 +106,7 @@ public class CSSContentAssistTraverser extends
 		contentAssistRequest.addProposal(new CSSWebResourcesCompletionProposal(
 				className, replacementOffset, replacementLength,
 				cursorPosition, image, displayString, null, info));
+		return false;
 	}
 
 }

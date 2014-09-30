@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.core.validation;
+package org.eclipse.wst.html.webresources.internal.core.validation;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -27,10 +27,11 @@ import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.preferences.WebResourcesCorePreferenceNames;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesCoreMessages;
-import org.eclipse.wst.html.webresources.internal.core.validation.LocalizedMessage;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
+import org.eclipse.wst.validation.internal.provisional.core.IReporter;
+import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
 /**
@@ -39,16 +40,17 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
  */
 public class MessageFactory {
 
-	private IProject fProject;
+	private final IValidator validator;
+	private final IReporter reporter;
+	private final IProject fProject;
 	private IScopeContext[] fLookupOrder;
 	private IPreferencesService fPreferenceService;
 
-	public MessageFactory() {
-		init();
-	}
-
-	public MessageFactory(IProject project) {
+	public MessageFactory(IProject project, IValidator validator,
+			IReporter reporter) {
 		fProject = project;
+		this.validator = validator;
+		this.reporter = reporter;
 		init();
 	}
 
@@ -99,20 +101,21 @@ public class MessageFactory {
 				.getSymbolicName();
 	}
 
-	public IMessage createMessage(IDOMAttr attr, WebResourcesFinderType type,
+	public void addMessage(IDOMAttr attr, WebResourcesFinderType type,
 			IFile file) {
 		String textContent = attr.getValue();
 		int start = attr.getValueRegionStartOffset();
-		return createMessage(attr, start, textContent, type, file);
+		addMessage(attr, start, textContent, type, file);
 	}
 
-	private LocalizedMessage createMessage(IDOMAttr node, int start,
-			String textContent, WebResourcesFinderType type, IResource resource) {
-		int length = textContent.trim().length() + 2;
+	public void addMessage(IDOMAttr node, int start, String textContent,
+			WebResourcesFinderType type, IResource resource) {
+		int length = textContent.trim().length();
 		String messageText = NLS.bind(getMessageText(type), textContent);
 		int severity = getSeverity(type);
-		return createMessage(start, length, messageText, severity,
+		IMessage message = createMessage(start, length, messageText, severity,
 				node.getStructuredDocument(), resource);
+		reporter.addMessage(validator, message);
 	}
 
 	private String getMessageText(WebResourcesFinderType type) {
@@ -131,9 +134,9 @@ public class MessageFactory {
 		return null;
 	}
 
-	private LocalizedMessage createMessage(int start, int length,
-			String messageText, int severity,
-			IStructuredDocument structuredDocument, IResource resource) {
+	private IMessage createMessage(int start, int length, String messageText,
+			int severity, IStructuredDocument structuredDocument,
+			IResource resource) {
 		int lineNo = getLineNumber(start, structuredDocument);
 		LocalizedMessage message = new LocalizedMessage(severity, messageText,
 				resource);

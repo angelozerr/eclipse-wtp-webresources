@@ -14,16 +14,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
-import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
- * {@link IWebResourcesCollector} implentation used for the hover.
+ * {@link IWebResourcesCollector} implementation used for the hover of
+ * {@link IResource}.
  *
  */
 public class WebResourcesCollectorForHover extends WebResourcesCollectorAdapter {
@@ -38,7 +38,7 @@ public class WebResourcesCollectorForHover extends WebResourcesCollectorAdapter 
 	}
 
 	@Override
-	public void add(Object resource, WebResourceKind resourceKind,
+	public boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver) {
 		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
 			IResource r = (IResource) resource;
@@ -47,8 +47,10 @@ public class WebResourcesCollectorForHover extends WebResourcesCollectorAdapter 
 			if (resourceFileLoc.toString().equals(fileName)) {
 				info = HTMLWebResourcesPrinter.getAdditionalProposalInfo(r,
 						type);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public String getInfo() {

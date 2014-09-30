@@ -107,10 +107,11 @@ public class WebResourcesProviderType {
 					collector2.startCollect(resourcesType);
 				}
 				// collect processes
-				for (int i = 0; i < files.length; i++) {
+				boolean stop = false;
+				for (int i = 0; i < files.length && !stop; i++) {
 					try {
-						processFile(files[i], collector, collector2, context,
-								resolver);
+						stop = processFile(files[i], collector, collector2,
+								context, resolver);
 					} catch (Exception e) {
 						Trace.trace(Trace.SEVERE,
 								"Error while collecting file system resources for container "
@@ -127,27 +128,34 @@ public class WebResourcesProviderType {
 		}
 	}
 
-	private void processFile(File file, IWebResourcesCollector collector,
+	private boolean processFile(File file, IWebResourcesCollector collector,
 			IWebResourcesCollector collector2, IWebResourcesContext context,
 			IURIResolver resolver) {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (int i = 0; i < files.length; i++) {
-				processFile(files[i], collector, collector2, context, resolver);
+				if (processFile(files[i], collector, collector2, context,
+						resolver)) {
+					return true;
+				}
 			}
 		} else if (file.isFile()) {
 			if (ResourceHelper.isMatchingWebResourceType(file, resourcesType)) {
 				// current file matches the given web resource type
 				// collect it.
-				collector.add(file, WebResourceKind.FILESYSTEM, context,
-						resolver);
+				if (collector.add(file, WebResourceKind.FILESYSTEM, context,
+						resolver)) {
+					return true;
+				}
 				if (collector2 != null) {
-					collector2.add(file, WebResourceKind.FILESYSTEM, context,
-							resolver);
+					if (collector2.add(file, WebResourceKind.FILESYSTEM,
+							context, resolver)) {
+						return true;
+					}
 				}
 			}
 		}
-
+		return false;
 	}
 
 }

@@ -12,11 +12,9 @@ package org.eclipse.wst.html.webresources.core.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -24,8 +22,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
-import org.eclipse.wst.html.core.internal.provisional.HTML40Namespace;
 import org.eclipse.wst.html.webresources.core.CSSClassNameFinder;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
@@ -38,7 +34,6 @@ import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.NamedNodeMap;
@@ -304,31 +299,21 @@ public class DOMHelper {
 		return null;
 	}
 
-	public static final IDOMNode getNodeByOffset(IStructuredModel model,
+	public static final IDOMAttr getAttrByOffset(IStructuredModel model,
 			int offset) {
 		IndexedRegion node = null;
 		if (model != null) {
 			node = model.getIndexedRegion(offset);
 			if (node instanceof IDOMNode) {
-				
 				NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
 				for (int i = 0; i < attrs.getLength(); i++) {
 					IndexedRegion attRegion = (IndexedRegion) attrs.item(i);
 					if (attRegion.contains(offset))
 						return (IDOMAttr) attrs.item(i);
 				}
-				return (IDOMNode) node;
-			}
-
-			if (model != null) {
-				int lastOffset = offset;
-				node = model.getIndexedRegion(offset);
-				while (node == null && lastOffset >= 0) {
-					lastOffset--;
-					node = model.getIndexedRegion(lastOffset);
-				}
+				return null;
 			}
 		}
-		return (IDOMNode) node;
+		return null;
 	}
 }
