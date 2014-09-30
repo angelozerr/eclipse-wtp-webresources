@@ -4,26 +4,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.wst.html.webresources.core.WebResourceRegion;
-import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
-import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
-import org.eclipse.wst.html.webresources.core.validation.MessageFactory;
 import org.eclipse.wst.html.webresources.core.validation.WebResourcesValidator;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.sse.ui.internal.reconcile.validator.ISourceValidator;
-import org.eclipse.wst.validation.internal.provisional.core.IMessage;
+import org.eclipse.wst.validation.Validator;
+import org.eclipse.wst.validation.internal.ValManager;
+import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public class WebResourcesSourceValidator extends WebResourcesValidator
 		implements ISourceValidator {
@@ -80,10 +74,21 @@ public class WebResourcesSourceValidator extends WebResourcesValidator
 
 			if (fDocument instanceof IStructuredDocument) {
 				IFile file = DOMHelper.getFile(model);
-				IStructuredDocumentRegion[] regions = ((IStructuredDocument) fDocument)
-						.getStructuredDocumentRegions(dirtyRegion.getOffset(),
-								dirtyRegion.getLength());
-				validateRegions(reporter, model, file, regions);
+
+				boolean shouldValidate = false;
+				try {
+					Validator v = ValManager.getDefault().getValidator(ID, file.getProject());
+					shouldValidate = v.shouldValidate(file, ValType.Build);
+				}
+				catch (Exception e) {
+				}
+
+				if (shouldValidate) {
+					IStructuredDocumentRegion[] regions = ((IStructuredDocument) fDocument)
+							.getStructuredDocumentRegions(dirtyRegion.getOffset(),
+									dirtyRegion.getLength());
+					validateRegions(reporter, model, file, regions);
+				}
 			}
 
 		} finally {

@@ -61,7 +61,9 @@
             markerId="org.eclipse.a.wst.html.webresources.core.validationMarker">
          <include>
             <rules>
-               <contentType id="org.eclipse.wst.html.core.htmlsource"></contentType>
+               <contentType
+                     exactMatch="false"
+                     id="org.eclipse.wst.html.core.htmlsource"></contentType>
                <fileext caseSensitive="false" ext="html"/>
                <fileext caseSensitive="false" ext="xhtml"/>
                <fileext caseSensitive="false" ext="htm"/>
@@ -69,6 +71,19 @@
                <fileext caseSensitive="false" ext="wml"/>
             </rules>
          </include>
+         <exclude>
+            <rules>
+               <contentType
+                     exactMatch="false"
+                     id="org.eclipse.jst.jsp.core.jspsource"></contentType>
+               <fileext caseSensitive="false" ext="jsp"/>
+               <fileext caseSensitive="false" ext="jspf"/>
+               <fileext caseSensitive="false" ext="jsv"/>
+               <fileext caseSensitive="false" ext="jtpl"/>
+               <fileext caseSensitive="false" ext="jspx"/>
+               <fileext caseSensitive="false" ext="ljsp"/>
+            </rules>
+         </exclude>
          <group id="org.eclipse.wst.sse.core.structuredModelGroup"/>
       </validator>
    </extension>
