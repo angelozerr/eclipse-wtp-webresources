@@ -301,9 +301,8 @@ public class DOMHelper {
 
 	public static final IDOMAttr getAttrByOffset(IStructuredModel model,
 			int offset) {
-		IndexedRegion node = null;
 		if (model != null) {
-			node = model.getIndexedRegion(offset);
+			IndexedRegion node = model.getIndexedRegion(offset);
 			if (node instanceof IDOMNode) {
 				NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
 				for (int i = 0; i < attrs.getLength(); i++) {

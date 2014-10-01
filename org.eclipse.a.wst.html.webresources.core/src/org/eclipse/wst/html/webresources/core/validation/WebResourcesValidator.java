@@ -399,21 +399,22 @@ public class WebResourcesValidator extends AbstractValidator implements
 		WebResourceRegion hoverRegion = DOMHelper
 				.getCSSRegion(attrValueRegion, documentRegion,
 						documentRegion.getParentDocument(), startOffset);
-		IDOMAttr xmlnode = DOMHelper.getAttrByOffset(model, startOffset);
-
-		switch (hoverRegion.getType()) {
-		case CSS_ID:
-			// Validate CSS/@id
-			CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
-					xmlnode, file, hoverRegion, factory);
-			cssIdTraverser.process();
-			break;
-		case CSS_CLASS_NAME:
-			// Validate CSS/@class
-			CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
-					xmlnode, file, hoverRegion, factory);
-			cssClassNameTraverser.process();
-			break;
+		IDOMAttr attr = DOMHelper.getAttrByOffset(model, startOffset);
+		if (attr != null) {
+			switch (hoverRegion.getType()) {
+			case CSS_ID:
+				// Validate CSS/@id
+				CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
+						attr, file, hoverRegion, factory);
+				cssIdTraverser.process();
+				break;
+			case CSS_CLASS_NAME:
+				// Validate CSS/@class
+				CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
+						attr, file, hoverRegion, factory);
+				cssClassNameTraverser.process();
+				break;
+			}
 		}
 	}
 
@@ -421,22 +422,23 @@ public class WebResourcesValidator extends AbstractValidator implements
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			WebResourceType resourceType) {
-		IDOMAttr xmlnode;
-		String attrValue = DOMHelper.getAttrValue(documentRegion
-				.getText(attrValueRegion.getRegion()));
-		if (attrValue.startsWith("http")) {
-			// TODO : validate http web resources.
-		} else {
-			xmlnode = DOMHelper.getAttrByOffset(model,
-					documentRegion.getStartOffset()
-							+ attrValueRegion.getRegion().getStart());
-			WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
-					attrValue, xmlnode, file, attrValueRegion.getType(),
-					factory);
-			WebResourcesContext context = new WebResourcesContext(xmlnode,
-					resourceType);
-			WebResourcesProvidersManager.getInstance().collect(context,
-					collector);
+		IDOMAttr attr = DOMHelper.getAttrByOffset(model,
+				documentRegion.getStartOffset()
+						+ attrValueRegion.getRegion().getStart());
+		if (attr != null) {
+			String attrValue = DOMHelper.getAttrValue(documentRegion
+					.getText(attrValueRegion.getRegion()));
+			if (attrValue.startsWith("http")) {
+				// TODO : validate http web resources.
+			} else {
+				WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
+						attrValue, attr, file, attrValueRegion.getType(),
+						factory);
+				WebResourcesContext context = new WebResourcesContext(attr,
+						resourceType);
+				WebResourcesProvidersManager.getInstance().collect(context,
+						collector);
+			}
 		}
 	}
 
