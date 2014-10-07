@@ -10,6 +10,7 @@
 #
 # Contributors:
 #     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
+#     Gregory Amerson <gregory.amerson@liferay.com> - https://github.com/angelozerr/eclipse-wtp-webresources/issues/14
 ###############################################################################
  -->
 <plugin>
@@ -17,8 +18,10 @@
 	<extension-point id="webResourcesProviders" name="%webResourcesProviders.name"
 		schema="schema/webResourcesProviders.exsd" />	
 	<extension-point id="webResourcesFinderTypeProviders" name="%webResourcesFinderTypeProviders.name"
-		schema="schema/webResourcesFinderTypeProviders.exsd" />	
-				
+		schema="schema/webResourcesFinderTypeProviders.exsd" />
+	<extension-point id="webResourcesIgnoreValidators" name="%webResourcesIgnoreValidators.name"
+		schema="schema/webResourcesIgnoreValidators.exsd" />
+
 	<extension
 		      point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders">
      <provider
@@ -72,5 +75,12 @@
          <group id="org.eclipse.wst.sse.core.structuredModelGroup"/>
       </validator>
    </extension>
-   	
-</plugin>        
+
+   <extension
+          point="org.eclipse.a.wst.html.webresources.core.webResourcesIgnoreValidators">
+       <ignoreValidator
+             class="org.eclipse.wst.html.webresources.internal.core.validation.JSPScriptletIgnoreValidator"
+             types="LINK_HREF,IMG_SRC,SCRIPT_SRC">
+       </ignoreValidator>
+    </extension>
+</plugin>
