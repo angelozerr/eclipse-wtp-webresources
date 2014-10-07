@@ -7,8 +7,11 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Gregory Amerson <gregory.amerson@liferay.com> - https://github.com/angelozerr/eclipse-wtp-webresources/issues/14
  */
 package org.eclipse.wst.html.webresources.internal.core.validation;
+
+import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -19,6 +22,8 @@ import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAdapter;
+import org.eclipse.wst.html.webresources.core.validation.IWebResourcesIgnoreValidator;
+import org.eclipse.wst.html.webresources.core.validation.WebResourcesIgnoreValidatorsManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
 public class WebResourcesCollectorForValidation extends
@@ -30,6 +35,7 @@ public class WebResourcesCollectorForValidation extends
 	private final String fileName;
 	private final MessageFactory factory;
 	private int nbFiles;
+	private final Collection<IWebResourcesIgnoreValidator> ignoreValidators;
 
 	public WebResourcesCollectorForValidation(String fileName, IDOMAttr attr,
 			IFile file, WebResourcesFinderType finderType,
@@ -40,12 +46,19 @@ public class WebResourcesCollectorForValidation extends
 		this.finderType = finderType;
 		this.factory = factory;
 		this.nbFiles = 0;
+		this.ignoreValidators = WebResourcesIgnoreValidatorsManager.getInstance().getIgnoreValidators( finderType );
 	}
 
 	@Override
 	public boolean add(Object resource, WebResourceKind resourceKind,
 			IWebResourcesContext context, IURIResolver resolver) {
 		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
+			for (IWebResourcesIgnoreValidator ignoreValidator : this.ignoreValidators ) {
+				if (ignoreValidator.shouldIgnore(resource, resourceKind, context)) {
+					this.nbFiles++;
+					return true;
+				}
+			}
 			IResource r = (IResource) resource;
 			IFile htmlFile = context.getHtmlFile();
 			IPath resourceFileLoc = resolver.resolve(r, htmlFile);

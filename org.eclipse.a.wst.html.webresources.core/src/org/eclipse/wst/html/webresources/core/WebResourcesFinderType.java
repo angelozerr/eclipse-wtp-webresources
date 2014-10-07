@@ -7,6 +7,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Gregory Amerson <gregory.amerson@liferay.com> - https://github.com/angelozerr/eclipse-wtp-webresources/issues/14
  */
 package org.eclipse.wst.html.webresources.core;
 
@@ -28,6 +29,18 @@ public enum WebResourcesFinderType {
 
 	public WebResourceType getType() {
 		return type;
+	}
+
+	public static WebResourcesFinderType get(String value) {
+		WebResourcesFinderType[] types = WebResourcesFinderType.values();
+		WebResourcesFinderType type = null;
+		for (int i = 0; i < types.length; i++) {
+			type = types[i];
+			if (type.name().equalsIgnoreCase(value)) {
+				return type;
+			}
+		}
+		return null;
 	}
 
 }
