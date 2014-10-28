@@ -46,6 +46,10 @@ and completion :
 
 ![imagecompletion](https://cloud.githubusercontent.com/assets/1932211/4271537/43276e44-3cd9-11e4-9475-947a0bb25ef8.png)
 
+# Installation
+
+Use the update site [http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/](http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/)
+
 # Why org.eclipse.a.wst.webresources.ui?
 
 See [bug 444189](https://bugs.eclipse.org/bugs/show_bug.cgi?id=444189)
