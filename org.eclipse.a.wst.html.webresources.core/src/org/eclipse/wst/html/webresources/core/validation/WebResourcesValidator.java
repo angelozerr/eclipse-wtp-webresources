@@ -34,7 +34,10 @@ import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
+import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
@@ -43,7 +46,6 @@ import org.eclipse.wst.html.webresources.internal.core.validation.CSSClassNameVa
 import org.eclipse.wst.html.webresources.internal.core.validation.CSSIdValidationTraverser;
 import org.eclipse.wst.html.webresources.internal.core.validation.LocalizedMessage;
 import org.eclipse.wst.html.webresources.internal.core.validation.MessageFactory;
-import org.eclipse.wst.html.webresources.internal.core.validation.WebResourcesCollectorForValidation;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -79,7 +81,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 	public WebResourcesValidator() {
 		fHTMLContentType = Platform.getContentTypeManager().getContentType(
 				ORG_ECLIPSE_WST_HTML_CORE_HTMLSOURCE);
-		// FIXME : create extension point to avoid hard coded.
+		// FIXME : create extension point to avoid hard coded that.
 		fAdditionalContentTypesIDs = new String[] {
 				"org.eclipse.jst.jsp.core.jspsource",
 				"org.eclipse.php.core.phpsource" };
@@ -372,9 +374,10 @@ public class WebResourcesValidator extends AbstractValidator implements
 		WebResourcesTextRegion attrValueRegion = DOMHelper.getTextRegion(
 				documentRegion, documentRegion.getStartOffset(), true);
 		if (attrValueRegion != null) {
-			if (factory.getSeverity(attrValueRegion.getType()) != ValidationMessage.IGNORE) {
-				WebResourceType type = attrValueRegion.getType().getType();
-				switch (attrValueRegion.getType()) {
+			WebResourcesFinderType finderType = attrValueRegion.getType();
+			if (factory.getSeverity(finderType) != ValidationMessage.IGNORE) {
+				WebResourceType type = finderType.getType();
+				switch (finderType) {
 				case CSS_CLASS_NAME:
 				case CSS_ID:
 					validateCSS(documentRegion, reporter, model, file, factory,
@@ -428,18 +431,38 @@ public class WebResourcesValidator extends AbstractValidator implements
 		if (attr != null) {
 			String attrValue = DOMHelper.getAttrValue(documentRegion
 					.getText(attrValueRegion.getRegion()));
-			if (attrValue.startsWith("http")) {
-				// TODO : validate http web resources.
-			} else {
-				WebResourcesCollectorForValidation collector = new WebResourcesCollectorForValidation(
-						attrValue, attr, file, attrValueRegion.getType(),
-						factory);
-				WebResourcesContext context = new WebResourcesContext(attr,
-						resourceType);
-				WebResourcesProvidersManager.getInstance().collect(context,
-						collector);
+
+			WebResourcesContext context = new WebResourcesContext(attr,
+					resourceType);
+			WebResourcesFinderType finderType = attrValueRegion.getType();
+			if (!shouldIgnoreValidation(context, finderType)) {
+				if (!WebResourcesProvidersManager.getInstance().exists(
+						attrValue, context)) {
+					factory.addMessage(attr, finderType, file);
+				}
 			}
 		}
+	}
+
+	/**
+	 * Return true if validation of web resources files should be ignored and
+	 * false otherwise.
+	 * 
+	 * @param context
+	 * @param finderType
+	 * @return
+	 */
+	private boolean shouldIgnoreValidation(IWebResourcesContext context,
+			WebResourcesFinderType finderType) {
+		Collection<IWebResourcesIgnoreValidator> ignoreValidators = WebResourcesIgnoreValidatorsManager
+				.getInstance().getIgnoreValidators(finderType);
+		for (IWebResourcesIgnoreValidator ignoreValidator : ignoreValidators) {
+			if (ignoreValidator.shouldIgnore(null,
+					WebResourceKind.ECLIPSE_RESOURCE, context)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

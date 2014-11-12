@@ -14,7 +14,29 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
+/**
+ * URI resolver used to resolve web resources file.
+ * 
+ */
 public interface IURIResolver {
 
+	/**
+	 * Resolve the given resource by using the given root.
+	 * 
+	 * @param resource
+	 *            web resources file to resolve.
+	 * @param root
+	 *            the root file.
+	 * @return the given resource by using the given root.
+	 */
 	IPath resolve(IResource resource, IFile root);
+
+	/**
+	 * Returns true of the given uri exists and false otherwise.
+	 * 
+	 * @param uri
+	 * @param root
+	 * @return
+	 */
+	boolean exists(String uri, IFile root);
 }

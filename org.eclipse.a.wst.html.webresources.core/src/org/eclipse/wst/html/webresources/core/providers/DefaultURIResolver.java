@@ -13,6 +13,7 @@ package org.eclipse.wst.html.webresources.core.providers;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class DefaultURIResolver implements IURIResolver {
 
@@ -23,6 +24,15 @@ public class DefaultURIResolver implements IURIResolver {
 		IPath location = resource.getLocation().makeRelativeTo(
 				root.getParent().getLocation());
 		return location;
+	}
+
+	@Override
+	public boolean exists(String uri, IFile root) {
+		if (uri.startsWith("http")) {
+			// TODO : validate http web resources
+			return true;
+		}
+		return root.getParent().exists(new Path(uri));
 	}
 
 }

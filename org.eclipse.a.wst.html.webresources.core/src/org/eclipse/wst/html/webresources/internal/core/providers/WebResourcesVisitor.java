@@ -20,7 +20,6 @@ import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * {@link IResourceVisitor} implementation to collect {@link IFile} which match
@@ -65,6 +64,7 @@ public class WebResourcesVisitor implements IResourceVisitor {
 			return !stop;
 		case IResource.FILE:
 			IFile file = (IFile) resource;
+			// System.err.println(file.getLocation().toString());
 			if (ResourceHelper.isMatchingWebResourceType(file,
 					context.getResourceType())) {
 				// current file matches the given web resource type

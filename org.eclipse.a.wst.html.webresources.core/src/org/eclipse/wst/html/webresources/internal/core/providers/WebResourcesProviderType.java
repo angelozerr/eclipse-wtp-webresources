@@ -12,7 +12,6 @@ package org.eclipse.wst.html.webresources.internal.core.providers;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
@@ -20,14 +19,13 @@ import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollectorProvider;
+import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 /**
  * 
@@ -60,7 +58,7 @@ public class WebResourcesProviderType {
 	 * @param htmlNode
 	 *            the DOM node which has triggered the start of this visitor.
 	 * @param htmlFile
-	 *            the owner HTML file of teh given DOM node.
+	 *            the owner HTML file of the given DOM node.
 	 * @param context
 	 */
 	public void collect(IWebResourcesContext context,
@@ -156,6 +154,19 @@ public class WebResourcesProviderType {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Returns true if web resources exists and false otherwise.
+	 * 
+	 * @param uri
+	 * 
+	 * @param context
+	 * @return true if web resources exists and false otherwise.
+	 */
+	public boolean exists(String uri, IWebResourcesContext context) {
+		IURIResolver resolver = WebResourcesProvidersManager.getInstance();
+		return resolver.exists(uri, context.getHtmlFile());
 	}
 
 }

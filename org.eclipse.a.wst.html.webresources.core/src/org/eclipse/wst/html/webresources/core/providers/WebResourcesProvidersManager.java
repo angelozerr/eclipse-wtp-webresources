@@ -24,10 +24,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
-import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.providers.WebResourcesProviderType;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public class WebResourcesProvidersManager implements IURIResolver {
 
@@ -40,6 +38,17 @@ public class WebResourcesProvidersManager implements IURIResolver {
 
 	public static WebResourcesProvidersManager getInstance() {
 		return INSTANCE;
+	}
+
+	public boolean exists(String uri, IWebResourcesContext context) {
+		WebResourceType resourceType = context.getResourceType();
+		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourceType);
+		for (WebResourcesProviderType providerType : providerTypes) {
+			if (providerType.exists(uri, context)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void collect(IWebResourcesContext context,
@@ -131,5 +140,11 @@ public class WebResourcesProvidersManager implements IURIResolver {
 	public IPath resolve(IResource resource, IFile root) {
 		// TODO : manage resolver with extension point
 		return DefaultURIResolver.INSTANCE.resolve(resource, root);
+	}
+
+	@Override
+	public boolean exists(String uri, IFile root) {
+		// TODO : manage resolver with extension point
+		return DefaultURIResolver.INSTANCE.exists(uri, root);
 	}
 }
