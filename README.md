@@ -48,7 +48,9 @@ and completion :
 
 # Installation
 
-Use the update site [http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/](http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/)
+WTP Web Resources is developed/tested with Eclipse 4.4 Luna. It is advised to use Eclipse 4.4 Luna (even if it could work with older version of Eclipse).
+
+To install Eclipse WTP Web Resources, please read [Installation - Update Site](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/Installation-Update-Site) section.
 
 # Why org.eclipse.a.wst.webresources.ui?
 
