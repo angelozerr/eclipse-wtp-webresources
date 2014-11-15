@@ -133,7 +133,10 @@ public class WebResourcesCompletionProposalComputer extends
 							IPath location = resolver.resolve(resource,
 									htmlFile);
 							String fileName = location.toString();
-							if (location.toString().startsWith(matchingString)) {
+							if (location.toString().startsWith(matchingString)
+									|| (!matchingString.contains("/") && location
+											.segments()[location.segmentCount() - 1]
+											.startsWith(matchingString))) {
 
 								/*
 								 * String displayString = resource
