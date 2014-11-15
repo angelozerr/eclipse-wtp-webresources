@@ -87,6 +87,47 @@ public class ResourceHelper {
 	}
 
 	/**
+	 * Returns the web resource type of the given resource and null otherwise.
+	 * 
+	 * @param resource
+	 * @return the web resource type of the given resource and null otherwise.
+	 */
+	public static WebResourceType getWebResourceType(IResource resource) {
+		WebResourceType resourceType = null;
+		WebResourceType[] resourceTypes = WebResourceType.values();
+		for (int i = 0; i < resourceTypes.length; i++) {
+			resourceType = resourceTypes[i];
+			if (isMatchingWebResourceType(resource, resourceType)) {
+				return resourceType;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns true if the given filename is a web resource and false otherwise.
+	 * 
+	 * @param filename
+	 * @return true if the given filename is a web resource and false otherwise.
+	 */
+	public static boolean isWebResource(String filename) {
+		int index = filename.lastIndexOf('.');
+		if (index == -1) {
+			return false;
+		}
+		String extension = filename.substring(index + 1, filename.length());
+		WebResourceType resourceType = null;
+		WebResourceType[] resourceTypes = WebResourceType.values();
+		for (int i = 0; i < resourceTypes.length; i++) {
+			resourceType = resourceTypes[i];
+			if (isMatching(extension, resourceType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Returns true if the given resources matches the web resource type and
 	 * false otherwise.
 	 * 

@@ -380,8 +380,9 @@ public class WebResourcesValidator extends AbstractValidator implements
 				switch (finderType) {
 				case CSS_CLASS_NAME:
 				case CSS_ID:
+					IProgressMonitor monitor = null;
 					validateCSS(documentRegion, reporter, model, file, factory,
-							attrValueRegion);
+							attrValueRegion, monitor);
 					break;
 				case SCRIPT_SRC:
 				case LINK_HREF:
@@ -396,7 +397,8 @@ public class WebResourcesValidator extends AbstractValidator implements
 
 	protected void validateCSS(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
-			MessageFactory factory, WebResourcesTextRegion attrValueRegion) {
+			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
+			IProgressMonitor monitor) {
 		int startOffset = documentRegion.getStartOffset()
 				+ attrValueRegion.getRegion().getStart();
 		WebResourceRegion hoverRegion = DOMHelper
@@ -409,13 +411,13 @@ public class WebResourcesValidator extends AbstractValidator implements
 				// Validate CSS/@id
 				CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
 						attr, file, hoverRegion, factory);
-				cssIdTraverser.process();
+				cssIdTraverser.process(monitor);
 				break;
 			case CSS_CLASS_NAME:
 				// Validate CSS/@class
 				CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
 						attr, file, hoverRegion, factory);
-				cssClassNameTraverser.process();
+				cssClassNameTraverser.process(monitor);
 				break;
 			}
 		}

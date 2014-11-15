@@ -32,6 +32,9 @@ public final class WebResourcesCoreMessages extends NLS {
 	public static String Validation_FILE_CSS_UNDEFINED;
 	public static String Validation_FILE_IMG_UNDEFINED;
 
+	public static String WebResourcesIndexManager;
+	public static String WebResourcesCorePlugin_Initializing_WebResources_Tools;
+
 	private WebResourcesCoreMessages() {
 	}
 

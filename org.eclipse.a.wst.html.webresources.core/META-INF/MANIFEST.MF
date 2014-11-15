@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  com.ibm.icu,
  org.eclipse.core.expressions,
  org.eclipse.wst.css.core,
- org.eclipse.wst.validation
+ org.eclipse.wst.validation,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.wst.html.webresources.core,

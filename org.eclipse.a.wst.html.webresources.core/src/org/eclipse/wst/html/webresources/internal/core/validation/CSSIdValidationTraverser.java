@@ -11,6 +11,7 @@
 package org.eclipse.wst.html.webresources.internal.core.validation;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
@@ -45,8 +46,8 @@ public class CSSIdValidationTraverser extends AbstractCSSClassNameOrIdTraverser 
 	}
 
 	@Override
-	public void process() {
-		super.process();
+	public void process(IProgressMonitor monitor) {
+		super.process(monitor);
 		if (nbFiles == 0) {
 			factory.addMessage((IDOMAttr) getNode(), cssRegion.getType(), file);
 		}

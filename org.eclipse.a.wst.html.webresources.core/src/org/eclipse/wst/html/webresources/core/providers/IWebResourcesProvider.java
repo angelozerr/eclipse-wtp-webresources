@@ -11,7 +11,7 @@
 package org.eclipse.wst.html.webresources.core.providers;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * API for web resources provider which works with eclipse resource
@@ -32,8 +32,10 @@ public interface IWebResourcesProvider {
 	 * @param resourceType
 	 *            the resource type (css, js, img);
 	 * @param context
+	 * @param monitor
 	 * @return
 	 */
-	IResource[] getResources(IWebResourcesContext context);
+	IResource[] getResources(IWebResourcesContext context,
+			IProgressMonitor monitor);
 
 }

@@ -13,6 +13,7 @@ package org.eclipse.wst.html.webresources.internal.ui.contentassist;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
@@ -57,6 +58,7 @@ public class WebResourcesCompletionProposalComputer extends
 		WebResourcesTextRegion attrValueRegion = DOMHelper.getTextRegion(
 				documentRegion, context.getInvocationOffset());
 		if (attrValueRegion != null) {
+			IProgressMonitor monitor = null;
 			String attrValue = DOMHelper.getAttrValue(documentRegion
 					.getText(attrValueRegion.getRegion()));
 			switch (attrValueRegion.getType()) {
@@ -64,14 +66,14 @@ public class WebResourcesCompletionProposalComputer extends
 			case CSS_ID:
 				// Completion for CSS class name or id.
 				processCSSCompletion(contentAssistRequest, context, attrValue,
-						attrValueRegion);
+						attrValueRegion, monitor);
 				break;
 			case SCRIPT_SRC:
 			case LINK_HREF:
 			case IMG_SRC:
 				// Completion for js, css, images files
 				processFilesCompletion(contentAssistRequest, context,
-						attrValue, attrValueRegion);
+						attrValue, attrValueRegion, monitor);
 				break;
 			}
 
@@ -89,11 +91,11 @@ public class WebResourcesCompletionProposalComputer extends
 	private void processCSSCompletion(
 			ContentAssistRequest contentAssistRequest,
 			CompletionProposalInvocationContext context, String attrValue,
-			WebResourcesTextRegion attrValueRegion) {
+			WebResourcesTextRegion attrValueRegion, IProgressMonitor monitor) {
 		CSSContentAssistTraverser traverser = new CSSContentAssistTraverser(
 				contentAssistRequest, context.getInvocationOffset(), attrValue,
 				attrValueRegion.getType());
-		traverser.process();
+		traverser.process(monitor);
 	}
 
 	/**
@@ -107,7 +109,8 @@ public class WebResourcesCompletionProposalComputer extends
 	private void processFilesCompletion(
 			final ContentAssistRequest contentAssistRequest,
 			final CompletionProposalInvocationContext context,
-			String attrValue, WebResourcesTextRegion attrValueRegion) {
+			String attrValue, WebResourcesTextRegion attrValueRegion,
+			IProgressMonitor monitor) {
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
 		final String matchingString = DOMHelper
 				.getAttrValue(contentAssistRequest.getMatchString());
@@ -150,7 +153,7 @@ public class WebResourcesCompletionProposalComputer extends
 						}
 						return false;
 					}
-				});
+				}, monitor);
 	}
 
 }

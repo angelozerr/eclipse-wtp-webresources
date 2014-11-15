@@ -18,19 +18,18 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
-import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
-import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
-import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
+import org.eclipse.wst.html.webresources.internal.core.search.WebResourcesIndexManager;
 
 /**
  * Web Resources configuration for a project.
  *
  */
-public class WebResourcesProjectConfiguration implements IWebResourcesCollector {
+public class WebResourcesProjectConfiguration {
 
 	private static final QualifiedName CONFIGURATION = new QualifiedName(
 			WebResourcesCorePlugin.PLUGIN_ID + ".sessionprops",
@@ -38,8 +37,9 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 
 	private static final IResource[] EMPTY_RESOURCE = new IResource[0];
 
+	private static final IProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
+
 	private final Map<WebResourceType, List<IResource>> resourcesMap;
-	private List<IResource> resources;
 
 	private WebResourcesProjectConfiguration(IProject project)
 			throws CoreException {
@@ -71,27 +71,11 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 		return new WebResourcesProjectConfiguration(project);
 	}
 
-	@Override
-	public void startCollect(WebResourceType resourcesType) {
-		this.resources = new ArrayList<IResource>();
-	}
-
-	@Override
-	public void endCollect(WebResourceType resourcesType) {
-		resourcesMap.put(resourcesType, resources);
-		this.resources = null;
-	}
-
-	@Override
-	public boolean add(Object resource, WebResourceKind resourceKind,
-			IWebResourcesContext context, IURIResolver resolver) {
-		if (resourceKind == WebResourceKind.ECLIPSE_RESOURCE) {
-			resources.add((IResource) resource);
-		}
-		return false;
-	}
-
-	public IResource[] getResources(WebResourceType resourceType) {
+	public IResource[] getResources(WebResourceType resourceType,
+			IProgressMonitor monitor) {
+		// wait for the index
+		WebResourcesIndexManager.getDefault().waitForConsistent(
+				monitor != null ? monitor : NULL_PROGRESS_MONITOR);
 		List<IResource> resources = resourcesMap.get(resourceType);
 		if (resources == null) {
 			return null;
@@ -100,17 +84,25 @@ public class WebResourcesProjectConfiguration implements IWebResourcesCollector 
 	}
 
 	public void addWebResource(IResource resource, WebResourceType resourceType) {
-		List<IResource> resources = resourcesMap.get(resourceType);
-		if (resources != null) {
-			resources.add(resource);
+		synchronized (resourcesMap) {
+			List<IResource> resources = resourcesMap.get(resourceType);
+			if (resources == null) {
+				resources = new ArrayList<IResource>();
+				resourcesMap.put(resourceType, resources);
+			}
+			if (!resources.contains(resource)) {
+				resources.add(resource);
+			}
 		}
 	}
 
 	public void removeWebResource(IResource resource,
 			WebResourceType resourceType) {
-		List<IResource> resources = resourcesMap.get(resourceType);
-		if (resources != null) {
-			resources.remove(resource);
+		synchronized (resourcesMap) {
+			List<IResource> resources = resourcesMap.get(resourceType);
+			if (resources != null) {
+				resources.remove(resource);
+			}
 		}
 	}
 }

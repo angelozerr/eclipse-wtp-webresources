@@ -10,6 +10,7 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.hyperlink;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
@@ -46,10 +47,9 @@ public class CSSHyperlinkDetector extends AbstractHyperlinkDetector {
 				case CSS_CLASS_NAME:
 				case CSS_ID:
 					// hyperlink is done for @id or @class
-					WebResourceRegion classNameRegion = DOMHelper
-							.getCSSRegion(attrValueRegion, documentRegion,
-									textViewer.getDocument(),
-									region.getOffset());
+					WebResourceRegion classNameRegion = DOMHelper.getCSSRegion(
+							attrValueRegion, documentRegion,
+							textViewer.getDocument(), region.getOffset());
 					if (classNameRegion != null) {
 						// Try to find CSS class name or CSS ID and build
 						// Hyperlink
@@ -57,7 +57,8 @@ public class CSSHyperlinkDetector extends AbstractHyperlinkDetector {
 								.getNodeAt(textViewer, region.getOffset());
 						CSSHyperlinkTraverser traverser = new CSSHyperlinkTraverser(
 								node, classNameRegion);
-						traverser.process();
+						IProgressMonitor monitor = null;
+						traverser.process(monitor);
 						return traverser.getHyperlinks();
 					}
 				default:

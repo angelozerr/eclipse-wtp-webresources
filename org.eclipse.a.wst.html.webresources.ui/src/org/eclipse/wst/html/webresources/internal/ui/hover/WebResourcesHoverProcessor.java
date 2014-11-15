@@ -10,6 +10,7 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.hover;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHoverExtension2;
@@ -105,32 +106,34 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 			WebResourceRegion resourceRegion) {
 		IDOMNode xmlnode = (IDOMNode) ContentAssistUtils.getNodeAt(textViewer,
 				resourceRegion.getOffset());
+		IProgressMonitor monitor = null;
 		switch (resourceRegion.getType()) {
 		case CSS_CLASS_NAME:
 		case CSS_ID:
-			return getCSSHoverInfo(resourceRegion, xmlnode);
+			return getCSSHoverInfo(resourceRegion, xmlnode, monitor);
 		default:
-			return getFileHoverInfo(resourceRegion, xmlnode);
+			return getFileHoverInfo(resourceRegion, xmlnode, monitor);
 		}
 	}
 
 	private String getCSSHoverInfo(WebResourceRegion hoverRegion,
-			IDOMNode xmlnode) {
+			IDOMNode xmlnode, IProgressMonitor monitor) {
 		CSSHoverTraverser traverser = new CSSHoverTraverser(xmlnode,
 				hoverRegion);
-		traverser.process();
+		traverser.process(monitor);
 		return traverser.getInfo();
 	}
 
 	private String getFileHoverInfo(WebResourceRegion resourceRegion,
-			IDOMNode xmlnode) {
+			IDOMNode xmlnode, IProgressMonitor monitor) {
 		final String fileName = resourceRegion.getValue();
 		WebResourceType resourceType = resourceRegion.getType().getType();
 		WebResourcesCollectorForHover collector = new WebResourcesCollectorForHover(
 				fileName, resourceType);
 		IWebResourcesContext context = new WebResourcesContext(xmlnode,
 				resourceType);
-		WebResourcesProvidersManager.getInstance().collect(context, collector);
+		WebResourcesProvidersManager.getInstance().collect(context, collector,
+				monitor);
 		return collector.getInfo();
 	}
 

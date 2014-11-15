@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
@@ -91,8 +92,8 @@ public class CSSClassNameValidationTraverser extends
 	}
 
 	@Override
-	public void process() {
-		super.process();
+	public void process(IProgressMonitor monitor) {
+		super.process(monitor);
 		Collection<List<CSSClassInfo>> allInfos = cssClassToValidate.values();
 		for (List<CSSClassInfo> infos : allInfos) {
 			for (CSSClassInfo classInfo : infos) {

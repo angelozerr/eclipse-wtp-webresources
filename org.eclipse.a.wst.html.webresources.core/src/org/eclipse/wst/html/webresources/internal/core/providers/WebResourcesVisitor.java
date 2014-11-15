@@ -29,10 +29,10 @@ import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 public class WebResourcesVisitor implements IResourceVisitor {
 
 	private final IWebResourcesCollector collector;
-	private final IWebResourcesCollector collector2;
 	private final IWebResourcesContext context;
 	private final IURIResolver resolver;
 	private boolean stop;
+	private IResource current;
 
 	/**
 	 * Constrctor of the web resources visitor;
@@ -47,10 +47,8 @@ public class WebResourcesVisitor implements IResourceVisitor {
 	 *            the resolver to use to resolve fine name.
 	 */
 	public WebResourcesVisitor(IWebResourcesCollector collector,
-			IWebResourcesCollector collector2, IWebResourcesContext context,
-			IURIResolver resolver) {
+			IWebResourcesContext context, IURIResolver resolver) {
 		this.collector = collector;
-		this.collector2 = collector2;
 		this.context = context;
 		this.resolver = resolver;
 		this.stop = false;
@@ -61,7 +59,7 @@ public class WebResourcesVisitor implements IResourceVisitor {
 		switch (resource.getType()) {
 		case IResource.FOLDER:
 		case IResource.PROJECT:
-			return !stop;
+			return resource.equals(current);
 		case IResource.FILE:
 			IFile file = (IFile) resource;
 			// System.err.println(file.getLocation().toString());
@@ -73,15 +71,13 @@ public class WebResourcesVisitor implements IResourceVisitor {
 						context, resolver)) {
 					stop = true;
 				}
-				if (collector2 != null) {
-					if (collector2.add(file, WebResourceKind.ECLIPSE_RESOURCE,
-							context, resolver)) {
-						stop = true;
-					}
-				}
 			}
 		}
 		return !stop;
+	}
+
+	public void setCurrent(IResource current) {
+		this.current = current;
 	}
 
 }

@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
@@ -52,11 +53,11 @@ public class WebResourcesProvidersManager implements IURIResolver {
 	}
 
 	public void collect(IWebResourcesContext context,
-			IWebResourcesCollector collector) {
+			IWebResourcesCollector collector, IProgressMonitor monitor) {
 		WebResourceType resourceType = context.getResourceType();
 		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourceType);
 		for (WebResourcesProviderType providerType : providerTypes) {
-			providerType.collect(context, collector);
+			providerType.collect(context, collector, monitor);
 		}
 	}
 
@@ -100,16 +101,12 @@ public class WebResourcesProvidersManager implements IURIResolver {
 			className = element.getAttribute("class");
 			Object provider = element.createExecutableExtension("class");
 			IWebResourcesProvider resourcesProvider = null;
-			IWebResourcesCollectorProvider collectorProvider = null;
 			IWebResourcesFileSystemProvider fileSystemProvider = null;
 			if (provider instanceof IWebResourcesProvider) {
 				resourcesProvider = (IWebResourcesProvider) provider;
 			}
 			if (provider instanceof IWebResourcesFileSystemProvider) {
 				fileSystemProvider = (IWebResourcesFileSystemProvider) provider;
-			}
-			if (provider instanceof IWebResourcesCollectorProvider) {
-				collectorProvider = (IWebResourcesCollectorProvider) provider;
 			}
 			if (resourcesProvider != null || fileSystemProvider != null) {
 				String[] types = element.getAttribute("types").split(",");
@@ -118,7 +115,7 @@ public class WebResourcesProvidersManager implements IURIResolver {
 							.get(types[i].trim());
 					WebResourcesProviderType providerType = new WebResourcesProviderType(
 							resourcesProvider, fileSystemProvider,
-							collectorProvider, resourcesType);
+							resourcesType);
 					Collection<WebResourcesProviderType> providerTypes = map
 							.get(resourcesType);
 					if (providerTypes == null) {

@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetListAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSImportRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSMediaRule;
@@ -56,7 +57,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		super.setTraverseImported(true);
 	}
 
-	public void process() {
+	public void process(IProgressMonitor monitor) {
 		HTMLDocumentAdapter adapter = (HTMLDocumentAdapter) ((INodeNotifier) node
 				.getOwnerDocument())
 				.getAdapterFor(IStyleSheetListAdapter.class);
@@ -80,7 +81,8 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		WebResourcesContext context = new WebResourcesContext(node,
 				WebResourceType.css, hasExternalCSS);
 		// try to discover styles from the project.
-		WebResourcesProvidersManager.getInstance().collect(context, this);
+		WebResourcesProvidersManager.getInstance().collect(context, this,
+				monitor);
 	}
 
 	private void traverseRule(ICSSStyleRule rule) {
