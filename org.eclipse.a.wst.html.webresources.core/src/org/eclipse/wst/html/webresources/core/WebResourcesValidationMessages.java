@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.internal.core;
+package org.eclipse.wst.html.webresources.core;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -16,19 +16,23 @@ import java.util.ResourceBundle;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * Web resources Core Messages.
+ * Web resources validation messages.
  * 
  */
-public final class WebResourcesCoreMessages extends NLS {
+public final class WebResourcesValidationMessages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.wst.html.webresources.internal.core.WebResourcesCoreMessages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.wst.html.webresources.core.WebResourcesValidationMessages"; //$NON-NLS-1$
 
 	private static ResourceBundle fResourceBundle;
 
-	public static String WebResourcesIndexManager;
-	public static String WebResourcesCorePlugin_Initializing_WebResources_Tools;
+	// Validation
+	public static String Validation_CSS_CLASS_UNDEFINED;
+	public static String Validation_CSS_ID_UNDEFINED;
+	public static String Validation_FILE_JS_UNDEFINED;
+	public static String Validation_FILE_CSS_UNDEFINED;
+	public static String Validation_FILE_IMG_UNDEFINED;
 
-	private WebResourcesCoreMessages() {
+	private WebResourcesValidationMessages() {
 	}
 
 	public static ResourceBundle getResourceBundle() {
@@ -42,6 +46,7 @@ public final class WebResourcesCoreMessages extends NLS {
 	}
 
 	static {
-		NLS.initializeMessages(BUNDLE_NAME, WebResourcesCoreMessages.class);
+		NLS.initializeMessages(BUNDLE_NAME,
+				WebResourcesValidationMessages.class);
 	}
 }

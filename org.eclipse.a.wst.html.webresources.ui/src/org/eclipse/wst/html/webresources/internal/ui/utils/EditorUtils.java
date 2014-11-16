@@ -11,18 +11,18 @@
 package org.eclipse.wst.html.webresources.internal.ui.utils;
 
 import java.io.File;
-import java.net.URI;
 
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.graphics.Path;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
@@ -98,5 +98,13 @@ public class EditorUtils {
 			e.printStackTrace();
 		}
 		return editor;
+	}
+
+	public static IFile getFile(IDocument document) {
+		ITextFileBufferManager bufferManager = FileBuffers
+				.getTextFileBufferManager(); // get the buffer manager
+		IPath location = bufferManager.getTextFileBuffer(document)
+				.getLocation();
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(location);
 	}
 }

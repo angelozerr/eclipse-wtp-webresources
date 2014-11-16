@@ -24,6 +24,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.html.webresources.core.WebResourcesCorePlugin;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
+import org.eclipse.wst.html.webresources.core.WebResourcesValidationMessages;
 import org.eclipse.wst.html.webresources.core.preferences.WebResourcesCorePreferenceNames;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.WebResourcesCoreMessages;
@@ -121,15 +122,15 @@ public class MessageFactory {
 	private String getMessageText(WebResourcesFinderType type) {
 		switch (type) {
 		case CSS_CLASS_NAME:
-			return WebResourcesCoreMessages.Validation_CSS_CLASS_UNDEFINED;
+			return WebResourcesValidationMessages.Validation_CSS_CLASS_UNDEFINED;
 		case CSS_ID:
-			return WebResourcesCoreMessages.Validation_CSS_ID_UNDEFINED;
+			return WebResourcesValidationMessages.Validation_CSS_ID_UNDEFINED;
 		case SCRIPT_SRC:
-			return WebResourcesCoreMessages.Validation_FILE_JS_UNDEFINED;
+			return WebResourcesValidationMessages.Validation_FILE_JS_UNDEFINED;
 		case LINK_HREF:
-			return WebResourcesCoreMessages.Validation_FILE_CSS_UNDEFINED;
+			return WebResourcesValidationMessages.Validation_FILE_CSS_UNDEFINED;
 		case IMG_SRC:
-			return WebResourcesCoreMessages.Validation_FILE_IMG_UNDEFINED;
+			return WebResourcesValidationMessages.Validation_FILE_IMG_UNDEFINED;
 		}
 		return null;
 	}

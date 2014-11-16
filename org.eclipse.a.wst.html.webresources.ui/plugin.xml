@@ -95,6 +95,14 @@
 			</enabledWhen>
 		</page>
 	</extension>
+
+	<!-- Quick fix -->
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+		<provisionalConfiguration
+			type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
+			class="org.eclipse.wst.html.webresources.internal.ui.text.correction.WebResourceQuickFixProcessor"
+			target="org.eclipse.wst.html.HTML_DEFAULT" />
+	</extension>
 	
 	<!-- ============ JSP support ================ -->
 	

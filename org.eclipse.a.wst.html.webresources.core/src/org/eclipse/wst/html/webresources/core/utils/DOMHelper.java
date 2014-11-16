@@ -36,6 +36,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 /**
@@ -304,15 +305,81 @@ public class DOMHelper {
 		if (model != null) {
 			IndexedRegion node = model.getIndexedRegion(offset);
 			if (node instanceof IDOMNode) {
-				NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
-				for (int i = 0; i < attrs.getLength(); i++) {
-					IndexedRegion attRegion = (IndexedRegion) attrs.item(i);
-					if (attRegion.contains(offset))
-						return (IDOMAttr) attrs.item(i);
-				}
-				return null;
+				return getAttrByOffset(node, offset);
 			}
 		}
 		return null;
 	}
+
+	private static IDOMAttr getAttrByOffset(IndexedRegion node, int offset) {
+		NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
+		for (int i = 0; i < attrs.getLength(); i++) {
+			IndexedRegion attRegion = (IndexedRegion) attrs.item(i);
+			if (attRegion.contains(offset))
+				return (IDOMAttr) attrs.item(i);
+		}
+		return null;
+	}
+
+	public static final IDOMAttr getAttrByOffset(IDocument document, int offset) {
+		IDOMNode node = getNodeByOffset(document, offset);
+		if (node instanceof Element) {
+			return getAttrByOffset(node, offset);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the SSE DOM Node {@link IDOMNode} by offset from the
+	 * {@link IDocument} document and null if not found.
+	 * 
+	 * @param document
+	 *            the document.
+	 * @param offset
+	 *            the offset.
+	 * @return
+	 */
+	public static final IDOMNode getNodeByOffset(IDocument document, int offset) {
+		IStructuredModel model = null;
+		try {
+			model = StructuredModelManager.getModelManager()
+					.getExistingModelForRead(document);
+			return getNodeByOffset(model, offset);
+		} finally {
+			if (model != null)
+				model.releaseFromRead();
+		}
+	}
+
+	/**
+	 * Returns the SSE DOM Node {@link IDOMNode} by offset from the
+	 * {@link IStructuredModel} SSE mode and null if not found.
+	 * 
+	 * @param model
+	 *            the SSE model.
+	 * @param offset
+	 *            the offset.
+	 * @return
+	 */
+	public static final IDOMNode getNodeByOffset(IStructuredModel model,
+			int offset) {
+		IndexedRegion node = null;
+		if (model != null) {
+			node = model.getIndexedRegion(offset);
+			if (node instanceof IDOMNode) {
+				return (IDOMNode) node;
+			}
+
+			if (model != null) {
+				int lastOffset = offset;
+				node = model.getIndexedRegion(offset);
+				while (node == null && lastOffset >= 0) {
+					lastOffset--;
+					node = model.getIndexedRegion(lastOffset);
+				}
+			}
+		}
+		return (IDOMNode) node;
+	}
+
 }
