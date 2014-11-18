@@ -10,49 +10,71 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.text.correction;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.html.ui.internal.HTMLUIPlugin;
-import org.eclipse.wst.html.webresources.core.providers.DefaultURIResolver;
-import org.eclipse.wst.html.webresources.internal.ui.wizard.INewFileWizard;
-import org.eclipse.wst.html.webresources.internal.ui.wizard.css.NewCSSFileWizard;
-import org.eclipse.wst.html.webresources.internal.ui.wizard.js.NewJSFileWizard;
+import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIMessages;
+import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIPlugin;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
-public class OpenNewWizardFileCompletionProposal implements ICompletionProposal {
+/**
+ * Create CSS, JS file which doesn't exists.
+ *
+ */
+public class CreateFileCompletionProposal implements ICompletionProposal {
 
 	private final IFile file;
 	private final IDOMAttr attr;
 
-	public OpenNewWizardFileCompletionProposal(IFile file, IDOMAttr attr) {
+	public CreateFileCompletionProposal(IFile file, IDOMAttr attr) {
 		this.file = file;
 		this.attr = attr;
 	}
 
 	@Override
 	public void apply(IDocument document) {
-		INewFileWizard wizard = createWizard(attr);
-		wizard.init(PlatformUI.getWorkbench(),
-				new StructuredSelection(file.getParent()));
-		WizardDialog wd = new WizardDialog(getShell(), wizard);
-		wd.setTitle(wizard.getWindowTitle());
-		wd.open();
-
-		IFile newFile = wizard.getFile();
-		if (newFile != null) {
-			IPath path = DefaultURIResolver.INSTANCE.resolve(newFile, file);
-			attr.setValue(path.toString());
+		String path = attr.getValue();
+		IFile newFile = file.getParent().getFile(new Path(path));
+		if (!newFile.exists()) {
+			try {
+				IContainer parent = newFile.getParent();
+				while (parent != null && parent.getType() == IResource.FOLDER
+						&& !parent.exists()) {
+					((IFolder) parent).create(IResource.NONE, true, null);
+					parent = parent.getParent();
+				}
+				newFile.create(null, true, null);
+			} catch (Throwable e) {
+				IStatus status = new Status(
+						IStatus.ERROR,
+						WebResourcesUIPlugin.PLUGIN_ID,
+						IStatus.ERROR,
+						NLS.bind(
+								WebResourcesUIMessages.CreateFileCompletionProposal_errorMessage,
+								path), e);
+				ErrorDialog
+						.openError(
+								getShell(),
+								WebResourcesUIMessages.CreateFileCompletionProposal_errorTitle,
+								NLS.bind(
+										WebResourcesUIMessages.CreateFileCompletionProposal_errorMessage,
+										path), status);
+			}
 		}
 	}
 
@@ -85,15 +107,6 @@ public class OpenNewWizardFileCompletionProposal implements ICompletionProposal 
 	@Override
 	public boolean equals(Object arg0) {
 		return super.equals(arg0);
-	}
-
-	private INewFileWizard createWizard(IDOMAttr attr) {
-		if ("href".equals(attr.getName())) {
-			// link/href
-			return new NewCSSFileWizard();
-		}
-		// script/@src
-		return new NewJSFileWizard();
 	}
 
 	private Shell getShell() {

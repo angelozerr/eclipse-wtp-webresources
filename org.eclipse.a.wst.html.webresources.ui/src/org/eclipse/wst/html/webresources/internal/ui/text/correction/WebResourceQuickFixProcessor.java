@@ -26,6 +26,7 @@ import org.eclipse.jface.text.source.IAnnotationModelExtension2;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.wst.html.core.internal.validate.StringMatcher;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.WebResourcesValidationMessages;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.html.webresources.internal.ui.utils.EditorUtils;
@@ -38,11 +39,11 @@ public class WebResourceQuickFixProcessor implements IQuickAssistProcessor {
 	private final StringMatcher Validation_FILE_JS_UNDEFINED_MATCHER;
 
 	public WebResourceQuickFixProcessor() {
-		Validation_FILE_CSS_UNDEFINED_MATCHER = createMather(WebResourcesValidationMessages.Validation_FILE_CSS_UNDEFINED);
-		Validation_FILE_JS_UNDEFINED_MATCHER = createMather(WebResourcesValidationMessages.Validation_FILE_JS_UNDEFINED);
+		Validation_FILE_CSS_UNDEFINED_MATCHER = createMatcher(WebResourcesValidationMessages.Validation_FILE_CSS_UNDEFINED);
+		Validation_FILE_JS_UNDEFINED_MATCHER = createMatcher(WebResourcesValidationMessages.Validation_FILE_JS_UNDEFINED);
 	}
 
-	private StringMatcher createMather(String templ) {
+	private StringMatcher createMatcher(String templ) {
 		templ = templ.replaceAll("\\{[0-9]*\\}", "\\*");
 		return new StringMatcher(templ);
 	}
@@ -76,8 +77,17 @@ public class WebResourceQuickFixProcessor implements IQuickAssistProcessor {
 	}
 
 	private boolean isWebResourceError(String text) {
-		return Validation_FILE_CSS_UNDEFINED_MATCHER.match(text)
-				|| Validation_FILE_JS_UNDEFINED_MATCHER.match(text);
+		return getWebResourcesFinderType(text) != null;
+	}
+
+	private WebResourcesFinderType getWebResourcesFinderType(String text) {
+		if (Validation_FILE_CSS_UNDEFINED_MATCHER.match(text)) {
+			return WebResourcesFinderType.LINK_HREF;
+		}
+		if (Validation_FILE_JS_UNDEFINED_MATCHER.match(text)) {
+			return WebResourcesFinderType.SCRIPT_SRC;
+		}
+		return null;
 	}
 
 	@Override
@@ -115,7 +125,7 @@ public class WebResourceQuickFixProcessor implements IQuickAssistProcessor {
 							viewer.getDocument(), offset);
 					if (attr != null) {
 						IFile file = EditorUtils.getFile(viewer.getDocument());
-						OpenNewWizardFileCompletionProposal proposal = new OpenNewWizardFileCompletionProposal(
+						CreateFileCompletionProposal proposal = new CreateFileCompletionProposal(
 								file, attr);
 						if (!proposals.contains(proposal)) {
 							proposals.add(proposal);
