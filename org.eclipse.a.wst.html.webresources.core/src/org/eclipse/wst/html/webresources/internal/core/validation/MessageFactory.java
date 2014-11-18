@@ -104,7 +104,7 @@ public class MessageFactory {
 
 	public void addMessage(IDOMAttr attr, WebResourcesFinderType type,
 			IFile file) {
-		String textContent = attr.getValue();
+		String textContent = attr.getValueRegionText();
 		int start = attr.getValueRegionStartOffset();
 		addMessage(attr, start, textContent, type, file);
 	}
