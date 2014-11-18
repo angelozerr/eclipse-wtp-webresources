@@ -13,10 +13,8 @@ package org.eclipse.wst.html.webresources.internal.core.providers;
 import java.io.File;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IURIResolver;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesCollector;
@@ -27,7 +25,6 @@ import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
-import org.eclipse.wst.html.webresources.internal.core.search.WebResourcesIndexManager;
 
 /**
  * 
@@ -35,8 +32,6 @@ import org.eclipse.wst.html.webresources.internal.core.search.WebResourcesIndexM
  *
  */
 public class WebResourcesProviderType {
-
-	private static final IProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 
 	private final IWebResourcesProvider resourcesProvider;
 	private final IWebResourcesFileSystemProvider fileSystemProvider;
@@ -72,8 +67,8 @@ public class WebResourcesProviderType {
 			if (resources != null) {
 				// Loop for each containers to visit files and collect it if it
 				// matches the given web resource type.
-				WebResourcesVisitor visitor = new WebResourcesVisitor(collector,
-						context, resolver);
+				WebResourcesProxyVisitor visitor = new WebResourcesProxyVisitor(
+						collector, context, resolver);
 				// start collect
 				collector.startCollect(resourcesType);
 				// collect processes
@@ -82,7 +77,7 @@ public class WebResourcesProviderType {
 					resource = resources[i];
 					try {
 						visitor.setCurrent(resource);
-						resource.accept(visitor);
+						resource.accept(visitor, IResource.NONE);
 					} catch (CoreException e) {
 						Trace.trace(Trace.SEVERE,
 								"Error while collecting resource for container "

@@ -97,7 +97,7 @@ public class ResourceHelper {
 		WebResourceType[] resourceTypes = WebResourceType.values();
 		for (int i = 0; i < resourceTypes.length; i++) {
 			resourceType = resourceTypes[i];
-			if (isMatchingWebResourceType(resource, resourceType)) {
+			if (isMatchingWebResourceType(resource.getName(), resourceType)) {
 				return resourceType;
 			}
 		}
@@ -111,16 +111,11 @@ public class ResourceHelper {
 	 * @return true if the given filename is a web resource and false otherwise.
 	 */
 	public static boolean isWebResource(String filename) {
-		int index = filename.lastIndexOf('.');
-		if (index == -1) {
-			return false;
-		}
-		String extension = filename.substring(index + 1, filename.length());
 		WebResourceType resourceType = null;
 		WebResourceType[] resourceTypes = WebResourceType.values();
 		for (int i = 0; i < resourceTypes.length; i++) {
 			resourceType = resourceTypes[i];
-			if (isMatching(extension, resourceType)) {
+			if (isMatchingWebResourceType(filename, resourceType)) {
 				return true;
 			}
 		}
@@ -128,25 +123,35 @@ public class ResourceHelper {
 	}
 
 	/**
-	 * Returns true if the given resources matches the web resource type and
+	 * Returns true if the given file system matches the web resource type and
 	 * false otherwise.
 	 * 
-	 * @param resource
-	 *            the file.
+	 * @param file
+	 *            the file system.
 	 * @param resourceType
 	 *            the web resource type.
-	 * @return true if the given resources matches the web resource type and
+	 * @return true if the given file system matches the web resource type and
 	 *         false otherwise.
 	 */
-	public static boolean isMatchingWebResourceType(IResource resource,
-			WebResourceType resourceType) {
-		String extension = resource.getFileExtension();
-		return isMatching(extension, resourceType);
-	}
-
 	public static boolean isMatchingWebResourceType(File file,
 			WebResourceType resourceType) {
 		String filename = file.getName();
+		return isMatchingWebResourceType(filename, resourceType);
+	}
+
+	/**
+	 * Returns true if the given file name matches the web resource type and
+	 * false otherwise.
+	 * 
+	 * @param filename
+	 *            the file name.
+	 * @param resourceType
+	 *            the web resource type.
+	 * @return true if the given file name matches the web resource type and
+	 *         false otherwise.
+	 */
+	public static boolean isMatchingWebResourceType(String filename,
+			WebResourceType resourceType) {
 		int index = filename.lastIndexOf('.');
 		if (index == -1) {
 			return false;
