@@ -45,7 +45,6 @@ import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.validation.CSSClassNameValidationTraverser;
 import org.eclipse.wst.html.webresources.internal.core.validation.CSSIdValidationTraverser;
 import org.eclipse.wst.html.webresources.internal.core.validation.LocalizedMessage;
-import org.eclipse.wst.html.webresources.internal.core.validation.MessageFactory;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -354,13 +353,16 @@ public class WebResourcesValidator extends AbstractValidator implements
 		return fOtherSupportedContentTypes;
 	}
 
-	public void validateRegions(IReporter reporter, IStructuredModel model,
+	protected void validateRegions(IReporter reporter, IStructuredModel model,
 			IFile file, IStructuredDocumentRegion[] regions) {
-		MessageFactory factory = new MessageFactory(file.getProject(), this,
-				reporter);
+		MessageFactory factory = createMessageFactory(reporter, file);
 		for (int i = 0; i < regions.length; i++) {
 			validate(regions[i], reporter, model, file, factory);
 		}
+	}
+
+	protected MessageFactory createMessageFactory(IReporter reporter, IFile file) {
+		return new MessageFactory(file.getProject(), this, reporter);
 	}
 
 	private void validate(IStructuredDocumentRegion documentRegion,
@@ -376,7 +378,6 @@ public class WebResourcesValidator extends AbstractValidator implements
 		if (attrValueRegion != null) {
 			WebResourcesFinderType finderType = attrValueRegion.getType();
 			if (factory.getSeverity(finderType) != ValidationMessage.IGNORE) {
-				WebResourceType type = finderType.getType();
 				switch (finderType) {
 				case CSS_CLASS_NAME:
 				case CSS_ID:
@@ -388,7 +389,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 				case LINK_HREF:
 				case IMG_SRC:
 					validateFile(documentRegion, reporter, model, file,
-							factory, attrValueRegion, type);
+							factory, attrValueRegion, finderType);
 					break;
 				}
 			}
@@ -426,7 +427,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 	public void validateFile(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
-			WebResourceType resourceType) {
+			WebResourcesFinderType resourceType) {
 		IDOMAttr attr = DOMHelper.getAttrByOffset(model,
 				documentRegion.getStartOffset()
 						+ attrValueRegion.getRegion().getStart());

@@ -65,7 +65,7 @@ public class WebResourcesProxyVisitor implements IResourceProxyVisitor {
 			return resource.equals(current);
 		case IResource.FILE:
 			if (ResourceHelper.isMatchingWebResourceType(proxy.getName(),
-					context.getResourceType())) {
+					context.getResourceType().getType())) {
 				// current file matches the given web resource type
 				// collect it.
 				IResource file = proxy.requestResource();

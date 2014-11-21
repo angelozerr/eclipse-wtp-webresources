@@ -42,7 +42,7 @@ public class WebResourcesProvidersManager implements IURIResolver {
 	}
 
 	public boolean exists(String uri, IWebResourcesContext context) {
-		WebResourceType resourceType = context.getResourceType();
+		WebResourceType resourceType = context.getResourceType().getType();
 		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourceType);
 		for (WebResourcesProviderType providerType : providerTypes) {
 			if (providerType.exists(uri, context)) {
@@ -54,7 +54,7 @@ public class WebResourcesProvidersManager implements IURIResolver {
 
 	public void collect(IWebResourcesContext context,
 			IWebResourcesCollector collector, IProgressMonitor monitor) {
-		WebResourceType resourceType = context.getResourceType();
+		WebResourceType resourceType = context.getResourceType().getType();
 		Collection<WebResourcesProviderType> providerTypes = getProviderTypes(resourceType);
 		for (WebResourcesProviderType providerType : providerTypes) {
 			providerType.collect(context, collector, monitor);

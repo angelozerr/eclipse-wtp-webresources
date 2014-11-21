@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.wst.html.webresources.internal.core.validation;
+package org.eclipse.wst.html.webresources.core.validation;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -27,7 +27,7 @@ import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.WebResourcesValidationMessages;
 import org.eclipse.wst.html.webresources.core.preferences.WebResourcesCorePreferenceNames;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
-import org.eclipse.wst.html.webresources.internal.core.WebResourcesCoreMessages;
+import org.eclipse.wst.html.webresources.internal.core.validation.LocalizedMessage;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
@@ -90,7 +90,7 @@ public class MessageFactory {
 			if (projectScope
 					.getNode(getQualifier())
 					.getBoolean(
-							WebResourcesCorePreferenceNames.USE_PROJECT_SETTINGS,
+							WebResourcesCorePreferenceNames.VALIDATION_USE_PROJECT_SETTINGS,
 							false))
 				fLookupOrder = new IScopeContext[] { projectScope,
 						new InstanceScope(), new DefaultScope() };
@@ -116,6 +116,12 @@ public class MessageFactory {
 		int severity = getSeverity(type);
 		IMessage message = createMessage(start, length, messageText, severity,
 				node.getStructuredDocument(), resource);
+
+		addMessage(message, type);
+
+	}
+
+	protected void addMessage(IMessage message, WebResourcesFinderType type) {
 		reporter.addMessage(validator, message);
 	}
 
@@ -157,4 +163,11 @@ public class MessageFactory {
 		return lineNo;
 	}
 
+	public IValidator getValidator() {
+		return validator;
+	}
+
+	protected IReporter getReporter() {
+		return reporter;
+	}
 }

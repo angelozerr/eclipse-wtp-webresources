@@ -30,6 +30,7 @@ public class WebResourcesCorePreferenceInitializer extends
 				.getNode(WebResourcesCorePlugin.getDefault().getBundle()
 						.getSymbolicName());
 		initializeValidationPreferences(node);
+		initializeSearchPreferences(node);
 	}
 
 	/**
@@ -52,4 +53,9 @@ public class WebResourcesCorePreferenceInitializer extends
 				ValidationMessage.IGNORE);
 	}
 
+	private void initializeSearchPreferences(IEclipsePreferences node) {
+		node.putBoolean(
+				WebResourcesCorePreferenceNames.SEARCH_IN_ALL_CSS_FILES_IF_NO_LINKS,
+				false);
+	}
 }

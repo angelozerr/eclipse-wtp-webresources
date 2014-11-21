@@ -80,20 +80,44 @@
 			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesValidationPreferencePage"
 			id="org.eclipse.wst.html.webresources.ui.preferences.validation">
 		</page>
+		<page
+			name="%WebResources_CSS"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.CSSWebResourcesPropertyPage"
+			id="org.eclipse.wst.html.webresources.ui.preferences.CSSWebResourcesPropertyPage">
+		</page>		
 	</extension>
 			    
 	<!-- Web content settings -->
 	<extension point="org.eclipse.ui.propertyPages">
 		<page
+			name="%WebResources_Property_main"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesMainPropertyPage"
+			id="org.eclipse.wst.html.webresources.ui.propertyPage.project.main">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">					
+				</adapt>
+			</enabledWhen>
+		</page>	
+		<page
 			name="%WebResources_Property_validation"
 			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesValidationPreferencePage"
-			id="org.eclipse.wst.html.webresources.ui.preferences.validation"
-			category="ValidationPropertiesPage">
+			id="org.eclipse.wst.html.webresources.ui.propertyPage.project.validation"
+			category="org.eclipse.wst.html.webresources.ui.propertyPage.project.main">
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject">					
 				</adapt>
 			</enabledWhen>
 		</page>
+		<page
+			name="%WebResources_Property_CSS"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.CSSWebResourcesPropertyPage"
+			id="org.eclipse.wst.html.webresources.ui.properties.CSSWebResourcesPropertyPage"
+			category="org.eclipse.wst.html.webresources.ui.propertyPage.project.main">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">					
+				</adapt>
+			</enabledWhen>
+		</page>				
 	</extension>
 
 	<!-- Quick fix -->

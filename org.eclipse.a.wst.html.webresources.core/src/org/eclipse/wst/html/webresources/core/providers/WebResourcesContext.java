@@ -12,13 +12,14 @@ package org.eclipse.wst.html.webresources.core.providers;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public class WebResourcesContext implements IWebResourcesContext {
 
 	private final IDOMNode htmlNode;
-	private final WebResourceType resourceType;
+	private final WebResourcesFinderType resourceType;
 	private final boolean hasExternalCSS;
 	private IFile htmlFile;
 
@@ -30,7 +31,8 @@ public class WebResourcesContext implements IWebResourcesContext {
 	 * @param resourceType
 	 *            the resource type (css, js, img);
 	 */
-	public WebResourcesContext(IDOMNode htmlNode, WebResourceType resourceType) {
+	public WebResourcesContext(IDOMNode htmlNode,
+			WebResourcesFinderType resourceType) {
 		this(htmlNode, resourceType, false);
 	}
 
@@ -43,8 +45,8 @@ public class WebResourcesContext implements IWebResourcesContext {
 	 *            the resource type (css, js, img);
 	 * @param hasExternalCSS
 	 */
-	public WebResourcesContext(IDOMNode htmlNode, WebResourceType resourceType,
-			boolean hasExternalCSS) {
+	public WebResourcesContext(IDOMNode htmlNode,
+			WebResourcesFinderType resourceType, boolean hasExternalCSS) {
 		this.htmlNode = htmlNode;
 		this.htmlFile = null;
 		this.resourceType = resourceType;
@@ -65,7 +67,7 @@ public class WebResourcesContext implements IWebResourcesContext {
 	}
 
 	@Override
-	public WebResourceType getResourceType() {
+	public WebResourcesFinderType getResourceType() {
 		return resourceType;
 	}
 

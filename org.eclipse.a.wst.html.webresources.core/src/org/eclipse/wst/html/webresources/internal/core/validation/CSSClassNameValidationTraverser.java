@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.html.webresources.core.AbstractCSSClassNameOrIdTraverser;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
+import org.eclipse.wst.html.webresources.core.validation.MessageFactory;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
 /**

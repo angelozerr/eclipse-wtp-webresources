@@ -12,6 +12,7 @@ package org.eclipse.wst.html.webresources.core.providers;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 public interface IWebResourcesContext {
@@ -38,10 +39,10 @@ public interface IWebResourcesContext {
 	boolean hasExternalCSS();
 
 	/**
-	 * Return the resource type (css, js, img).
+	 * Return the resource finder type (css, js, img).
 	 * 
-	 * @return the resource type (css, js, img).
+	 * @return the resource finder type (css, js, img).
 	 */
-	WebResourceType getResourceType();
+	WebResourcesFinderType getResourceType();
 
 }

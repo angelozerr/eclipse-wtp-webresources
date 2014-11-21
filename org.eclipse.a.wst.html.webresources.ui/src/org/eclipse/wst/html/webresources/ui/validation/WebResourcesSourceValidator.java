@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
+import org.eclipse.wst.html.webresources.core.validation.MessageFactory;
 import org.eclipse.wst.html.webresources.core.validation.WebResourcesValidator;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -92,5 +93,9 @@ public class WebResourcesSourceValidator extends WebResourcesValidator
 		}
 	}
 
+	@Override
+	protected MessageFactory createMessageFactory(IReporter reporter, IFile file) {
+		return new UIMessageFactory(file.getProject(), this, reporter);
+	}
 
 }

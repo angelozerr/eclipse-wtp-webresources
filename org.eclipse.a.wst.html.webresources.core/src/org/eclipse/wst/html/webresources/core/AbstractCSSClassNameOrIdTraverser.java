@@ -79,7 +79,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 			}
 		}
 		WebResourcesContext context = new WebResourcesContext(node,
-				WebResourceType.css, hasExternalCSS);
+				webResourcesType, hasExternalCSS);
 		// try to discover styles from the project.
 		WebResourcesProvidersManager.getInstance().collect(context, this,
 				monitor);

@@ -120,7 +120,7 @@ public class WebResourcesCompletionProposalComputer extends
 		final WebResourceType resourceType = attrValueRegion.getType()
 				.getType();
 		IWebResourcesContext resourcesContext = new WebResourcesContext(node,
-				resourceType);
+				attrValueRegion.getType());
 		WebResourcesProvidersManager.getInstance().collect(resourcesContext,
 				new WebResourcesCollectorAdapter() {
 

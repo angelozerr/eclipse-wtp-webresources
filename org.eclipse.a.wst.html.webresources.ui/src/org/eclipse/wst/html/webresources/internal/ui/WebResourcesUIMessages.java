@@ -44,8 +44,13 @@ public final class WebResourcesUIMessages extends NLS {
 	public static String WebResourcesValidationPreferencePage_CSS_CLASS_UNKNOWN;
 	public static String WebResourcesValidationPreferencePage_CSS_ID_UNKNOWN;
 
+	// CSS preferences
+	public static String CSSPreferencesPage_searchInAllCSSFiles_label;
+	
 	public static String CreateFileCompletionProposal_errorTitle;
 	public static String CreateFileCompletionProposal_errorMessage;
+
+
 
 	private WebResourcesUIMessages() {
 	}

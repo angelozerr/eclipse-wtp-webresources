@@ -302,7 +302,7 @@ public class WebResourcesValidationPreferencePage extends
 
 	@Override
 	protected String getProjectSettingsKey() {
-		return WebResourcesCorePreferenceNames.USE_PROJECT_SETTINGS;
+		return WebResourcesCorePreferenceNames.VALIDATION_USE_PROJECT_SETTINGS;
 	}
 
 	@Override

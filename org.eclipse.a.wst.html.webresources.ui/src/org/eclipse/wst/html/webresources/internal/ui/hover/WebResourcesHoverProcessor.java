@@ -17,6 +17,7 @@ import org.eclipse.jface.text.ITextHoverExtension2;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
@@ -127,9 +128,9 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 	private String getFileHoverInfo(WebResourceRegion resourceRegion,
 			IDOMNode xmlnode, IProgressMonitor monitor) {
 		final String fileName = resourceRegion.getValue();
-		WebResourceType resourceType = resourceRegion.getType().getType();
+		WebResourcesFinderType resourceType = resourceRegion.getType();
 		WebResourcesCollectorForHover collector = new WebResourcesCollectorForHover(
-				fileName, resourceType);
+				fileName, resourceType.getType());
 		IWebResourcesContext context = new WebResourcesContext(xmlnode,
 				resourceType);
 		WebResourcesProvidersManager.getInstance().collect(context, collector,
