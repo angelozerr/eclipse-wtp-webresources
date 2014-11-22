@@ -47,8 +47,10 @@ public final class WebResourcesUIMessages extends NLS {
 	// CSS preferences
 	public static String CSSPreferencesPage_searchInAllCSSFiles_label;
 	
+	// Quick fix
 	public static String CreateFileCompletionProposal_errorTitle;
 	public static String CreateFileCompletionProposal_errorMessage;
+	public static String CreateFileCompletionProposal_displayString;
 
 
 

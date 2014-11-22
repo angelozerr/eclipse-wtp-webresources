@@ -10,6 +10,8 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.text.correction;
 
+import java.io.ByteArrayInputStream;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -28,6 +30,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.wst.html.ui.internal.HTMLUIPlugin;
+import org.eclipse.wst.html.webresources.core.WebResourceType;
+import org.eclipse.wst.html.webresources.internal.ui.ImageResource;
 import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIMessages;
 import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIPlugin;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
@@ -58,7 +62,8 @@ public class CreateFileCompletionProposal implements ICompletionProposal {
 					((IFolder) parent).create(IResource.NONE, true, null);
 					parent = parent.getParent();
 				}
-				newFile.create(null, true, null);
+				newFile.create(new ByteArrayInputStream("".getBytes()), true,
+						null);
 			} catch (Throwable e) {
 				IStatus status = new Status(
 						IStatus.ERROR,
@@ -91,22 +96,31 @@ public class CreateFileCompletionProposal implements ICompletionProposal {
 
 	@Override
 	public String getDisplayString() {
-		return "TODO";
+		return NLS
+				.bind(WebResourcesUIMessages.CreateFileCompletionProposal_displayString,
+						attr.getValue());
 	}
 
 	@Override
 	public Image getImage() {
+		if (attr.getValue().endsWith(WebResourceType.css.name())) {
+			return ImageResource.getImage(ImageResource.IMG_NEW_CSS);
+		}
+		return ImageResource.getImage(ImageResource.IMG_NEW_HTML);
+	}
+
+	@Override
+	public Point getSelection(IDocument document) {
 		return null;
 	}
 
 	@Override
-	public Point getSelection(IDocument arg0) {
-		return null;
-	}
-
-	@Override
-	public boolean equals(Object arg0) {
-		return super.equals(arg0);
+	public boolean equals(Object obj) {
+		if (obj instanceof CreateFileCompletionProposal) {
+			CreateFileCompletionProposal proposal = (CreateFileCompletionProposal) obj;
+			return proposal.attr.getValue().equals(proposal.attr.getValue());
+		}
+		return false;
 	}
 
 	private Shell getShell() {

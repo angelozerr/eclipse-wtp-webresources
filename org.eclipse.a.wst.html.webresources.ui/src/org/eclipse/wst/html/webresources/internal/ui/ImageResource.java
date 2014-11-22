@@ -49,6 +49,8 @@ public class ImageResource {
 	// General Object Images
 	public static final String IMG_CSS_CLASSNAME = "css_classname";
 	public static final String IMG_CSS_ID = "css_id";
+	public static final String IMG_NEW_CSS = "newcss";
+	public static final String IMG_NEW_HTML = "newhtml";
 
 	static {
 		try {
@@ -139,6 +141,8 @@ public class ImageResource {
 		// load general object images
 		registerImage(IMG_CSS_CLASSNAME, URL_OBJ + IMG_CSS_CLASSNAME + ".gif");
 		registerImage(IMG_CSS_ID, URL_OBJ + IMG_CSS_ID + ".gif");
+		registerImage(IMG_NEW_CSS, URL_OBJ + IMG_NEW_CSS + ".gif");
+		registerImage(IMG_NEW_HTML, URL_OBJ + IMG_NEW_HTML + ".gif");
 	}
 
 	/**
