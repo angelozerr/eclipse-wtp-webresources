@@ -106,6 +106,10 @@ public class CSSContentAssistTraverser extends
 		contentAssistRequest.addProposal(new CSSWebResourcesCompletionProposal(
 				className, replacementOffset, replacementLength,
 				cursorPosition, image, displayString, null, info));
+		// add the class name in the list of class names to avoid having several
+		// times the same class name in the completion.
+		// see https://github.com/angelozerr/eclipse-wtp-webresources/issues/28
+		existingClassNames.add(className);
 		return false;
 	}
 
