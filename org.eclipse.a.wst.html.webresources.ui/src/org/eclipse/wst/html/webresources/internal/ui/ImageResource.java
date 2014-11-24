@@ -135,7 +135,7 @@ public class ImageResource {
 	 * Initialize the image resources.
 	 */
 	protected static void initializeImageRegistry() {
-		imageRegistry = new ImageRegistry();
+		imageRegistry = WebResourcesUIPlugin.getDefault().getImageRegistry();
 		imageDescriptors = new HashMap<String, ImageDescriptor>();
 
 		// load general object images
