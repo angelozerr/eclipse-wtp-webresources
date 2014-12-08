@@ -67,6 +67,9 @@ public class WebResourcesIndexManager extends AbstractIndexManager {
 				.getWebResourceType(resource);
 		if (resourceType != null) {
 			IProject project = resource.getProject();
+			if (!project.isAccessible()) {
+				return;
+			}
 			// it's a web resources file (css, img or js).
 			try {
 				IContainer container = resource.getParent();
