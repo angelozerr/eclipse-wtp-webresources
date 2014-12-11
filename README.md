@@ -1,4 +1,4 @@
-What is Eclipse WTP WebResources?
+What is Eclipse WTP WebResources (EWW) ?
 ===================
 
 [![Build Status](https://secure.travis-ci.org/angelozerr/eclipse-wtp-webresources.png)](http://travis-ci.org/angelozerr/eclipse-wtp-webresources)
