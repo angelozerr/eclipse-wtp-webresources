@@ -313,6 +313,10 @@ public class DOMHelper {
 
 	private static IDOMAttr getAttrByOffset(IndexedRegion node, int offset) {
 		NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
+		if (attrs == null) {
+			// see https://github.com/angelozerr/eclipse-wtp-webresources/issues/34
+			return null;
+		}
 		for (int i = 0; i < attrs.getLength(); i++) {
 			IndexedRegion attRegion = (IndexedRegion) attrs.item(i);
 			if (attRegion.contains(offset))
