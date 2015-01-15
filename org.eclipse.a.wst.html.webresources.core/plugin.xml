@@ -82,5 +82,9 @@
              class="org.eclipse.wst.html.webresources.internal.core.validation.JSPScriptletIgnoreValidator"
              types="LINK_HREF,IMG_SRC,SCRIPT_SRC">
        </ignoreValidator>
+       <ignoreValidator
+             class="org.eclipse.wst.html.webresources.internal.core.validation.PHPScriptIgnoreValidator"
+             types="LINK_HREF,IMG_SRC,SCRIPT_SRC">
+       </ignoreValidator>
     </extension>
 </plugin>
