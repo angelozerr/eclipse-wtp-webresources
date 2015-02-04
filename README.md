@@ -62,6 +62,10 @@ It's because of CSS Hover. After debugging WTP, Hover is managed with BestMatchH
 
 If plugin uses org.eclipse.wst.webresources.ui, it's org.eclipse.jst.jsf.facelet.ui.internal.hover.FaceletHover which is executed before CSS class hover and CSS class name hover doesn't work. If org.eclipse.a.wst.webresources.ui (before  org.eclipse.jst.jsf.facelet.ui) is executed correctly.
 
+# Who is using Eclipse WTP WebResources (EWW) ?
+
+ * [Liferay IDE](https://github.com/liferay/liferay-ide)
+ 
 # Build
 
 Eclipse WTP Web Resourcese is build with this [cloudbees job](https://opensagres.ci.cloudbees.com/job/eclipse-wtp-webresources/).
