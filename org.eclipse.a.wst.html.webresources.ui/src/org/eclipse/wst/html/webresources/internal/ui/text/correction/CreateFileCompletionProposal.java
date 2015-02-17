@@ -118,7 +118,7 @@ public class CreateFileCompletionProposal implements ICompletionProposal {
 	public boolean equals(Object obj) {
 		if (obj instanceof CreateFileCompletionProposal) {
 			CreateFileCompletionProposal proposal = (CreateFileCompletionProposal) obj;
-			return proposal.attr.getValue().equals(proposal.attr.getValue());
+			return proposal.attr.getValue().equals(this.attr.getValue());
 		}
 		return false;
 	}
