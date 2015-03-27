@@ -2,7 +2,7 @@
 <?eclipse version="3.0"?>
 <!--
 ###############################################################################
-# Copyright (c) 2013 Angelo Zerr and others.
+# Copyright (c) 2013-2015 Angelo Zerr and others.
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Eclipse Public License v1.0
 # which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
 #
 # Contributors:
 #     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
+#     Kaloyan Raev <kaloyan.r@zend.com> - #37 Mark folders as web root folders
 ###############################################################################
  -->
 <plugin>
@@ -117,7 +118,17 @@
 				<adapt type="org.eclipse.core.resources.IProject">					
 				</adapt>
 			</enabledWhen>
-		</page>				
+		</page>
+		<page
+			name="%WebResources_Property_roots"
+			class="org.eclipse.wst.html.webresources.internal.ui.preferences.WebResourcesRootFoldersPropertyPage"
+			id="org.eclipse.wst.html.webresources.ui.propertyPage.project.roots"
+			category="org.eclipse.wst.html.webresources.ui.propertyPage.project.validation">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">
+				</adapt>
+			</enabledWhen>
+		</page>
 	</extension>
 
 	<!-- Quick fix -->

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  Copyright (c) 2013-2015 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Kaloyan Raev <kaloyan.r@zend.com> - #37 Mark folders as web root folders
  */
 package org.eclipse.wst.html.webresources.internal.ui;
 
@@ -46,6 +47,10 @@ public final class WebResourcesUIMessages extends NLS {
 
 	// CSS preferences
 	public static String CSSPreferencesPage_searchInAllCSSFiles_label;
+	
+	// Web Root Folders Property Page
+	public static String WebRootFoldersPropertyPage_description;
+	public static String WebRootFoldersPropertyPage_select;
 	
 	// Quick fix
 	public static String CreateFileCompletionProposal_errorTitle;
