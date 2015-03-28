@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  Copyright (c) 2013-2015 Angelo ZERR and others.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Kaloyan Raev <kaloyan.r@zend.com> - #37 Mark folders as web root folders
  */
 package org.eclipse.wst.html.webresources.core;
 
@@ -89,6 +90,15 @@ public class WebResourcesCorePlugin extends Plugin {
 	 */
 	public static WebResourcesCorePlugin getDefault() {
 		return plugin;
+	}
+	
+	/**
+	 * Logs the given <code>Throwable</code>.
+	 * 
+	 * @param t the <code>Throwable</code>
+	 */
+	public static void log(Throwable t) {
+		plugin.getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
 	}
 
 	/**

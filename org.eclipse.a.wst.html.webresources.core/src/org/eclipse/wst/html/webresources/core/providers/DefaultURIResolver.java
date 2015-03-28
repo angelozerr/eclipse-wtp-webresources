@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2014 Angelo ZERR.
+ *  Copyright (c) 2013-2015 Angelo ZERR and others.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -7,13 +7,17 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Kaloyan Raev <kaloyan.r@zend.com> - #37 Mark folders as web root folders
  */
 package org.eclipse.wst.html.webresources.core.providers;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.wst.html.webresources.core.WebRootFolders;
 
 public class DefaultURIResolver implements IURIResolver {
 
@@ -31,6 +35,15 @@ public class DefaultURIResolver implements IURIResolver {
 		if (uri.startsWith("http")) {
 			// TODO : validate http web resources
 			return true;
+		} else if (uri.startsWith("/")) {
+			IProject project = root.getProject();
+			String[] webRootFolders = WebRootFolders.getWebRootFolders(project);
+			for (String webRootFolder : webRootFolders) {
+				IResource resource = project.findMember(webRootFolder);
+				if (resource instanceof IContainer && ((IContainer) resource).exists(new Path(uri))) {
+					return true;
+				}
+			}
 		}
 		return root.getParent().exists(new Path(uri));
 	}
