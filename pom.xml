@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -7,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.opensagres.eclipse.wtp</groupId>
 	<artifactId>eclipse-wtp-webresources</artifactId>
-	<version>0.9.0-SNAPSHOT</version>
+	<version>0.10.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,8 +24,8 @@
 	<modules>
 		<module>org.eclipse.a.wst.html.webresources.core</module>
 		<module>org.eclipse.a.wst.html.webresources.ui</module>
-		<module>org.eclipse.wst.html.webresources.feature</module>		
-		<module>org.eclipse.wst.html.webresources.repository</module>		
+		<module>org.eclipse.wst.html.webresources.feature</module>
+		<module>org.eclipse.wst.html.webresources.repository</module>
 	</modules>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
@@ -86,8 +87,8 @@
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-          		<artifactId>tycho-compiler-plugin</artifactId>
-          		<version>${tycho-version}</version>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho-version}</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -122,16 +123,15 @@
 	</scm>
 	<profiles>
 		<profile>
-			<!-- release profile (see parent pom) -->
-			<id>sonatype-oss-release</id>
+			<id>release</id>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.eclipse.tycho</groupId>
-						<artifactId>tycho-packaging-plugin</artifactId>
+						<artifactId>tycho-maven-plugin</artifactId>
 						<version>${tycho-version}</version>
 						<configuration>
-						<strictVersions>false</strictVersions>
+							<test>skip</test>
 						</configuration>
 					</plugin>
 				</plugins>

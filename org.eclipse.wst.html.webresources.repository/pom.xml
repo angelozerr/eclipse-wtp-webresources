@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>fr.opensagres.eclipse.wtp</groupId>
 		<artifactId>eclipse-wtp-webresources</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.10.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.eclipse.wst.html.webresources.repository</artifactId>
 	<packaging>eclipse-repository</packaging>
@@ -51,6 +52,34 @@
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>de.jutzig</groupId>
+						<artifactId>github-release-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<id>github-upload</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>release</goal>
+								</goals>
+								<inherited>false</inherited>
+							</execution>
+						</executions>
+						<configuration>
+							<overwriteArtifact>true</overwriteArtifact>
+							<tag>${project.artifactId}-${project.version}</tag>
+							<releaseName>${project.artifactId}-${project.version}</releaseName>
+							<artifact>${project.build.directory}/${project.artifactId}-${project.version}.zip</artifact>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
