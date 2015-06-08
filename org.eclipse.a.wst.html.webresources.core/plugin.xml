@@ -61,6 +61,7 @@
             class="org.eclipse.wst.html.webresources.core.validation.WebResourcesValidator"
             manual="true"
             version="1"
+            sourceid="org.eclipse.wst.html.webresources.ui.validation.webresourcessourcevalidator,org.eclipse.wst.jsp.webresources.ui.validation.webresourcessourcevalidator,org.eclipse.wst.php.webresources.ui.validation.webresourcessourcevalidator"
             markerId="org.eclipse.a.wst.html.webresources.core.validationMarker">
          <include>
             <rules>
