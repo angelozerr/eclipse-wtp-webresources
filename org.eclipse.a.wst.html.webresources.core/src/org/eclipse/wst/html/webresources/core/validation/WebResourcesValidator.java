@@ -421,19 +421,26 @@ public class WebResourcesValidator extends AbstractValidator implements
 						documentRegion.getParentDocument(), startOffset);
 		IDOMAttr attr = DOMHelper.getAttrByOffset(model, startOffset);
 		if (attr != null) {
-			switch (hoverRegion.getType()) {
-			case CSS_ID:
-				// Validate CSS/@id
-				CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
-						attr, file, hoverRegion, factory);
-				cssIdTraverser.process(monitor);
-				break;
-			case CSS_CLASS_NAME:
-				// Validate CSS/@class
-				CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
-						attr, file, hoverRegion, factory);
-				cssClassNameTraverser.process(monitor);
-				break;
+			WebResourcesFinderType finderType = attrValueRegion.getType();
+			WebResourcesContext context = new WebResourcesContext(attr,
+					hoverRegion.getType());
+			if (!shouldIgnoreValidation(context, finderType)) {
+				switch (hoverRegion.getType()) {
+				case CSS_ID:
+					// Validate CSS/@id
+					CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
+							attr, file, hoverRegion, factory);
+					cssIdTraverser.process(monitor);
+					break;
+				case CSS_CLASS_NAME:
+					// Validate CSS/@class
+
+					CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
+							attr, file, hoverRegion, factory);
+					cssClassNameTraverser.process(monitor);
+
+					break;
+				}
 			}
 		}
 	}
