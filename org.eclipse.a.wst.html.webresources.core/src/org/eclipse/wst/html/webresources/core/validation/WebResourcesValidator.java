@@ -387,8 +387,11 @@ public class WebResourcesValidator extends AbstractValidator implements
 					break;
 				case SCRIPT_SRC:
 				case LINK_HREF:
-				case IMG_SRC:
 					validateFile(documentRegion, reporter, model, file,
+							factory, attrValueRegion, finderType);
+					break;
+				case IMG_SRC:
+					validateImage(documentRegion, reporter, model, file,
 							factory, attrValueRegion, finderType);
 					break;
 				}
@@ -396,7 +399,18 @@ public class WebResourcesValidator extends AbstractValidator implements
 		}
 	}
 
-	protected void validateCSS(IStructuredDocumentRegion documentRegion,
+	/**
+	 * Validate CSS class name and ids.
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param monitor
+	 */
+	private void validateCSS(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			IProgressMonitor monitor) {
@@ -424,7 +438,51 @@ public class WebResourcesValidator extends AbstractValidator implements
 		}
 	}
 
-	public void validateFile(IStructuredDocumentRegion documentRegion,
+	/**
+	 * Validate img/@src
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param resourceType
+	 */
+	private void validateImage(IStructuredDocumentRegion documentRegion,
+			IReporter reporter, IStructuredModel model, IFile file,
+			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
+			WebResourcesFinderType resourceType) {
+		IDOMAttr attr = DOMHelper.getAttrByOffset(model,
+				documentRegion.getStartOffset()
+						+ attrValueRegion.getRegion().getStart());
+		if (attr != null) {
+			String attrValue = DOMHelper.getAttrValue(documentRegion
+					.getText(attrValueRegion.getRegion()));
+			if (attrValue.startsWith("data:")) {
+				// see https://en.wikipedia.org/wiki/Data_URI_scheme
+				// ex : <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
+				// TODO : validate format of data uri scheme.
+			} else {
+				// ex : <img src="path/to/image.png" />
+				validateFile(documentRegion, reporter, model, file, factory,
+						attrValueRegion, resourceType);
+			}
+		}
+	}
+
+	/**
+	 * Validate existing of the file.
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param resourceType
+	 */
+	private void validateFile(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			WebResourcesFinderType resourceType) {
