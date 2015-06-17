@@ -45,8 +45,6 @@ import org.w3c.dom.NamedNodeMap;
  */
 public class DOMHelper {
 
-	private static final String DATA_URI_SCHEME = "data:";
-
 	/**
 	 * Returns the "@class", "@id", "script/@src", "link/@href" or , "img/@src"
 	 * attribute value region from the given document region and position and
@@ -387,15 +385,5 @@ public class DOMHelper {
 			}
 		}
 		return (IDOMNode) node;
-	}
-
-	/**
-	 * Returns true if the given uri is a data URI scheme and false otherwise.
-	 * 
-	 * @param uri
-	 * @return true if the given uri is a data URI scheme and false otherwise.
-	 */
-	public static boolean isDataURIScheme(String uri) {
-		return uri != null && uri.startsWith(DATA_URI_SCHEME);
 	}
 }

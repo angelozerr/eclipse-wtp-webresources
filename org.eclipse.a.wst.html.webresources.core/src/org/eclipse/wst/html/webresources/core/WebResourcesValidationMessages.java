@@ -31,6 +31,9 @@ public final class WebResourcesValidationMessages extends NLS {
 	public static String Validation_FILE_JS_UNDEFINED;
 	public static String Validation_FILE_CSS_UNDEFINED;
 	public static String Validation_FILE_IMG_UNDEFINED;
+	public static String Validation_URL_JS_UNDEFINED;
+	public static String Validation_URL_CSS_UNDEFINED;
+	public static String Validation_URL_IMG_UNDEFINED;
 
 	private WebResourcesValidationMessages() {
 	}

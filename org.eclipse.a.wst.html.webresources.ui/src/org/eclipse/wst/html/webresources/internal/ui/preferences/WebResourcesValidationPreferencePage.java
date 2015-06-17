@@ -10,16 +10,20 @@
  */
 package org.eclipse.wst.html.webresources.internal.ui.preferences;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -86,48 +90,14 @@ public class WebResourcesValidationPreferencePage extends
 		}
 	}
 
-	private class TextData {
-		private String fKey;
-		private String fValue;
-		String originalValue = ""; //$NON-NLS-1$
-
-		public TextData(String key) {
-			fKey = key;
-		}
-
-		public String getKey() {
-			return fKey;
-		}
-
-		/**
-		 * Sets the ignored attribute names pattern
-		 * 
-		 * @param severity
-		 *            the severity level
-		 */
-		public void setValue(String value) {
-			fValue = value;
-		}
-
-		/**
-		 * Returns non-null value for the ignored attribute names pattern
-		 * 
-		 * @return
-		 */
-		public String getValue() {
-			return fValue != null ? fValue : ""; //$NON-NLS-1$
-		}
-
-		boolean isChanged() {
-			return !originalValue.equalsIgnoreCase(fValue);
-		}
-	}
-
 	public WebResourcesValidationPreferencePage() {
 		super();
+		fPreferencesService = Platform.getPreferencesService();
 	}
 
+	private IPreferencesService fPreferencesService = null;
 	private PixelConverter fPixelConverter;
+	private Button validateExternalURL;
 
 	protected Control createCommonContents(Composite parent) {
 		final Composite page = new Composite(parent, SWT.NULL);
@@ -222,6 +192,38 @@ public class WebResourcesValidationPreferencePage extends
 
 		// End CSS validation section
 
+		// Validate external URL
+		BooleanData ignoreData = new BooleanData(
+				WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN);
+		validateExternalURL = new Button(composite, SWT.CHECK);
+		validateExternalURL.setData(ignoreData);
+		validateExternalURL.setFont(page.getFont());
+		validateExternalURL
+				.setText(WebResourcesUIMessages.WebResourcesValidationPreferencePage_EXTERNAL_URL_UNKWOWN);
+		validateExternalURL.setEnabled(true);
+
+		boolean ignoreAttributeNamesIsSelected = fPreferencesService
+				.getBoolean(
+						getPreferenceNodeQualifier(),
+						ignoreData.getKey(),
+						WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN_DEFAULT,
+						createPreferenceScopes());
+		ignoreData.setValue(ignoreAttributeNamesIsSelected);
+		ignoreData.originalValue = ignoreAttributeNamesIsSelected;
+
+		validateExternalURL.setSelection(ignoreData.getValue());
+		validateExternalURL.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+				controlChanged(e.widget);
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				controlChanged(e.widget);
+			}
+		});
+		validateExternalURL.setLayoutData(new GridData(GridData.FILL,
+				GridData.CENTER, true, false, 3, 1));
+		controlChanged(validateExternalURL);
 		restoreSectionExpansionStates(getDialogSettings().getSection(
 				SETTINGS_SECTION_NAME));
 
@@ -244,9 +246,11 @@ public class WebResourcesValidationPreferencePage extends
 
 	@Override
 	protected void controlChanged(Widget widget) {
-		if (widget instanceof Text) {
-			TextData data = (TextData) widget.getData();
-			data.setValue(((Text) widget).getText());
+		if (widget instanceof Button) {
+			BooleanData data = (BooleanData) widget.getData();
+			if (data != null) {
+				data.setValue(((Button) widget).getSelection());
+			}
 		} else {
 			super.controlChanged(widget);
 		}
@@ -255,6 +259,11 @@ public class WebResourcesValidationPreferencePage extends
 	@Override
 	protected void storeValues() {
 		IScopeContext[] contexts = createPreferenceScopes();
+
+		BooleanData ignoreData = (BooleanData) validateExternalURL.getData();
+		contexts[0].getNode(getPreferenceNodeQualifier()).putBoolean(
+				ignoreData.getKey(), ignoreData.getValue());
+		ignoreData.originalValue = ignoreData.getValue();
 
 		for (int i = 0; i < contexts.length; i++) {
 			try {
@@ -312,5 +321,19 @@ public class WebResourcesValidationPreferencePage extends
 
 	@Override
 	public void init(IWorkbench workbench) {
+	}
+
+	/**
+	 * Returns true in case of the Attribute Names to ignore preferences is
+	 * changed causing the full validation to be requested.
+	 */
+	@Override
+	protected boolean shouldRevalidateOnSettingsChange() {
+
+		BooleanData ignoreData = (BooleanData) validateExternalURL.getData();
+		if (ignoreData.isChanged())
+			return true;
+
+		return super.shouldRevalidateOnSettingsChange();
 	}
 }
