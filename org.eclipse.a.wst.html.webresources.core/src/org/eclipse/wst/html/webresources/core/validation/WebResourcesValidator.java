@@ -459,9 +459,11 @@ public class WebResourcesValidator extends AbstractValidator implements
 		if (attr != null) {
 			String attrValue = DOMHelper.getAttrValue(documentRegion
 					.getText(attrValueRegion.getRegion()));
-			if (attrValue.startsWith("data:")) {
+			if (DOMHelper.isDataURIScheme(attrValue)) {
 				// see https://en.wikipedia.org/wiki/Data_URI_scheme
-				// ex : <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
+				// ex : <img
+				// src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+				// alt="Red dot" />
 				// TODO : validate format of data uri scheme.
 			} else {
 				// ex : <img src="path/to/image.png" />
