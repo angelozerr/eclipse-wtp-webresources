@@ -82,7 +82,7 @@ public class HTMLWebResourcesPrinter {
 	public static String getAdditionalProposalInfo(IResource resource,
 			WebResourceType type) {
 		StringBuffer buffer = new StringBuffer();
-		ImageDescriptor descriptor = ResourceHelper
+		ImageDescriptor descriptor = ResourceUIHelper
 				.getFileTypeImageDescriptor(resource);
 		startPage(buffer, getTitle(resource), descriptor);
 		buffer.append("<hr />");
@@ -92,7 +92,7 @@ public class HTMLWebResourcesPrinter {
 			buffer.append(resource.getLocation().toString());
 			buffer.append("\" />");
 			// Hack to generate an well height for the browser input control.
-			Integer imageHeight = ResourceHelper.getImageHeight(resource);
+			Integer imageHeight = ResourceUIHelper.getImageHeight(resource);
 			long length = Math
 					.round((double) (imageHeight != null ? imageHeight : 16) / 16);
 			for (int i = 0; i < length; i++) {
