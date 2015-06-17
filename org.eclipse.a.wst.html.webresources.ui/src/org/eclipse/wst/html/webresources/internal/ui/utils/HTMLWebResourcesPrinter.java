@@ -68,9 +68,9 @@ public class HTMLWebResourcesPrinter {
 			buffer.append("\" />");
 			// Hack to generate an well height for the browser input control.
 			Integer imageHeight = ResourceHelper.getImageHeight(resource);
-			long lengh = Math.round((double) (imageHeight != null ? imageHeight
+			long length = Math.round((double) (imageHeight != null ? imageHeight
 					: 16) / 16);
-			for (int i = 0; i < lengh; i++) {
+			for (int i = 0; i < length; i++) {
 				buffer.append("<p>&nbsp;</p>");
 			}
 		}
