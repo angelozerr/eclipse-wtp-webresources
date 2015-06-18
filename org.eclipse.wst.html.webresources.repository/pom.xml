@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>fr.opensagres.eclipse.wtp</groupId>
 		<artifactId>eclipse-wtp-webresources</artifactId>
-		<version>0.10.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<!-- https://github.com/jutzig/github-release-plugin/issues/14 -->
 	<scm>
