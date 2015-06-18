@@ -45,6 +45,31 @@ public class HTMLWebResourcesPrinter {
 	 */
 	private static String fgStyleSheet;
 
+	// ---------------------------- HTML info for Image
+
+	/**
+	 * Returns the information of the given data:image/png;base64.
+	 * 
+	 * @param data
+	 * @return the information of the given data:image/png;base64.
+	 */
+	public static String getAdditionalProposalInfo(String data) {
+		StringBuffer buffer = new StringBuffer();
+		ImageDescriptor descriptor = null;
+		startPage(buffer, "", descriptor);
+		buffer.append("<hr />");
+		// resource is an image, display it.
+		buffer.append("<img src=\"");
+		buffer.append(data);
+		buffer.append("\" />");
+		long length = 1;
+		for (int i = 0; i < length; i++) {
+			buffer.append("<p>&nbsp;</p>");
+		}
+		endPage(buffer);
+		return buffer.toString();
+	}
+
 	// ---------------------------- HTML info for IResource
 
 	/**
@@ -57,7 +82,7 @@ public class HTMLWebResourcesPrinter {
 	public static String getAdditionalProposalInfo(IResource resource,
 			WebResourceType type) {
 		StringBuffer buffer = new StringBuffer();
-		ImageDescriptor descriptor = ResourceHelper
+		ImageDescriptor descriptor = ResourceUIHelper
 				.getFileTypeImageDescriptor(resource);
 		startPage(buffer, getTitle(resource), descriptor);
 		buffer.append("<hr />");
@@ -67,10 +92,10 @@ public class HTMLWebResourcesPrinter {
 			buffer.append(resource.getLocation().toString());
 			buffer.append("\" />");
 			// Hack to generate an well height for the browser input control.
-			Integer imageHeight = ResourceHelper.getImageHeight(resource);
-			long lengh = Math.round((double) (imageHeight != null ? imageHeight
-					: 16) / 16);
-			for (int i = 0; i < lengh; i++) {
+			Integer imageHeight = ResourceUIHelper.getImageHeight(resource);
+			long length = Math
+					.round((double) (imageHeight != null ? imageHeight : 16) / 16);
+			for (int i = 0; i < length; i++) {
 				buffer.append("<p>&nbsp;</p>");
 			}
 		}

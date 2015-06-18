@@ -43,20 +43,19 @@ public final class WebResourcesUIMessages extends NLS {
 	public static String WebResourcesValidationPreferencePage_FILE_IMG_UNKNOWN;
 	public static String WebResourcesValidationPreferencePage_CSS_CLASS_UNKNOWN;
 	public static String WebResourcesValidationPreferencePage_CSS_ID_UNKNOWN;
+	public static String WebResourcesValidationPreferencePage_EXTERNAL_URL_UNKWOWN;
 
 	// CSS preferences
 	public static String CSSPreferencesPage_searchInAllCSSFiles_label;
-	
+
 	// Web Root Folders Property Page
 	public static String WebRootFoldersPropertyPage_description;
 	public static String WebRootFoldersPropertyPage_select;
-	
+
 	// Quick fix
 	public static String CreateFileCompletionProposal_errorTitle;
 	public static String CreateFileCompletionProposal_errorMessage;
 	public static String CreateFileCompletionProposal_displayString;
-
-
 
 	private WebResourcesUIMessages() {
 	}

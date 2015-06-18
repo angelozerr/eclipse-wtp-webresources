@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.wst.html.webresources.core.WebResourceRegion;
-import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;
 import org.eclipse.wst.html.webresources.core.WebResourcesTextRegion;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
@@ -41,6 +40,7 @@ import org.eclipse.wst.html.webresources.core.providers.WebResourceKind;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
+import org.eclipse.wst.html.webresources.core.utils.URIHelper;
 import org.eclipse.wst.html.webresources.internal.core.Trace;
 import org.eclipse.wst.html.webresources.internal.core.validation.CSSClassNameValidationTraverser;
 import org.eclipse.wst.html.webresources.internal.core.validation.CSSIdValidationTraverser;
@@ -387,8 +387,11 @@ public class WebResourcesValidator extends AbstractValidator implements
 					break;
 				case SCRIPT_SRC:
 				case LINK_HREF:
-				case IMG_SRC:
 					validateFile(documentRegion, reporter, model, file,
+							factory, attrValueRegion, finderType);
+					break;
+				case IMG_SRC:
+					validateImage(documentRegion, reporter, model, file,
 							factory, attrValueRegion, finderType);
 					break;
 				}
@@ -396,7 +399,18 @@ public class WebResourcesValidator extends AbstractValidator implements
 		}
 	}
 
-	protected void validateCSS(IStructuredDocumentRegion documentRegion,
+	/**
+	 * Validate CSS class name and ids.
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param monitor
+	 */
+	private void validateCSS(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			IProgressMonitor monitor) {
@@ -407,24 +421,42 @@ public class WebResourcesValidator extends AbstractValidator implements
 						documentRegion.getParentDocument(), startOffset);
 		IDOMAttr attr = DOMHelper.getAttrByOffset(model, startOffset);
 		if (attr != null) {
-			switch (hoverRegion.getType()) {
-			case CSS_ID:
-				// Validate CSS/@id
-				CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
-						attr, file, hoverRegion, factory);
-				cssIdTraverser.process(monitor);
-				break;
-			case CSS_CLASS_NAME:
-				// Validate CSS/@class
-				CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
-						attr, file, hoverRegion, factory);
-				cssClassNameTraverser.process(monitor);
-				break;
+			WebResourcesFinderType finderType = attrValueRegion.getType();
+			WebResourcesContext context = new WebResourcesContext(attr,
+					hoverRegion.getType());
+			if (!shouldIgnoreValidation(context, finderType)) {
+				switch (hoverRegion.getType()) {
+				case CSS_ID:
+					// Validate CSS/@id
+					CSSIdValidationTraverser cssIdTraverser = new CSSIdValidationTraverser(
+							attr, file, hoverRegion, factory);
+					cssIdTraverser.process(monitor);
+					break;
+				case CSS_CLASS_NAME:
+					// Validate CSS/@class
+
+					CSSClassNameValidationTraverser cssClassNameTraverser = new CSSClassNameValidationTraverser(
+							attr, file, hoverRegion, factory);
+					cssClassNameTraverser.process(monitor);
+
+					break;
+				}
 			}
 		}
 	}
 
-	public void validateFile(IStructuredDocumentRegion documentRegion,
+	/**
+	 * Validate img/@src
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param resourceType
+	 */
+	private void validateImage(IStructuredDocumentRegion documentRegion,
 			IReporter reporter, IStructuredModel model, IFile file,
 			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
 			WebResourcesFinderType resourceType) {
@@ -434,16 +466,59 @@ public class WebResourcesValidator extends AbstractValidator implements
 		if (attr != null) {
 			String attrValue = DOMHelper.getAttrValue(documentRegion
 					.getText(attrValueRegion.getRegion()));
+			if (URIHelper.isDataURIScheme(attrValue)) {
+				// see https://en.wikipedia.org/wiki/Data_URI_scheme
+				// ex : <img
+				// src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+				// alt="Red dot" />
+				// TODO : validate format of data uri scheme.
+			} else {
+				// ex : <img src="path/to/image.png" />
+				validateFile(documentRegion, reporter, model, file, factory,
+						attrValueRegion, resourceType);
+			}
+		}
+	}
 
+	/**
+	 * Validate existing of the file.
+	 * 
+	 * @param documentRegion
+	 * @param reporter
+	 * @param model
+	 * @param file
+	 * @param factory
+	 * @param attrValueRegion
+	 * @param resourceType
+	 */
+	private void validateFile(IStructuredDocumentRegion documentRegion,
+			IReporter reporter, IStructuredModel model, IFile file,
+			MessageFactory factory, WebResourcesTextRegion attrValueRegion,
+			WebResourcesFinderType resourceType) {
+		IDOMAttr attr = DOMHelper.getAttrByOffset(model,
+				documentRegion.getStartOffset()
+						+ attrValueRegion.getRegion().getStart());
+		if (attr != null) {
+			String attrValue = DOMHelper.getAttrValue(documentRegion
+					.getText(attrValueRegion.getRegion()));
+			WebResourcesFinderType finderType = attrValueRegion.getType();
 			WebResourcesContext context = new WebResourcesContext(attr,
 					resourceType);
-			WebResourcesFinderType finderType = attrValueRegion.getType();
 			if (!shouldIgnoreValidation(context, finderType)) {
-				if (!WebResourcesProvidersManager.getInstance().exists(
+				if (URIHelper.isExternalURL(attrValue)) {
+					// attribute value starts with http or //, validate the URL
+					// if need
+					if (factory.isValidateExternalURL()
+							&& !URIHelper.validateExternalURL(attrValue)) {
+						factory.addMessage(attr, finderType, file, true);
+					}
+				} else if (!WebResourcesProvidersManager.getInstance().exists(
 						attrValue, context)) {
+					// validate file
 					factory.addMessage(attr, finderType, file);
 				}
 			}
+
 		}
 	}
 

@@ -10,6 +10,9 @@
  */
 package org.eclipse.wst.html.webresources.core.validation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -43,20 +46,19 @@ public class MessageFactory {
 
 	private final IValidator validator;
 	private final IReporter reporter;
-	private final IProject fProject;
-	private IScopeContext[] fLookupOrder;
-	private IPreferencesService fPreferenceService;
+	private final Map<WebResourcesFinderType, Integer> severities;
+	private final boolean validateExternalURL;
 
 	public MessageFactory(IProject project, IValidator validator,
 			IReporter reporter) {
-		fProject = project;
 		this.validator = validator;
 		this.reporter = reporter;
-		init();
+		this.severities = new HashMap<WebResourcesFinderType, Integer>();
+		this.validateExternalURL = init(project, severities);
 	}
 
 	public int getSeverity(WebResourcesFinderType type) {
-		return getSeverity(getPreferenceName(type));
+		return severities.get(type);
 	}
 
 	private String getPreferenceName(WebResourcesFinderType type) {
@@ -75,26 +77,43 @@ public class MessageFactory {
 		return null;
 	}
 
-	private int getSeverity(String key) {
-		return fPreferenceService.getInt(getQualifier(), key,
-				ValidationMessage.WARNING, fLookupOrder);
-	}
+	private boolean init(IProject project,
+			Map<WebResourcesFinderType, Integer> severities) {
+		IPreferencesService preferenceService = Platform
+				.getPreferencesService();
+		IScopeContext[] lookupOrder = new IScopeContext[] {
+				new InstanceScope(), new DefaultScope() };
 
-	private void init() {
-		fPreferenceService = Platform.getPreferencesService();
-		fLookupOrder = new IScopeContext[] { new InstanceScope(),
-				new DefaultScope() };
-
-		if (fProject != null) {
-			ProjectScope projectScope = new ProjectScope(fProject);
+		if (project != null) {
+			ProjectScope projectScope = new ProjectScope(project);
 			if (projectScope
 					.getNode(getQualifier())
 					.getBoolean(
 							WebResourcesCorePreferenceNames.VALIDATION_USE_PROJECT_SETTINGS,
 							false))
-				fLookupOrder = new IScopeContext[] { projectScope,
+				lookupOrder = new IScopeContext[] { projectScope,
 						new InstanceScope(), new DefaultScope() };
 		}
+		WebResourcesFinderType[] types = WebResourcesFinderType.values();
+		WebResourcesFinderType type = null;
+		for (int i = 0; i < types.length; i++) {
+			type = types[i];
+			severities.put(
+					type,
+					getSeverity(getPreferenceName(type), preferenceService,
+							lookupOrder));
+		}
+
+		return preferenceService.getBoolean(getQualifier(),
+				WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN,
+				WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN_DEFAULT,
+				lookupOrder);
+	}
+
+	private int getSeverity(String key, IPreferencesService preferenceService,
+			IScopeContext[] lookupOrder) {
+		return preferenceService.getInt(getQualifier(), key,
+				ValidationMessage.WARNING, lookupOrder);
 	}
 
 	private String getQualifier() {
@@ -104,39 +123,52 @@ public class MessageFactory {
 
 	public void addMessage(IDOMAttr attr, WebResourcesFinderType type,
 			IFile file) {
+		addMessage(attr, type, file, false);
+	}
+
+	public void addMessage(IDOMAttr attr, WebResourcesFinderType type,
+			IFile file, boolean externalURL) {
 		String textContent = attr.getValueRegionText();
 		int start = attr.getValueRegionStartOffset();
-		addMessage(attr, start, textContent, type, file);
+		addMessage(attr, start, textContent, type, file, externalURL);
 	}
 
 	public void addMessage(IDOMAttr node, int start, String textContent,
 			WebResourcesFinderType type, IResource resource) {
+		addMessage(node, start, textContent, type, resource, false);
+	}
+
+	public void addMessage(IDOMAttr node, int start, String textContent,
+			WebResourcesFinderType type, IResource resource, boolean externalURL) {
 		int length = textContent.trim().length();
-		String messageText = NLS.bind(getMessageText(type), textContent);
+		String messageText = NLS.bind(getMessageText(type, externalURL),
+				textContent);
 		int severity = getSeverity(type);
 		IMessage message = createMessage(start, length, messageText, severity,
 				node.getStructuredDocument(), resource);
-
 		addMessage(message, type);
-
 	}
 
 	protected void addMessage(IMessage message, WebResourcesFinderType type) {
 		reporter.addMessage(validator, message);
 	}
 
-	private String getMessageText(WebResourcesFinderType type) {
+	private String getMessageText(WebResourcesFinderType type,
+			boolean externalURL) {
 		switch (type) {
 		case CSS_CLASS_NAME:
 			return WebResourcesValidationMessages.Validation_CSS_CLASS_UNDEFINED;
 		case CSS_ID:
 			return WebResourcesValidationMessages.Validation_CSS_ID_UNDEFINED;
 		case SCRIPT_SRC:
-			return WebResourcesValidationMessages.Validation_FILE_JS_UNDEFINED;
+			return externalURL ? WebResourcesValidationMessages.Validation_URL_JS_UNDEFINED
+					: WebResourcesValidationMessages.Validation_FILE_JS_UNDEFINED;
 		case LINK_HREF:
-			return WebResourcesValidationMessages.Validation_FILE_CSS_UNDEFINED;
+			return externalURL ? WebResourcesValidationMessages.Validation_URL_CSS_UNDEFINED
+					: WebResourcesValidationMessages.Validation_FILE_CSS_UNDEFINED;
 		case IMG_SRC:
-			return WebResourcesValidationMessages.Validation_FILE_IMG_UNDEFINED;
+			return externalURL ? WebResourcesValidationMessages.Validation_URL_IMG_UNDEFINED
+					: WebResourcesValidationMessages.Validation_FILE_IMG_UNDEFINED;
 		}
 		return null;
 	}
@@ -169,5 +201,9 @@ public class MessageFactory {
 
 	protected IReporter getReporter() {
 		return reporter;
+	}
+
+	public boolean isValidateExternalURL() {
+		return validateExternalURL;
 	}
 }

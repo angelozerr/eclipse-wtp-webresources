@@ -51,6 +51,9 @@ public class WebResourcesCorePreferenceInitializer extends
 				ValidationMessage.WARNING);
 		node.putInt(WebResourcesCorePreferenceNames.CSS_ID_UNKWOWN,
 				ValidationMessage.IGNORE);
+
+		node.putBoolean(WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN,
+				WebResourcesCorePreferenceNames.EXTERNAL_URL_UNKWOWN_DEFAULT);
 	}
 
 	private void initializeSearchPreferences(IEclipsePreferences node) {

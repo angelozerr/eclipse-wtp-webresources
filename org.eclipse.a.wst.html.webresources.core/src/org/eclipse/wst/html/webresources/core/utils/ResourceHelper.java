@@ -15,32 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.ui.model.IWorkbenchAdapter;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
-import org.eclipse.wst.html.webresources.internal.core.Trace;
 
 /**
  * Helper for {@link IResource}.
  */
 public class ResourceHelper {
-
-	private static final ResourceLabelProvider LABEL_PROVIDER = new ResourceLabelProvider();
-
-	static class ResourceLabelProvider extends WorkbenchLabelProvider {
-
-		public ImageDescriptor getImageDescriptor(IResource resource) {
-			IWorkbenchAdapter adapter = super.getAdapter(resource);
-			if (adapter == null) {
-				return null;
-			}
-			return adapter.getImageDescriptor(resource);
-
-		}
-	};
 
 	private final static Collection<String> IMG_EXTENSIONS;
 
@@ -64,26 +44,6 @@ public class ResourceHelper {
 		CSS_EXTENSIONS = new ArrayList<String>();
 		CSS_EXTENSIONS.add("css");
 		CSS_EXTENSIONS.add("scss");
-	}
-
-	/**
-	 * Returns the image file type of the given file.
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	public static Image getFileTypeImage(IResource resource) {
-		return LABEL_PROVIDER.getImage(resource);
-	}
-
-	/**
-	 * Returns the image descriptor file type of the given file.
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	public static ImageDescriptor getFileTypeImageDescriptor(IResource resource) {
-		return LABEL_PROVIDER.getImageDescriptor(resource);
 	}
 
 	/**
@@ -174,27 +134,6 @@ public class ResourceHelper {
 			return IMG_EXTENSIONS.contains(extension.toLowerCase());
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the image height of the given image resource and null if the
-	 * height cannot be retrieved.
-	 * 
-	 * @param resource
-	 * @return the image height of the given image resource and null if the
-	 *         height cannot be retrieved.
-	 */
-	public static Integer getImageHeight(IResource resource) {
-		String filename = null;
-		try {
-			filename = resource.getLocation().toOSString();
-			ImageData data = new ImageData(filename);
-			return data.height;
-		} catch (Throwable e) {
-			Trace.trace(Trace.INFO, "Error while getting image height of "
-					+ filename, e);
-		}
-		return null;
 	}
 
 }

@@ -314,7 +314,8 @@ public class DOMHelper {
 	private static IDOMAttr getAttrByOffset(IndexedRegion node, int offset) {
 		NamedNodeMap attrs = ((IDOMNode) node).getAttributes();
 		if (attrs == null) {
-			// see https://github.com/angelozerr/eclipse-wtp-webresources/issues/34
+			// see
+			// https://github.com/angelozerr/eclipse-wtp-webresources/issues/34
 			return null;
 		}
 		for (int i = 0; i < attrs.getLength(); i++) {
@@ -385,5 +386,4 @@ public class DOMHelper {
 		}
 		return (IDOMNode) node;
 	}
-
 }

@@ -31,15 +31,13 @@ public class DefaultURIResolver implements IURIResolver {
 
 	@Override
 	public boolean exists(String uri, IFile root) {
-		if (uri.startsWith("http")) {
-			// TODO : validate http web resources
-			return true;
-		} else if (uri.startsWith("/")) {
+		if (uri.startsWith("/")) {
 			IProject project = root.getProject();
 			String[] webRootFolders = WebRootFolders.getWebRootFolders(project);
 			for (String webRootFolder : webRootFolders) {
 				IResource resource = project.findMember(webRootFolder);
-				if (resource instanceof IContainer && ((IContainer) resource).exists(new Path(uri))) {
+				if (resource instanceof IContainer
+						&& ((IContainer) resource).exists(new Path(uri))) {
 					return true;
 				}
 			}

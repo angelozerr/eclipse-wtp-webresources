@@ -25,7 +25,7 @@ import org.eclipse.wst.html.webresources.core.providers.WebResourcesCollectorAda
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
-import org.eclipse.wst.html.webresources.core.utils.ResourceHelper;
+import org.eclipse.wst.html.webresources.internal.ui.utils.ResourceUIHelper;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -144,7 +144,7 @@ public class WebResourcesCompletionProposalComputer extends
 								 */
 								String displayString = fileName;
 								int cursorPosition = fileName.length();
-								Image image = ResourceHelper
+								Image image = ResourceUIHelper
 										.getFileTypeImage(resource);
 								ICompletionProposal proposal = new FileWebResourcesCompletionProposal(
 										fileName, replacementOffset,

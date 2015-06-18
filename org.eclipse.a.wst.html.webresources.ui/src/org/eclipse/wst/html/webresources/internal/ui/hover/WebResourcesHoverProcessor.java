@@ -23,6 +23,8 @@ import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.WebResourcesProvidersManager;
 import org.eclipse.wst.html.webresources.core.utils.DOMHelper;
+import org.eclipse.wst.html.webresources.core.utils.URIHelper;
+import org.eclipse.wst.html.webresources.internal.ui.utils.HTMLWebResourcesPrinter;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.sse.ui.internal.taginfo.AbstractHoverProcessor;
@@ -112,6 +114,8 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 		case CSS_CLASS_NAME:
 		case CSS_ID:
 			return getCSSHoverInfo(resourceRegion, xmlnode, monitor);
+		case IMG_SRC:
+			return getImageHoverInfo(resourceRegion, xmlnode, monitor);
 		default:
 			return getFileHoverInfo(resourceRegion, xmlnode, monitor);
 		}
@@ -123,6 +127,16 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 				hoverRegion);
 		traverser.process(monitor);
 		return traverser.getInfo();
+	}
+
+	private String getImageHoverInfo(WebResourceRegion resourceRegion,
+			IDOMNode xmlnode, IProgressMonitor monitor) {
+		String attrValue = resourceRegion.getValue();
+		if (URIHelper.isDataURIScheme(attrValue)) {
+			// value contains data:
+			return HTMLWebResourcesPrinter.getAdditionalProposalInfo(attrValue);
+		}
+		return getFileHoverInfo(resourceRegion, xmlnode, monitor);
 	}
 
 	private String getFileHoverInfo(WebResourceRegion resourceRegion,
