@@ -64,6 +64,7 @@ If plugin uses org.eclipse.wst.webresources.ui, it's org.eclipse.jst.jsf.facelet
 
 # Who is using Eclipse WTP WebResources?
 
+ * [Enide by Nodeclipse](http://www.nodeclipse.org/enide/studio/)
  * [Liferay IDE](https://github.com/liferay/liferay-ide)
  * [Zend Studio](http://www.zend.com/products/studio)
  
