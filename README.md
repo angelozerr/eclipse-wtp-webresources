@@ -48,7 +48,7 @@ and completion :
 
 # Installation
 
-Eclipse WTP Web Resources is developed/tested with Eclipse 4.4 Luna. It is advised to use Eclipse 4.4 Luna (even if it could work with older version of Eclipse).
+Eclipse WTP Web Resources is developed/tested with Eclipse 4.5 Mars. It is advised to use this Eclipse JEE version (even if it could work with older version of Eclipse).
 
 To install Eclipse WTP Web Resources, please read [Installation - Update Site](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/Installation-Update-Site) section.
 
