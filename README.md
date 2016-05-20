@@ -10,9 +10,9 @@ Eclipse WTP provides HTML editor with several completions (tags, CSS styles decl
  * CSS resources files completion, hover, validation for link/@href.
  * Images resources files completion, hover, validation for img/@src.
    
-# CSS#class & CSS#ID
-
 See [wiki](https://github.com/angelozerr/eclipse-wtp-webresources/wiki) to see more explanation about the features of Eclipse WTP WebResources.
+
+# CSS#class & CSS#ID
 
 ## Completion for CSS Class name
 
