@@ -45,6 +45,8 @@ import org.w3c.dom.NamedNodeMap;
  */
 public class DOMHelper {
 
+	private DOMHelper() {}
+
 	/**
 	 * Returns the "@class", "@id", "script/@src", "link/@href" or , "img/@src"
 	 * attribute value region from the given document region and position and

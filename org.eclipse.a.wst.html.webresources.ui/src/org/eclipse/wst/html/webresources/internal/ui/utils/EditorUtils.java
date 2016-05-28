@@ -35,6 +35,8 @@ import org.eclipse.wst.html.webresources.internal.ui.WebResourcesUIPlugin;
  */
 public class EditorUtils {
 
+	private EditorUtils() {}
+
 	public static IEditorPart openInEditor(IFile file, int start, int length,
 			boolean activate) {
 		IEditorPart editor = null;

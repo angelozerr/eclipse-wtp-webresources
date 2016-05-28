@@ -24,6 +24,8 @@ public class WebRootFolders {
 	public static final QualifiedName PROPERTY_KEY = new QualifiedName(
 			WebResourcesCorePlugin.PLUGIN_ID, WebRootFolders.class.getName());
 
+	private WebRootFolders() {}
+
 	public static String[] getWebRootFolders(IProject project) {
 		String value = null;
 

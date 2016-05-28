@@ -37,6 +37,8 @@ public class ResourceUIHelper {
 		}
 	};
 
+	private ResourceUIHelper() {}
+
 	/**
 	 * Returns the image file type of the given file.
 	 * 

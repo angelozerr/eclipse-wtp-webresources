@@ -19,6 +19,8 @@ import org.eclipse.jface.text.IDocument;
  */
 public class CSSClassNameFinder {
 
+	private CSSClassNameFinder() {}
+
 	public static WebResourceRegion findClassName(IDocument document,
 			int offset, int startOffset, int endOffset) {
 

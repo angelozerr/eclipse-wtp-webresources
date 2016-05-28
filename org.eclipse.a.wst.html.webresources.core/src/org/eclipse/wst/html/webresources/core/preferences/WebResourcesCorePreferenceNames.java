@@ -33,6 +33,5 @@ public class WebResourcesCorePreferenceNames {
 	public static final String CSS_USE_PROJECT_SETTINGS = "css-use-project-settings";//$NON-NLS-1$
 	public static final String SEARCH_IN_ALL_CSS_FILES_IF_NO_LINKS = "search-in-all-css-files-if-no-links"; //$NON-NLS-1$
 
-
-	
+	private WebResourcesCorePreferenceNames() {}
 }
