@@ -100,6 +100,8 @@ public class WebResourcesHoverProcessor extends AbstractHoverProcessor
 			case IMG_SRC:
 				return DOMHelper.getAttrValueRegion(attrValueRegion,
 						documentRegion, textViewer.getDocument(), offset);
+			default:
+				break;
 			}
 		}
 		return null;

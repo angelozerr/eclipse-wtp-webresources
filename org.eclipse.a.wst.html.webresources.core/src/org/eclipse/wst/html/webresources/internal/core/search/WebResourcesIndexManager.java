@@ -66,6 +66,8 @@ public class WebResourcesIndexManager extends AbstractIndexManager {
 			return !name.equals(BIN_FOLDER) && !name.startsWith(".");
 		case IResource.FILE:
 			return ResourceHelper.isWebResource(name);
+		default:
+			break;
 		}
 		return false;
 	}
@@ -94,6 +96,8 @@ public class WebResourcesIndexManager extends AbstractIndexManager {
 				case AbstractIndexManager.ACTION_REMOVE:
 					// remove (css, img or js) file
 					configuration.removeWebResource(container, resourceType);
+					break;
+				default:
 					break;
 				}
 			} catch (CoreException e) {

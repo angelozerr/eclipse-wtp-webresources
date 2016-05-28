@@ -74,6 +74,8 @@ public class WebResourcesProxyVisitor implements IResourceProxyVisitor {
 					stop = true;
 				}
 			}
+		default:
+			break;
 		}
 		return !stop;
 	}

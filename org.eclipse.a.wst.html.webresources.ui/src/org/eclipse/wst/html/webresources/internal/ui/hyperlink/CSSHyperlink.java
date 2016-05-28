@@ -95,6 +95,8 @@ public class CSSHyperlink implements IHyperlink {
 				}
 			}
 			break;
+		default:
+			break;
 		}
 	}
 }

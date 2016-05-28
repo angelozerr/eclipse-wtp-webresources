@@ -185,6 +185,8 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 			return DOMHelper.getModel((IFile) resource);
 		case FILESYSTEM:
 			return DOMHelper.getModel((File) resource);
+		default:
+			break;
 		}
 		return null;
 	}
