@@ -41,8 +41,6 @@ public class CSSWebResourcesPropertyPage extends PropertyPreferencePage {
 	private Button searchInAllCSSFilesCheckbox;
 
 	public CSSWebResourcesPropertyPage() {
-		// setImageDescriptor(ImageResource
-		// .getImageDescriptor(ImageResource.IMG_CSS_CLASSNAME));
 		fPreferencesService = Platform.getPreferencesService();
 	}
 

@@ -213,19 +213,7 @@ public class WebResourcesValidator extends AbstractValidator implements
 			if (model.getDocument() instanceof NodeImpl) {
 				document = (NodeImpl) model.getDocument();
 			}
-			/*
-			 * if (result != null && document != null) { dependencies = new
-			 * HashSet();
-			 * document.setUserData(HTMLValidationAdapterFactory.DEPENDENCIES,
-			 * dependencies, null); }
-			 */
 			validate(reporter, file, model);
-			/*
-			 * if (result != null && document != null) {
-			 * document.setUserData(HTMLValidationAdapterFactory.DEPENDENCIES,
-			 * null, null); result.setDependsOn((IResource[]) dependencies
-			 * .toArray(new IResource[dependencies.size()])); }
-			 */
 		} finally {
 			releaseModel(model);
 		}
@@ -305,7 +293,6 @@ public class WebResourcesValidator extends AbstractValidator implements
 			} catch (CoreException e) {
 				// should be rare, but will ignore to avoid logging "encoding
 				// exceptions" and the like here.
-				// Logger.logException(e);
 			}
 		}
 		return result;

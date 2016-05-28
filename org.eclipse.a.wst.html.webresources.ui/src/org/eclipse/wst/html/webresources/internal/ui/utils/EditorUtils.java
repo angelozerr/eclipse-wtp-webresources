@@ -51,7 +51,6 @@ public class EditorUtils {
 				if (textEditor != null) {
 					IDocument document = textEditor.getDocumentProvider()
 							.getDocument(editor.getEditorInput());
-					// int start = document.getLineOffset(line - 1);
 					textEditor.selectAndReveal(start, length);
 					page.activate(editor);
 				} else {
@@ -86,7 +85,6 @@ public class EditorUtils {
 				if (textEditor != null) {
 					IDocument document = textEditor.getDocumentProvider()
 							.getDocument(editor.getEditorInput());
-					// int start = document.getLineOffset(line - 1);
 					textEditor.selectAndReveal(start, length);
 					page.activate(editor);
 				}

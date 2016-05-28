@@ -62,7 +62,6 @@ public class WebResourcesCorePlugin extends Plugin {
 		this.fPluginInitializerJob = new PluginInitializerJob();
 		// schedule delayed initialization
 		this.fPluginInitializerJob.schedule(2000);
-		//WebResourcesFileManager.getInstance().initialize();
 		WebResourcesFinderTypeProviderManager.getManager().initialize();
 	}
 
@@ -74,7 +73,6 @@ public class WebResourcesCorePlugin extends Plugin {
 	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
-		//WebResourcesFileManager.getInstance().dispose();
 		WebResourcesFinderTypeProviderManager.getManager().destroy();
 		// stop any indexing
 		WebResourcesIndexManager.getDefault().stop();
@@ -162,7 +160,6 @@ public class WebResourcesCorePlugin extends Plugin {
 
 						// if there is a saved state start up using that, else
 						// start up cold
-						//if (savedState != null) {
 						if (false) {
 							try {
 								Thread.currentThread().setPriority(

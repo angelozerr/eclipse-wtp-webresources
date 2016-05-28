@@ -88,7 +88,6 @@ public class WebResourcesIndexManager extends AbstractIndexManager {
 				switch (action) {
 				case AbstractIndexManager.ACTION_ADD:
 					// add (css, img or js) file
-					// System.err.println(resource.getLocation());
 					configuration.addWebResource(container, resourceType);
 					break;
 				case AbstractIndexManager.ACTION_REMOVE:

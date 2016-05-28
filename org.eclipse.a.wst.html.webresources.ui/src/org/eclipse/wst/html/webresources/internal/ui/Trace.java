@@ -74,14 +74,11 @@ public class Trace {
 			return;
 
 		if (level == SEVERE) {
-			// if (!logged.contains(s)) {
 			WebResourcesUIPlugin
 					.getDefault()
 					.getLog()
 					.log(new Status(IStatus.ERROR, WebResourcesUIPlugin.PLUGIN_ID,
 							s, t));
-			// logged.add(s);
-			// }
 		}
 
 		if (!WebResourcesUIPlugin.getDefault().isDebugging())
