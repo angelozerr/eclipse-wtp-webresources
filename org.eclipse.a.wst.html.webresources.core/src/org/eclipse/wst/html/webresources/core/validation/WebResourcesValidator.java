@@ -394,6 +394,8 @@ public class WebResourcesValidator extends AbstractValidator implements
 					validateImage(documentRegion, reporter, model, file,
 							factory, attrValueRegion, finderType);
 					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -439,6 +441,8 @@ public class WebResourcesValidator extends AbstractValidator implements
 							attr, file, hoverRegion, factory);
 					cssClassNameTraverser.process(monitor);
 
+					break;
+				default:
 					break;
 				}
 			}

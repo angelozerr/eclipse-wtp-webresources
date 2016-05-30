@@ -132,6 +132,8 @@ public class ResourceHelper {
 			return resourceType.name().equalsIgnoreCase(extension);
 		case img:
 			return IMG_EXTENSIONS.contains(extension.toLowerCase());
+		default:
+			break;
 		}
 		return false;
 	}

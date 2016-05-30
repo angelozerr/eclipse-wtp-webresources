@@ -73,6 +73,8 @@ public class MessageFactory {
 			return WebResourcesCorePreferenceNames.FILE_CSS_UNKNOWN;
 		case IMG_SRC:
 			return WebResourcesCorePreferenceNames.FILE_IMG_UNKNOWN;
+		default:
+			break;
 		}
 		return null;
 	}
@@ -169,6 +171,8 @@ public class MessageFactory {
 		case IMG_SRC:
 			return externalURL ? WebResourcesValidationMessages.Validation_URL_IMG_UNDEFINED
 					: WebResourcesValidationMessages.Validation_FILE_IMG_UNDEFINED;
+		default:
+			break;
 		}
 		return null;
 	}

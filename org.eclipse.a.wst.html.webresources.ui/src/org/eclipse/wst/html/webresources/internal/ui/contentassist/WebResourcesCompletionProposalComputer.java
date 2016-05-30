@@ -75,6 +75,8 @@ public class WebResourcesCompletionProposalComputer extends
 				processFilesCompletion(contentAssistRequest, context,
 						attrValue, attrValueRegion, monitor);
 				break;
+			default:
+				break;
 			}
 
 		}
