@@ -45,6 +45,8 @@ public class HTMLWebResourcesPrinter {
 	 */
 	private static String fgStyleSheet;
 
+	private HTMLWebResourcesPrinter() {}
+
 	// ---------------------------- HTML info for Image
 
 	/**

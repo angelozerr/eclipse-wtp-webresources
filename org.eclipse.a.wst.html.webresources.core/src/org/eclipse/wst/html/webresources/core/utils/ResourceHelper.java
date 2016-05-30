@@ -46,6 +46,8 @@ public class ResourceHelper {
 		CSS_EXTENSIONS.add("scss");
 	}
 
+	private ResourceHelper() {}
+
 	/**
 	 * Returns the web resource type of the given resource and null otherwise.
 	 * 

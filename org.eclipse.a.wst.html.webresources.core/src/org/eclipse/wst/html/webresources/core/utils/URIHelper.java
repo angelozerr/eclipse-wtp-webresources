@@ -28,6 +28,8 @@ public class URIHelper {
 
 	private static final String DOUBLE_SLASH = "//";
 
+	private URIHelper() {}
+
 	/**
 	 * Returns true if the given uri is a data URI scheme and false otherwise.
 	 * 
