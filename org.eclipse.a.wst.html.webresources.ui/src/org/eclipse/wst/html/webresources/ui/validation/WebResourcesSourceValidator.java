@@ -76,7 +76,6 @@ public class WebResourcesSourceValidator extends WebResourcesValidator
 
 			if (document == null /* || !hasHTMLFeature(document) */) {
 				// handled in finally clause
-				// model.releaseFromRead();
 				return; // ignore
 			}
 

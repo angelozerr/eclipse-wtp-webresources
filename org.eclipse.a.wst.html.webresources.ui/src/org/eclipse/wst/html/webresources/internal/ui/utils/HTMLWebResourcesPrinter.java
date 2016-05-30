@@ -194,14 +194,6 @@ public class HTMLWebResourcesPrinter {
 
 		buf.append("'>"); //$NON-NLS-1$
 		if (imageSrcPath != null) {
-			/*
-			 * if (element != null) { // try { // String uri = ""; // TODO //
-			 * JavaElementLinks.createURI(JavaElementLinks.OPEN_LINK_SCHEME, //
-			 * element); //buf.append("<a href='").append(uri).append("'>");
-			 * //$NON-NLS-1$//$NON-NLS-2$ /* } catch (URISyntaxException e) {
-			 * element= null; // no link }
-			 */
-			// }
 			StringBuffer imageStyle = new StringBuffer(
 					"border:none; position: absolute; "); //$NON-NLS-1$
 			imageStyle.append("width: ").append(imageWidth).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
@@ -222,9 +214,6 @@ public class HTMLWebResourcesPrinter {
 			buf.append("<!--[if gte IE 7]>\n"); //$NON-NLS-1$
 			buf.append("<img ").append(tooltip).append("style='").append(imageStyle).append("' src='").append(imageSrcPath).append("'/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			buf.append("<![endif]-->\n"); //$NON-NLS-1$
-			// if (element != null) {
-			//	buf.append("</a>"); //$NON-NLS-1$
-			// }
 		}
 		buf.append(title);
 

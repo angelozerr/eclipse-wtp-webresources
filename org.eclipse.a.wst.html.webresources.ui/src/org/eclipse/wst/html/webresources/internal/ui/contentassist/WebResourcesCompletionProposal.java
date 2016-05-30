@@ -58,7 +58,7 @@ public class WebResourcesCompletionProposal extends CustomCompletionProposal
 
 	@Override
 	public int getPrefixCompletionStart(IDocument document, int completionOffset) {
-		return 1;// getReplacementOffset();
+		return 1;
 	}
 
 	@Override
@@ -70,22 +70,6 @@ public class WebResourcesCompletionProposal extends CustomCompletionProposal
 	@Override
 	public int getRelevance() {
 		return 0;
-		/*int relevance = 0;
-		/*char c;
-		char[] ch = getReplacementString().toCharArray();
-		for (int i = 0; i < ch.length; i++) {
-			c = ch[i];
-			relevance += c;
-			if (c == '/') {
-				// relevance++;
-				// break;
-			}
-		}
-		return -relevance;*/
-		/*
-		 * return super.getRelevance() -
-		 * StringUtils.countMatches(getReplacementString(), "/");
-		 */
 	}
 
 }

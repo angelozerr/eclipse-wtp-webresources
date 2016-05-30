@@ -140,10 +140,6 @@ public class WebResourcesCompletionProposalComputer extends
 											.segments()[location.segmentCount() - 1]
 											.startsWith(matchingString))) {
 
-								/*
-								 * String displayString = resource
-								 * .getProjectRelativePath().toString();
-								 */
 								String displayString = fileName;
 								int cursorPosition = fileName.length();
 								Image image = ResourceUIHelper

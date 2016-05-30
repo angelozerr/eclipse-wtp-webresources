@@ -127,16 +127,6 @@ public class WebResourcesFinderTypeProviderManager implements
 				webResourcesFinderTypeProviders);
 		if (delta.getKind() == IExtensionDelta.ADDED) {
 			addTernServerConfigurations(cf, list);
-		} else {
-			/*
-			 * int size = list.size(); ITernConsoleConfiguration[] st = new
-			 * ITernConsoleConfiguration[size]; list.toArray(st); int size2 =
-			 * cf.length;
-			 * 
-			 * for (int i = 0; i < size; i++) { for (int j = 0; j < size2; j++)
-			 * { if (st[i].getId().equals(cf[j].getAttribute("id"))) {
-			 * st[i].dispose(); list.remove(st[i]); } } }
-			 */
 		}
 		webResourcesFinderTypeProviders = list;
 	}
