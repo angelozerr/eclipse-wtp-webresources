@@ -61,7 +61,7 @@ public abstract class AbstractCSSClassNameOrIdTraverser extends
 		HTMLDocumentAdapter adapter = (HTMLDocumentAdapter) ((INodeNotifier) node
 				.getOwnerDocument())
 				.getAdapterFor(IStyleSheetListAdapter.class);
-		ICSSNode cssNode = null;
+		ICSSNode cssNode;
 		StyleSheetList sheetList = adapter.getStyleSheets();
 		int nbSheets = sheetList.getLength();
 		boolean hasExternalCSS = false;

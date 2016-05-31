@@ -51,7 +51,6 @@ public class WebResourcesCompletionProposalComputer extends
 	protected void addAttributeValueProposals(
 			ContentAssistRequest contentAssistRequest,
 			CompletionProposalInvocationContext context) {
-		IDOMNode element = (IDOMNode) contentAssistRequest.getNode();
 
 		IStructuredDocumentRegion documentRegion = contentAssistRequest
 				.getDocumentRegion();

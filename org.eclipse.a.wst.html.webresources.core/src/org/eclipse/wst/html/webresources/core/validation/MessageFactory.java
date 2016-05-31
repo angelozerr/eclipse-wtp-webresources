@@ -97,7 +97,7 @@ public class MessageFactory {
 						new InstanceScope(), new DefaultScope() };
 		}
 		WebResourcesFinderType[] types = WebResourcesFinderType.values();
-		WebResourcesFinderType type = null;
+		WebResourcesFinderType type;
 		for (int i = 0; i < types.length; i++) {
 			type = types[i];
 			severities.put(

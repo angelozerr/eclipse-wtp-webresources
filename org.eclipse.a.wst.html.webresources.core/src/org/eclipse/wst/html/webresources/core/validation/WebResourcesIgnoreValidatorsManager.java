@@ -74,7 +74,7 @@ public class WebResourcesIgnoreValidatorsManager {
 		try {
 			className = element.getAttribute("class");
 			Object provider = element.createExecutableExtension("class");
-			IWebResourcesIgnoreValidator resourcesValidator = null;
+			IWebResourcesIgnoreValidator resourcesValidator;
 			if (provider instanceof IWebResourcesIgnoreValidator) {
 				resourcesValidator = (IWebResourcesIgnoreValidator) provider;
 				String[] types = element.getAttribute("types").split(",");

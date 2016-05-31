@@ -51,8 +51,6 @@ public class EditorUtils {
 					textEditor = (ITextEditor) editor
 							.getAdapter(ITextEditor.class);
 				if (textEditor != null) {
-					IDocument document = textEditor.getDocumentProvider()
-							.getDocument(editor.getEditorInput());
 					textEditor.selectAndReveal(start, length);
 					page.activate(editor);
 				} else {
@@ -85,8 +83,6 @@ public class EditorUtils {
 					textEditor = (ITextEditor) editor
 							.getAdapter(ITextEditor.class);
 				if (textEditor != null) {
-					IDocument document = textEditor.getDocumentProvider()
-							.getDocument(editor.getEditorInput());
 					textEditor.selectAndReveal(start, length);
 					page.activate(editor);
 				}

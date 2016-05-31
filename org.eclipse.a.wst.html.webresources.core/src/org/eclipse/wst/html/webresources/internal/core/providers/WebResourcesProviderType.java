@@ -72,7 +72,7 @@ public class WebResourcesProviderType {
 				// start collect
 				collector.startCollect(resourcesType);
 				// collect processes
-				IResource resource = null;
+				IResource resource;
 				for (int i = 0; i < resources.length; i++) {
 					resource = resources[i];
 					try {
