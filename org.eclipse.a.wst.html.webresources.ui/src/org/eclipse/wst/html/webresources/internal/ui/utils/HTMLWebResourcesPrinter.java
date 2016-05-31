@@ -56,20 +56,20 @@ public class HTMLWebResourcesPrinter {
 	 * @return the information of the given data:image/png;base64.
 	 */
 	public static String getAdditionalProposalInfo(String data) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		ImageDescriptor descriptor = null;
-		startPage(buffer, "", descriptor);
-		buffer.append("<hr />");
+		startPage(builder, "", descriptor);
+		builder.append("<hr />");
 		// resource is an image, display it.
-		buffer.append("<img src=\"");
-		buffer.append(data);
-		buffer.append("\" />");
+		builder.append("<img src=\"");
+		builder.append(data);
+		builder.append("\" />");
 		long length = 1;
 		for (int i = 0; i < length; i++) {
-			buffer.append("<p>&nbsp;</p>");
+			builder.append("<p>&nbsp;</p>");
 		}
-		endPage(buffer);
-		return buffer.toString();
+		endPage(builder);
+		return builder.toString();
 	}
 
 	// ---------------------------- HTML info for IResource
@@ -83,26 +83,26 @@ public class HTMLWebResourcesPrinter {
 	 */
 	public static String getAdditionalProposalInfo(IResource resource,
 			WebResourceType type) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		ImageDescriptor descriptor = ResourceUIHelper
 				.getFileTypeImageDescriptor(resource);
-		startPage(buffer, getTitle(resource), descriptor);
-		buffer.append("<hr />");
+		startPage(builder, getTitle(resource), descriptor);
+		builder.append("<hr />");
 		if (type == WebResourceType.img) {
 			// resource is an image, display it.
-			buffer.append("<img src=\"file:/");
-			buffer.append(resource.getLocation().toString());
-			buffer.append("\" />");
+			builder.append("<img src=\"file:/");
+			builder.append(resource.getLocation().toString());
+			builder.append("\" />");
 			// Hack to generate an well height for the browser input control.
 			Integer imageHeight = ResourceUIHelper.getImageHeight(resource);
 			long length = Math
 					.round((double) (imageHeight != null ? imageHeight : 16) / 16);
 			for (int i = 0; i < length; i++) {
-				buffer.append("<p>&nbsp;</p>");
+				builder.append("<p>&nbsp;</p>");
 			}
 		}
-		endPage(buffer);
-		return buffer.toString();
+		endPage(builder);
+		return builder.toString();
 	}
 
 	/**
@@ -129,16 +129,16 @@ public class HTMLWebResourcesPrinter {
 
 	public static String getAdditionalProposalInfo(ICSSStyleRule rule,
 			WebResourcesFinderType type, IDOMNode node) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		ImageDescriptor descriptor = getImageDescriptor(type);
-		startPage(buffer, getTitle(rule, node), descriptor);
-		buffer.append("<hr />");
-		buffer.append("<pre>");
-		buffer.append(rule.getCssText());
-		buffer.append("</pre>");
-		buffer.append("<p>&nbsp;</p>");
-		endPage(buffer);
-		return buffer.toString();
+		startPage(builder, getTitle(rule, node), descriptor);
+		builder.append("<hr />");
+		builder.append("<pre>");
+		builder.append(rule.getCssText());
+		builder.append("</pre>");
+		builder.append("<p>&nbsp;</p>");
+		endPage(builder);
+		return builder.toString();
 	}
 
 	private static String getTitle(ICSSStyleRule rule, IDOMNode node) {
@@ -179,24 +179,24 @@ public class HTMLWebResourcesPrinter {
 
 	// ---------------------------- HTML printer utilities
 
-	public static void startPage(StringBuffer buf, String title,
+	public static void startPage(StringBuilder builder, String title,
 			ImageDescriptor descriptor) {
 		int imageWidth = 16;
 		int imageHeight = 16;
 		int labelLeft = 20;
 		int labelTop = 2;
 
-		buf.append("<div style='word-wrap: break-word; position: relative; "); //$NON-NLS-1$
+		builder.append("<div style='word-wrap: break-word; position: relative; "); //$NON-NLS-1$
 
 		String imageSrcPath = getImageURL(descriptor);
 		if (imageSrcPath != null) {
-			buf.append("margin-left: ").append(labelLeft).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
-			buf.append("padding-top: ").append(labelTop).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
+			builder.append("margin-left: ").append(labelLeft).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
+			builder.append("padding-top: ").append(labelTop).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		buf.append("'>"); //$NON-NLS-1$
+		builder.append("'>"); //$NON-NLS-1$
 		if (imageSrcPath != null) {
-			StringBuffer imageStyle = new StringBuffer(
+			StringBuilder imageStyle = new StringBuilder(
 					"border:none; position: absolute; "); //$NON-NLS-1$
 			imageStyle.append("width: ").append(imageWidth).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
 			imageStyle.append("height: ").append(imageHeight).append("px; "); //$NON-NLS-1$ //$NON-NLS-2$
@@ -204,32 +204,32 @@ public class HTMLWebResourcesPrinter {
 
 			// hack for broken transparent PNG support in IE 6, see
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=223900 :
-			buf.append("<!--[if lte IE 6]><![if gte IE 5.5]>\n"); //$NON-NLS-1$
+			builder.append("<!--[if lte IE 6]><![if gte IE 5.5]>\n"); //$NON-NLS-1$
 			String tooltip = ""; // TODO element == null ? "" : "alt='" + JavaHoverMessages.JavadocHover_openDeclaration + "' "; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			buf.append("<span ").append(tooltip).append("style=\"").append(imageStyle). //$NON-NLS-1$ //$NON-NLS-2$
+			builder.append("<span ").append(tooltip).append("style=\"").append(imageStyle). //$NON-NLS-1$ //$NON-NLS-2$
 					append("filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='").append(imageSrcPath).append("')\"></span>\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			buf.append("<![endif]><![endif]-->\n"); //$NON-NLS-1$
+			builder.append("<![endif]><![endif]-->\n"); //$NON-NLS-1$
 
-			buf.append("<!--[if !IE]>-->\n"); //$NON-NLS-1$
-			buf.append("<img ").append(tooltip).append("style='").append(imageStyle).append("' src='").append(imageSrcPath).append("'/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			buf.append("<!--<![endif]-->\n"); //$NON-NLS-1$
-			buf.append("<!--[if gte IE 7]>\n"); //$NON-NLS-1$
-			buf.append("<img ").append(tooltip).append("style='").append(imageStyle).append("' src='").append(imageSrcPath).append("'/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			buf.append("<![endif]-->\n"); //$NON-NLS-1$
+			builder.append("<!--[if !IE]>-->\n"); //$NON-NLS-1$
+			builder.append("<img ").append(tooltip).append("style='").append(imageStyle).append("' src='").append(imageSrcPath).append("'/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			builder.append("<!--<![endif]-->\n"); //$NON-NLS-1$
+			builder.append("<!--[if gte IE 7]>\n"); //$NON-NLS-1$
+			builder.append("<img ").append(tooltip).append("style='").append(imageStyle).append("' src='").append(imageSrcPath).append("'/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			builder.append("<![endif]-->\n"); //$NON-NLS-1$
 		}
-		buf.append(title);
+		builder.append(title);
 
-		buf.append("</div>"); //$NON-NLS-1$
+		builder.append("</div>"); //$NON-NLS-1$
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 */
-	public static void endPage(StringBuffer buffer) {
-		HTMLPrinter.insertPageProlog(buffer, 0,
+	public static void endPage(StringBuilder builder) {
+		HTMLPrinter.insertPageProlog(builder, 0,
 				HTMLWebResourcesPrinter.getStyleSheet());
-		HTMLPrinter.addPageEpilog(buffer);
+		HTMLPrinter.addPageEpilog(builder);
 	}
 
 	/**
@@ -272,17 +272,17 @@ public class HTMLWebResourcesPrinter {
 		try {
 			reader = new BufferedReader(new InputStreamReader(
 					styleSheetURL.openStream()));
-			StringBuffer buffer = new StringBuffer(1500);
+			StringBuilder builder = new StringBuilder(1500);
 			String line = reader.readLine();
 			while (line != null) {
-				buffer.append(line);
-				buffer.append('\n');
+				builder.append(line);
+				builder.append('\n');
 				line = reader.readLine();
 			}
 
 			FontData fontData = JFaceResources.getFontRegistry().getFontData(
 					JFaceResources.DIALOG_FONT)[0];
-			return HTMLPrinter.convertTopLevelFont(buffer.toString(), fontData);
+			return HTMLPrinter.convertTopLevelFont(builder.toString(), fontData);
 		} catch (IOException ex) {
 			Trace.trace(Trace.SEVERE, "Error while loading style sheets", ex);
 			return ""; //$NON-NLS-1$
