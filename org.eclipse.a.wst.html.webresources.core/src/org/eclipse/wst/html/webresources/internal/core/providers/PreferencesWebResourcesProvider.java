@@ -87,7 +87,7 @@ public class PreferencesWebResourcesProvider implements IWebResourcesProvider {
 			fPreferenceService = Platform.getPreferencesService();
 		}
 
-		IScopeContext[] fLookupOrder = null;
+		IScopeContext[] fLookupOrder;
 		ProjectScope projectScope = new ProjectScope(project);
 		if (projectScope
 				.getNode(getQualifier())

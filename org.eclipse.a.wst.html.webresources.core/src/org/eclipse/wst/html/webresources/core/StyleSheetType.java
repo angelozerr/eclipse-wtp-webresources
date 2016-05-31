@@ -27,7 +27,7 @@ public enum StyleSheetType {
 
 	public static StyleSheetType getType(String value) {
 		StyleSheetType[] types = values();
-		StyleSheetType type = null;
+		StyleSheetType type;
 		for (int i = 0; i < types.length; i++) {
 			type = types[i];
 			if (type.value.equals(value)) {

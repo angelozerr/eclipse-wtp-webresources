@@ -65,10 +65,10 @@ public class DOMHelper {
 			boolean ignoreOffset) {
 		Iterator regions = documentRegion.getRegions().iterator();
 		int startOffset = documentPosition - documentRegion.getStartOffset();
-		ITextRegion currentRegion = null;
-		String regionType = null;
+		ITextRegion currentRegion;
+		String regionType;
 		String elementName = null;
-		String attrName = null;
+		String attrName;
 		while (regions.hasNext()) {
 			currentRegion = (ITextRegion) regions.next();
 			regionType = currentRegion.getType();
@@ -236,8 +236,6 @@ public class DOMHelper {
 			int offset) {
 		ITextRegion textRegion = cssRegion.getRegion();
 		int startOffset = documentRegion.getStartOffset(textRegion);
-		String attrValue = DOMHelper.getAttrValue(documentRegion
-				.getText(textRegion));
 		switch (cssRegion.getType()) {
 		case CSS_CLASS_NAME:
 			int endOffset = documentRegion.getEndOffset(textRegion);

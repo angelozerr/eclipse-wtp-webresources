@@ -16,7 +16,7 @@ public enum WebResourceType {
 
 	public static WebResourceType get(String value) {
 		WebResourceType[] types = WebResourceType.values();
-		WebResourceType type = null;
+		WebResourceType type;
 		for (int i = 0; i < types.length; i++) {
 			type = types[i];
 			if (type.name().equalsIgnoreCase(value)) {

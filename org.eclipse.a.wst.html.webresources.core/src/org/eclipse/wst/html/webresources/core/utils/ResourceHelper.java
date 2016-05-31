@@ -55,7 +55,7 @@ public class ResourceHelper {
 	 * @return the web resource type of the given resource and null otherwise.
 	 */
 	public static WebResourceType getWebResourceType(IResource resource) {
-		WebResourceType resourceType = null;
+		WebResourceType resourceType;
 		WebResourceType[] resourceTypes = WebResourceType.values();
 		for (int i = 0; i < resourceTypes.length; i++) {
 			resourceType = resourceTypes[i];
@@ -73,7 +73,7 @@ public class ResourceHelper {
 	 * @return true if the given filename is a web resource and false otherwise.
 	 */
 	public static boolean isWebResource(String filename) {
-		WebResourceType resourceType = null;
+		WebResourceType resourceType;
 		WebResourceType[] resourceTypes = WebResourceType.values();
 		for (int i = 0; i < resourceTypes.length; i++) {
 			resourceType = resourceTypes[i];
