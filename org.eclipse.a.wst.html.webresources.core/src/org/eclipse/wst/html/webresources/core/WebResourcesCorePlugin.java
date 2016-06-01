@@ -58,7 +58,7 @@ public class WebResourcesCorePlugin extends Plugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 		this.fPluginInitializerJob = new PluginInitializerJob();
 		// schedule delayed initialization
 		this.fPluginInitializerJob.schedule(2000);
@@ -76,7 +76,7 @@ public class WebResourcesCorePlugin extends Plugin {
 		WebResourcesFinderTypeProviderManager.getManager().destroy();
 		// stop any indexing
 		WebResourcesIndexManager.getDefault().stop();
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
 	}
 
@@ -231,5 +231,9 @@ public class WebResourcesCorePlugin extends Plugin {
 		public void saving(ISaveContext context) throws CoreException {
 			context.needDelta();
 		}
+	}
+
+	public static void setPlugin(WebResourcesCorePlugin plugin) {
+		WebResourcesCorePlugin.plugin = plugin;
 	}
 }

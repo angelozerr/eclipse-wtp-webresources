@@ -44,7 +44,7 @@ public class WebResourcesUIPlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
 	}
 
 	/*
@@ -56,7 +56,7 @@ public class WebResourcesUIPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		ImageResource.dispose();
-		plugin = null;
+		setPlugin(null);
 		super.stop(context);
 	}
 
@@ -95,6 +95,10 @@ public class WebResourcesUIPlugin extends AbstractUIPlugin {
 	 */
 	public static IWorkbenchPage getActivePage() {
 		return getActiveWorkbenchWindow().getActivePage();
+	}
+
+	public static void setPlugin(WebResourcesUIPlugin plugin) {
+		WebResourcesUIPlugin.plugin = plugin;
 	}
 
 }
