@@ -68,7 +68,7 @@ public class WebResourcesBrowserInformationControlInput extends
 	 */
 	@Override
 	public Object getInputElement() {
-		return (Object) fHtml;
+		return fHtml;
 	}
 
 	/*

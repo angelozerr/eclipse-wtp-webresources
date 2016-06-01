@@ -32,6 +32,8 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentReg
 public class WebResourcesFinderTypeProviderManager implements
 		IRegistryChangeListener {
 
+	private static final String CLASS = "class";
+
 	private static final String EXTENSION_WEB_RESOURCES_FINDER_TYPE_PROVIDERS = "webResourcesFinderTypeProviders";
 
 	private static final WebResourcesFinderTypeProviderManager INSTANCE = new WebResourcesFinderTypeProviderManager();
@@ -40,12 +42,12 @@ public class WebResourcesFinderTypeProviderManager implements
 
 	private boolean registryListenerIntialized;
 
-	public static WebResourcesFinderTypeProviderManager getManager() {
-		return INSTANCE;
-	}
-
 	public WebResourcesFinderTypeProviderManager() {
 		this.registryListenerIntialized = false;
+	}
+
+	public static WebResourcesFinderTypeProviderManager getManager() {
+		return INSTANCE;
 	}
 
 	@Override
@@ -102,16 +104,16 @@ public class WebResourcesFinderTypeProviderManager implements
 		for (IConfigurationElement ce : cf) {
 			try {
 				list.add((IWebResourcesFinderTypeProvider) ce
-						.createExecutableExtension("class"));
+						.createExecutableExtension(CLASS));
 				Trace.trace(
 						Trace.EXTENSION_POINT,
 						"  Loaded console connectors: "
-								+ ce.getAttribute("class"));
+								+ ce.getAttribute(CLASS));
 			} catch (Throwable t) {
 				Trace.trace(
 						Trace.SEVERE,
 						"  Could not load console connectors: "
-								+ ce.getAttribute("class"), t);
+								+ ce.getAttribute(CLASS), t);
 			}
 		}
 	}
