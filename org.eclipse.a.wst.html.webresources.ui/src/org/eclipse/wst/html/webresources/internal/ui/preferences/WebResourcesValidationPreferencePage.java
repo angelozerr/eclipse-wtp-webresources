@@ -53,6 +53,10 @@ public class WebResourcesValidationPreferencePage extends
 
 	private static final String SETTINGS_SECTION_NAME = "WebResourcesValidationSeverities";//$NON-NLS-1$
 
+	private IPreferencesService fPreferencesService = null;
+	private PixelConverter fPixelConverter;
+	private Button validateExternalURL;
+
 	private class BooleanData {
 		private String fKey;
 		private boolean fValue;
@@ -94,10 +98,6 @@ public class WebResourcesValidationPreferencePage extends
 		super();
 		fPreferencesService = Platform.getPreferencesService();
 	}
-
-	private IPreferencesService fPreferencesService = null;
-	private PixelConverter fPixelConverter;
-	private Button validateExternalURL;
 
 	protected Control createCommonContents(Composite parent) {
 		final Composite page = new Composite(parent, SWT.NULL);

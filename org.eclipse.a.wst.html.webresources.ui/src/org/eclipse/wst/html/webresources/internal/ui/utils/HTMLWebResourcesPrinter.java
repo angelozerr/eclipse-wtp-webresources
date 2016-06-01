@@ -40,6 +40,9 @@ import org.osgi.framework.Bundle;
  */
 public class HTMLWebResourcesPrinter {
 
+	private static final String HR = "<hr />";
+	private static final String P_NBSP_P = "<p>&nbsp;</p>";
+
 	/**
 	 * Style sheets content.
 	 */
@@ -59,14 +62,14 @@ public class HTMLWebResourcesPrinter {
 		StringBuffer buffer = new StringBuffer();
 		ImageDescriptor descriptor = null;
 		startPage(buffer, "", descriptor);
-		buffer.append("<hr />");
+		buffer.append(HR);
 		// resource is an image, display it.
 		buffer.append("<img src=\"");
 		buffer.append(data);
 		buffer.append("\" />");
 		long length = 1;
 		for (int i = 0; i < length; i++) {
-			buffer.append("<p>&nbsp;</p>");
+			buffer.append(P_NBSP_P);
 		}
 		endPage(buffer);
 		return buffer.toString();
@@ -87,7 +90,7 @@ public class HTMLWebResourcesPrinter {
 		ImageDescriptor descriptor = ResourceUIHelper
 				.getFileTypeImageDescriptor(resource);
 		startPage(buffer, getTitle(resource), descriptor);
-		buffer.append("<hr />");
+		buffer.append(HR);
 		if (type == WebResourceType.img) {
 			// resource is an image, display it.
 			buffer.append("<img src=\"file:/");
@@ -98,7 +101,7 @@ public class HTMLWebResourcesPrinter {
 			long length = Math
 					.round((double) (imageHeight != null ? imageHeight : 16) / 16);
 			for (int i = 0; i < length; i++) {
-				buffer.append("<p>&nbsp;</p>");
+				buffer.append(P_NBSP_P);
 			}
 		}
 		endPage(buffer);
@@ -132,11 +135,11 @@ public class HTMLWebResourcesPrinter {
 		StringBuffer buffer = new StringBuffer();
 		ImageDescriptor descriptor = getImageDescriptor(type);
 		startPage(buffer, getTitle(rule, node), descriptor);
-		buffer.append("<hr />");
+		buffer.append(HR);
 		buffer.append("<pre>");
 		buffer.append(rule.getCssText());
 		buffer.append("</pre>");
-		buffer.append("<p>&nbsp;</p>");
+		buffer.append(P_NBSP_P);
 		endPage(buffer);
 		return buffer.toString();
 	}

@@ -45,14 +45,14 @@ public class WebResourcesIndexManager extends AbstractIndexManager {
 
 	private static final WebResourcesIndexManager INSTANCE = new WebResourcesIndexManager();
 
-	public static WebResourcesIndexManager getDefault() {
-		return INSTANCE;
-	}
-
 	private IPath fWorkingLocation;
 
 	protected WebResourcesIndexManager() {
 		super(WebResourcesCoreMessages.WebResourcesIndexManager);
+	}
+
+	public static WebResourcesIndexManager getDefault() {
+		return INSTANCE;
 	}
 
 	@Override

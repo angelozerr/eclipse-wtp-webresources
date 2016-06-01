@@ -138,7 +138,7 @@ public class WebResourceQuickFixProcessor implements IQuickAssistProcessor {
 		if (proposals.isEmpty())
 			return null;
 
-		return (ICompletionProposal[]) proposals
+		return proposals
 				.toArray(new ICompletionProposal[proposals.size()]);
 
 	}
