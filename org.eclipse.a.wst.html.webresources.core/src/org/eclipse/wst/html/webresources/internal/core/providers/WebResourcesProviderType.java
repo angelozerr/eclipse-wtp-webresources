@@ -121,15 +121,12 @@ public class WebResourcesProviderType {
 					return true;
 				}
 			}
-		} else if (file.isFile()) {
-			if (ResourceHelper.isMatchingWebResourceType(file, resourcesType)) {
-				// current file matches the given web resource type
-				// collect it.
-				if (collector.add(file, WebResourceKind.FILESYSTEM, context,
-						resolver)) {
-					return true;
-				}
-			}
+			// current file matches the given web resource type
+			// collect it.
+		} else if (file.isFile() &&
+				ResourceHelper.isMatchingWebResourceType(file, resourcesType) &&
+				collector.add(file, WebResourceKind.FILESYSTEM, context, resolver)) {
+			return true;
 		}
 		return false;
 	}

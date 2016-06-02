@@ -81,21 +81,19 @@ public class DOMHelper {
 				attrName = documentRegion.getText(currentRegion);
 				WebResourcesFinderType type = getWebResourcesFinderType(
 						elementName, attrName, documentRegion, documentPosition);
-				if (type != null) { //$NON-NLS-1$
-					// the next region should be "="
+				// the next region should be "="
+				if (type != null && regions.hasNext()) {
+					regions.next(); // skip the "="
+					// next region should be attr value region
 					if (regions.hasNext()) {
-						regions.next(); // skip the "="
-						// next region should be attr value region
-						if (regions.hasNext()) {
-							ITextRegion attrValueRegion = (ITextRegion) regions
-									.next();
-							if (ignoreOffset
-									|| (startOffset >= attrValueRegion
-											.getStart() && startOffset <= attrValueRegion
-											.getEnd())) {
-								return new WebResourcesTextRegion(
-										attrValueRegion, type);
-							}
+						ITextRegion attrValueRegion = (ITextRegion) regions
+								.next();
+						if (ignoreOffset
+								|| (startOffset >= attrValueRegion
+										.getStart() && startOffset <= attrValueRegion
+										.getEnd())) {
+							return new WebResourcesTextRegion(
+									attrValueRegion, type);
 						}
 					}
 				}

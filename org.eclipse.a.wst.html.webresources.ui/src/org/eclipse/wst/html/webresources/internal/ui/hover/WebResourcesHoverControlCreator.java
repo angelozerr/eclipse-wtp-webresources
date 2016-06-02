@@ -37,11 +37,6 @@ public class WebResourcesHoverControlCreator extends
 	 * 
 	 */
 	private final IInformationControlCreator fInformationPresenterControlCreator;
-	/**
-	 * <code>true</code> to use the additional info affordance,
-	 * <code>false</code> to use the hover affordance.
-	 */
-	private final boolean fAdditionalInfoAffordance;
 
 	/**
 	 * @param informationPresenterControlCreator
@@ -63,7 +58,6 @@ public class WebResourcesHoverControlCreator extends
 			IInformationControlCreator informationPresenterControlCreator,
 			boolean additionalInfoAffordance) {
 		fInformationPresenterControlCreator = informationPresenterControlCreator;
-		fAdditionalInfoAffordance = additionalInfoAffordance;
 	}
 
 	/*
