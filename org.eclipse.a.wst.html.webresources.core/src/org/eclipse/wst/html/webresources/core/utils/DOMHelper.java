@@ -274,9 +274,6 @@ public class DOMHelper {
 		} catch (Exception e) {
 
 		}
-		if (model != null) {
-			model.releaseFromRead();
-		}
 		return null;
 	}
 
@@ -293,9 +290,6 @@ public class DOMHelper {
 			return (ICSSModel) model;
 		} catch (Exception e) {
 
-		}
-		if (model != null) {
-			model.releaseFromRead();
 		}
 		return null;
 	}
@@ -375,13 +369,11 @@ public class DOMHelper {
 				return (IDOMNode) node;
 			}
 
-			if (model != null) {
-				int lastOffset = offset;
-				node = model.getIndexedRegion(offset);
-				while (node == null && lastOffset >= 0) {
-					lastOffset--;
-					node = model.getIndexedRegion(lastOffset);
-				}
+			int lastOffset = offset;
+			node = model.getIndexedRegion(offset);
+			while (node == null && lastOffset >= 0) {
+				lastOffset--;
+				node = model.getIndexedRegion(lastOffset);
 			}
 		}
 		return (IDOMNode) node;
