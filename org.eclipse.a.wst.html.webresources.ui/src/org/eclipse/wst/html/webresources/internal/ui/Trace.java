@@ -38,8 +38,6 @@ public class Trace {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat(
 			"dd/MM/yy HH:mm.ss.SSS");
 
-	private static Set<String> logged = new HashSet<String>();
-
 	/**
 	 * Trace constructor comment.
 	 */

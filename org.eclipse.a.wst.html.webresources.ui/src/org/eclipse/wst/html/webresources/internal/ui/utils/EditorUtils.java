@@ -47,7 +47,7 @@ public class EditorUtils {
 				ITextEditor textEditor = null;
 				if (editor instanceof ITextEditor)
 					textEditor = (ITextEditor) editor;
-				else if (editor instanceof IAdaptable)
+				else
 					textEditor = (ITextEditor) editor
 							.getAdapter(ITextEditor.class);
 				if (textEditor != null) {
@@ -79,7 +79,7 @@ public class EditorUtils {
 				ITextEditor textEditor = null;
 				if (editor instanceof ITextEditor)
 					textEditor = (ITextEditor) editor;
-				else if (editor instanceof IAdaptable)
+				else
 					textEditor = (ITextEditor) editor
 							.getAdapter(ITextEditor.class);
 				if (textEditor != null) {
