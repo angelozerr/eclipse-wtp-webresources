@@ -1,4 +1,4 @@
-Eclipse WTP WebResources is stable and you can [install it Site](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/Installation-Update-Site) but I have decided to give up this project because WTP WebResources features are integrating inside WTP HTML step by step. See [issue 63](https://github.com/angelozerr/eclipse-wtp-webresources/issues/63) for more informations.
+Eclipse WTP WebResources is stable and you can [install it](https://github.com/angelozerr/eclipse-wtp-webresources/wiki/Installation-Update-Site) but I have decided to give up this project because WTP WebResources features are integrating inside WTP HTML step by step. See [issue 63](https://github.com/angelozerr/eclipse-wtp-webresources/issues/63) for more informations.
 
 What is Eclipse WTP WebResources (EWW) ?
 ===================
